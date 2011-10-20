@@ -202,6 +202,7 @@ public class TownyChatFormatter {
 
 				String nTag = "", tTag = "";
 
+				//Force use of full names only
 				if (full) {
 					nationTag = "";
 					townTag = "";
@@ -219,13 +220,13 @@ public class TownyChatFormatter {
 					nTag = nation.getName();
 
 				// Output depending on what tags are present
-				if ((tTag.isEmpty()) && (nTag.isEmpty()))
+				if ((!tTag.isEmpty()) && (!nTag.isEmpty()))
 					return String.format(TownySettings.getChatTownNationTagFormat(), nTag, tTag);
 
-				if (nTag.isEmpty())
+				if (!nTag.isEmpty())
 					return String.format(TownySettings.getChatNationTagFormat(), nTag);
 
-				if (tTag.isEmpty())
+				if (!tTag.isEmpty())
 					return String.format(TownySettings.getChatTownTagFormat(), tTag);
 
 			}
