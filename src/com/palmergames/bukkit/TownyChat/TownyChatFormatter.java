@@ -219,13 +219,13 @@ public class TownyChatFormatter {
 					nTag = nation.getName();
 
 				// Output depending on what tags are present
-				if ((tTag != "") && (nTag != ""))
+				if ((tTag.isEmpty()) && (nTag.isEmpty()))
 					return String.format(TownySettings.getChatTownNationTagFormat(), nTag, tTag);
 
-				if (nTag != "")
+				if (nTag.isEmpty())
 					return String.format(TownySettings.getChatNationTagFormat(), nTag);
 
-				if (tTag != "")
+				if (tTag.isEmpty())
 					return String.format(TownySettings.getChatTownTagFormat(), tTag);
 
 			}
