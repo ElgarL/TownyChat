@@ -179,7 +179,7 @@ public class TownyChatFormatter {
 
 	public static String getChatFormat(TownyChatEvent event) {
 		// Replace the {msg} here so it's not regex parsed.
-		return replacer.replaceAll(event.getFormat(), event).replace("{msg}", event.getMessage());
+		return replacer.replaceAll(event.getFormat(), event).replace("{msg}", "%2$s");
 	}
 
 	/**
