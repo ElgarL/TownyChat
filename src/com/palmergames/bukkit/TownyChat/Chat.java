@@ -71,7 +71,7 @@ public class Chat extends JavaPlugin {
 	public void registerEvents() {
 		TownyPlayerListener = new TownyPlayerHighestListener(towny);
 
-		pm.registerEvent(Event.Type.PLAYER_CHAT, TownyPlayerListener, Priority.High, this); //Run this one level lower so we go before other chat plugins.
+		pm.registerEvent(Event.Type.PLAYER_CHAT, TownyPlayerListener, Priority.Normal, this); //Run this lower so we go before herochat.
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, TownyPlayerListener, Priority.Highest, this);
 	}
 
