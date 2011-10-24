@@ -116,7 +116,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 
-			TownyMessaging.sendTownMessage(town, chatEvent.getFormat().replace("%2$s", event.getMessage()));
+			TownyMessaging.sendTownMessage(town, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
@@ -131,7 +131,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			TownyMessaging.sendNationMessage(nation, chatEvent.getFormat().replace("%2$s", event.getMessage()));
+			TownyMessaging.sendNationMessage(nation, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
@@ -148,7 +148,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
 				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command))))
-					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%2$s", event.getMessage()));
+					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
 			}
 
 			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());
