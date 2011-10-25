@@ -22,9 +22,11 @@ public class onLoadedTask implements Runnable {
 	
 	@Override
 	public void run() {
-
-		plugin.getLogger().info("-******* TownyChat enabled *******-");
-		plugin.registerEvents();
+		
+		if (this.towny.isEnabled()) {
+			plugin.getLogger().info("-******* TownyChat enabled *******-");
+			plugin.registerEvents();
+		}
 		
 	}
 	

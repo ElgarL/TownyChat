@@ -4,3 +4,5 @@ v0.2:
 	- Fixed players entering regex fields in chat crashing {msg}.
 	- changed PLAYER_CHAT event to run earlier so we triger before other chat plugins.
 	  If players are using chat modes we need to run first to cancel the chat event for other plugins.
+v0.3:
+	- TownyChat now only enables itself if Towny successfully starts.
