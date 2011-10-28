@@ -6,3 +6,4 @@ v0.2:
 	  If players are using chat modes we need to run first to cancel the chat event for other plugins.
 v0.3:
 	- TownyChat now only enables itself if Towny successfully starts.
+	- Fixed missing {} around modplayername.
