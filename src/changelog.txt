@@ -7,3 +7,5 @@ v0.2:
 v0.3:
 	- TownyChat now only enables itself if Towny successfully starts.
 	- Fixed missing {} around modplayername.
+v0.4:
+	- Fixed custom channel chat not showing in the console.
