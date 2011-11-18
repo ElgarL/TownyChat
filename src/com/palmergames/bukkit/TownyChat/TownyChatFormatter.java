@@ -16,6 +16,12 @@ public class TownyChatFormatter {
 	private static StringReplaceManager<TownyChatEvent> replacer = new StringReplaceManager<TownyChatEvent>();
 
 	static {
+		replacer.registerFormatReplacement(Pattern.quote("{worldname}"), new TownyChatReplacerCallable() {
+			@Override
+			public String call(String match, TownyChatEvent event) throws Exception {
+				return String.format(TownySettings.getChatWorldFormat(), event.getEvent().getPlayer().getWorld().getName());
+			}
+		});
 		replacer.registerFormatReplacement(Pattern.quote("{town}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, TownyChatEvent event) throws Exception {
