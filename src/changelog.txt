@@ -9,3 +9,10 @@ v0.3:
 	- Fixed missing {} around modplayername.
 v0.4:
 	- Fixed custom channel chat not showing in the console.
+v0.5:
+	- Added auto modes for chat.
+	  Type '/tc' to set town chat mode. All text typed from then on will be sent to town chat.
+	  While in a chat mode you can still talk in other channels by using the channel commands eg. '/nc hi'.
+	  While in a chat mode you can talk in global chat with '/g text here'.
+	  to clear all chat modes '/g'.
+	- Added a new permission node for global chat ('/g') of 'towny.chat.global'.

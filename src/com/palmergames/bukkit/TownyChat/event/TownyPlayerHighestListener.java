@@ -37,40 +37,61 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			return;
 		}
 		String split[] = event.getMessage().split("\\ ");
+		String command = split[0].trim().toLowerCase();
+		String message = "";
 
-		if (split.length > 1) {
-			String command = split[0].trim().toLowerCase();
-			String message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+		if (split.length > 1)
+			message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
-			if (TownySettings.chatChannelExists(command)) {
-				event.setMessage(message);
+		if (TownySettings.chatChannelExists(command)) {
+			event.setMessage(message);
 
-				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, TownySettings.getChatChannelPermission(command)))) {
-					// Deal with special cases
-					if (command.equalsIgnoreCase("/tc")) {
+			if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, TownySettings.getChatChannelPermission(command)))) {
+				// Deal with special cases
+				if (command.equalsIgnoreCase("/tc")) {
 
+					if (message.isEmpty())
+						plugin.setPlayerChatMode(player, "tc");
+					else {
 						// Town Chat
 						parseTownChatCommand(event, command, player);
-						event.setCancelled(true);
+					}
+					event.setCancelled(true);
 
-					} else if (command.equalsIgnoreCase("/nc")) {
+				} else if (command.equalsIgnoreCase("/nc")) {
 
+					if (message.isEmpty())
+						plugin.setPlayerChatMode(player, "nc");
+					else {
 						// Nation Chat
 						parseNationChatCommand(event, command, player);
-						event.setCancelled(true);
+					}
+					event.setCancelled(true);
 
-					} else {
+				} else if (command.equalsIgnoreCase("/g")) {
 
+					if (message.isEmpty())
+						plugin.setPlayerChatMode(player, "g");
+					else {
+						// Global Chat
+						parseGlobalChannelChatCommand(event, command, player);
+					}
+					event.setCancelled(true);
+
+				} else {
+
+					if (message.isEmpty())
+						plugin.setPlayerChatMode(player, command.replace("/", ""));
+					else {
 						// Custom channel Chat
 						parseDefaultChannelChatCommand(event, command, player);
-						event.setCancelled(true);
 					}
-				} else {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
 					event.setCancelled(true);
 				}
-
-			}// channel doesn't exist
+			} else {
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
+				event.setCancelled(true);
+			}
 
 		}
 	}
@@ -93,6 +114,16 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			// Nation chat
 			parseNationChatCommand(event, "/nc", player);
 		} else {
+			
+			for (String channel : TownySettings.getChatChannels()) {
+				if (plugin.hasPlayerMode(player, channel.replace("/", ""))) {
+					// Custom channel Chat
+					parseDefaultChannelChatCommand(event, channel, player);
+					event.setCancelled(true);
+					return;
+				}
+			}
+			
 			// All chat modes are disabled, or this is open chat.
 			if (TownySettings.isUsingModifyChat()) {
 				event.setFormat(TownySettings.getModifyChatFormat());
@@ -142,6 +173,28 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
 
 			event.setFormat(TownySettings.getChatDefaultChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+
+			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
+			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+
+			TownyUniverse.plugin.log(chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
+				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command))))
+					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+			}
+
+		} catch (NotRegisteredException x) {
+			TownyMessaging.sendErrorMsg(player, x.getError());
+		}
+	}
+	
+	private void parseGlobalChannelChatCommand(PlayerChatEvent event, String command, Player player) {
+		try {
+			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
+
+			if (TownySettings.isUsingModifyChat()) {
+				event.setFormat(TownySettings.getModifyChatFormat());
+			}
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
