@@ -113,6 +113,9 @@ public class TownyPlayerHighestListener extends PlayerListener {
 		} else if (plugin.hasPlayerMode(player, "nc")) {
 			// Nation chat
 			parseNationChatCommand(event, "/nc", player);
+		} else if (plugin.hasPlayerMode(player, "g")) {
+			// Global chat
+			parseGlobalChannelChatCommand(event, "/g", player);
 		} else {
 			
 			for (String channel : TownySettings.getChatChannels()) {
