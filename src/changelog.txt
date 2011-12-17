@@ -18,3 +18,5 @@ v0.5:
 	- Added a new permission node for global chat ('/g') of 'towny.chat.global'.
 	- Added {worldname} as an accepted entry.
 	- Fixed '/g' mode to add formatting.
+v0.6:
+	- Changed global chat to pass through bukkits chat process instead of our own (allows other plugins to see it again).

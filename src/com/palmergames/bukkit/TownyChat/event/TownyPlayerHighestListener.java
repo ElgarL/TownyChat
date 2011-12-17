@@ -115,7 +115,16 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			parseNationChatCommand(event, "/nc", player);
 		} else if (plugin.hasPlayerMode(player, "g")) {
 			// Global chat
-			parseGlobalChannelChatCommand(event, "/g", player);
+			//parseGlobalChannelChatCommand(event, "/g", player);
+			
+			// This is Global chat.
+			if (TownySettings.isUsingModifyChat()) {
+				event.setFormat(TownySettings.getModifyChatFormat());
+			}
+
+			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
+			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+			return;
 		} else {
 			
 			for (String channel : TownySettings.getChatChannels()) {
@@ -127,7 +136,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 				}
 			}
 			
-			// All chat modes are disabled, or this is open chat.
+			// All chat modes are disabled, or this is Global chat.
 			if (TownySettings.isUsingModifyChat()) {
 				event.setFormat(TownySettings.getModifyChatFormat());
 			}
@@ -165,6 +174,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+			
 			TownyMessaging.sendNationMessage(nation, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
