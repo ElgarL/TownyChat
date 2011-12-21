@@ -6,8 +6,10 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerListener;
 
+import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
@@ -47,6 +49,19 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			event.setMessage(message);
 
 			if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, TownySettings.getChatChannelPermission(command)))) {
+				
+				// Check if essentials has this player muted.
+				if (plugin.isEssentials()) {
+					try {
+						if (plugin.getEssentials().getUser(player).isMuted()) {
+							TownyMessaging.sendErrorMsg(player, "Unable to talk...You are currently muted!");
+							return;
+						}
+					} catch (TownyException e) {
+						// Get essentials failed
+					}
+				}
+				
 				// Deal with special cases
 				if (command.equalsIgnoreCase("/tc")) {
 
@@ -101,6 +116,19 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 		Player player = event.getPlayer();
 		Resident resident;
+		
+		// Check if essentials has this player muted.
+		if (plugin.isEssentials()) {
+			try {
+				if (plugin.getEssentials().getUser(player).isMuted()) {
+					TownyMessaging.sendErrorMsg(player, "Unable to talk...You are currently muted!");
+					return;
+				}
+			} catch (TownyException e) {
+				// Get essentials failed
+			}
+		}
+		
 		try {
 			resident = plugin.getTownyUniverse().getResident(player.getName());
 		} catch (NotRegisteredException e) {
@@ -184,7 +212,8 @@ public class TownyPlayerHighestListener extends PlayerListener {
 	private void parseDefaultChannelChatCommand(PlayerChatEvent event, String command, Player player) {
 		try {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
-
+			Boolean bEssentials = plugin.isEssentials();
+			
 			event.setFormat(TownySettings.getChatDefaultChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
@@ -192,8 +221,20 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyUniverse.plugin.log(chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
 			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
-				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command))))
+				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {
+					
+					if (bEssentials) {
+						try {
+							User targetUser = plugin.getEssentials().getUser(test);
+							// Don't send this message if the user is ignored
+							if (targetUser.isIgnoredPlayer(player.getName()))
+								continue;
+						} catch (TownyException e) {
+							// Failed to fetch user so ignore.
+						}
+					}
 					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+				}
 			}
 
 		} catch (NotRegisteredException x) {
@@ -204,6 +245,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 	private void parseGlobalChannelChatCommand(PlayerChatEvent event, String command, Player player) {
 		try {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
+			Boolean bEssentials = plugin.isEssentials();
 
 			if (TownySettings.isUsingModifyChat()) {
 				event.setFormat(TownySettings.getModifyChatFormat());
@@ -214,8 +256,20 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyUniverse.plugin.log(chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
 			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
-				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command))))
+				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {
+					
+					if (bEssentials) {
+						try {
+							User targetUser = plugin.getEssentials().getUser(test);
+							// Don't send this message if the user is ignored
+							if (targetUser.isIgnoredPlayer(player.getName()))
+								continue;
+						} catch (TownyException e) {
+							// Failed to fetch user so ignore.
+						}
+					}
 					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+				}
 			}
 
 			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());

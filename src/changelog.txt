@@ -20,3 +20,5 @@ v0.5:
 	- Fixed '/g' mode to add formatting.
 v0.6:
 	- Changed global chat to pass through bukkits chat process instead of our own (allows other plugins to see it again).
+v0.7:
+	- Added support for Essentials mute and ignore features. Players on ignore will still be seen in town and nation chat.
