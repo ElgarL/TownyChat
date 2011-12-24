@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.TownyException;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
+import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -22,9 +23,11 @@ import com.palmergames.util.StringMgmt;
 
 public class TownyPlayerHighestListener extends PlayerListener {
 	private final Towny plugin;
+	private CraftIRCHandler ircHander;
 
-	public TownyPlayerHighestListener(Towny instance) {
+	public TownyPlayerHighestListener(Towny instance, CraftIRCHandler irc) {
 		this.plugin = instance;
+		this.ircHander = irc;
 	}
 
 	@Override
@@ -152,7 +155,12 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			return;
+			
+			if (ircHander != null) {
+				parseGlobalChannelChatCommand(event, "/g", player);
+			} else
+				return;
+			
 		} else {
 			
 			for (String channel : TownySettings.getChatChannels()) {
@@ -171,7 +179,11 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			return;
+
+			if (ircHander != null) {
+				parseGlobalChannelChatCommand(event, "/g", player);
+			} else
+				return;
 		}
 		event.setCancelled(true);
 
@@ -186,8 +198,13 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
+			
+			// Relay to IRC
+			if (ircHander != null)
+				ircHander.IRCSender(msg);
 
-			TownyMessaging.sendTownMessage(town, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+			TownyMessaging.sendTownMessage(town, msg);
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
@@ -202,8 +219,13 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
-			TownyMessaging.sendNationMessage(nation, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+			// Relay to IRC
+			if (ircHander != null)
+				ircHander.IRCSender(msg);
+			
+			TownyMessaging.sendNationMessage(nation, msg);
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
@@ -218,8 +240,13 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-
-			TownyUniverse.plugin.log(chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
+			
+			TownyUniverse.plugin.log(msg);
+			// Relay to IRC
+			if (ircHander != null)
+				ircHander.IRCSender(msg);
+			
 			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
 				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {
 					
@@ -233,7 +260,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 							// Failed to fetch user so ignore.
 						}
 					}
-					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+					TownyMessaging.sendMessage(test, msg);
 				}
 			}
 
@@ -253,8 +280,13 @@ public class TownyPlayerHighestListener extends PlayerListener {
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-
-			TownyUniverse.plugin.log(chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
+			
+			TownyUniverse.plugin.log(msg);
+			// Relay to IRC
+			if (ircHander != null)
+				ircHander.IRCSender(msg);
+			
 			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
 				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {
 					
@@ -268,7 +300,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 							// Failed to fetch user so ignore.
 						}
 					}
-					TownyMessaging.sendMessage(test, chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage()));
+					TownyMessaging.sendMessage(test, msg);
 				}
 			}
 

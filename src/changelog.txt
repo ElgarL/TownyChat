@@ -22,3 +22,19 @@ v0.6:
 	- Changed global chat to pass through bukkits chat process instead of our own (allows other plugins to see it again).
 v0.7:
 	- Added support for Essentials mute and ignore features. Players on ignore will still be seen in town and nation chat.
+	- Added craftIRC 3.1 support
+	
+	  Add a channel tag of 'admin' to the
+	  receiving channel in the craftIRC config.
+	  
+	  Disable Auto paths and add the following to the 'paths:' section
+
+	    - source: 'minecraft'
+	      target: 'admin'
+	      formatting:
+	        chat: '%message%'
+	        
+	    - source: 'admin'     # These are endpoint tags
+	      target: 'minecraft'    #
+	      formatting:
+	        chat: '%foreground%[%red%%ircPrefix%%sender%%foreground%] %message%'

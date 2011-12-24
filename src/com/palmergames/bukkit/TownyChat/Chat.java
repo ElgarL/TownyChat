@@ -8,6 +8,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.ensifera.animosity.craftirc.CraftIRC;
+import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.event.TownyPlayerHighestListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.towny.Towny;
@@ -27,6 +29,9 @@ public class Chat extends JavaPlugin {
 
 	protected PluginManager pm;
 	private Towny towny = null;
+	private CraftIRC craftIRC = null;
+	
+	private CraftIRCHandler irc = null;
 
 	@Override
 	public void onEnable() {
@@ -65,11 +70,20 @@ public class Chat extends JavaPlugin {
 		test = pm.getPlugin("Towny");
 		if (test != null && test instanceof Towny)
 			towny = (Towny) test;
+		
+		test = pm.getPlugin("CraftIRC");
+		if (test != null) {
+			if (Double.valueOf(test.getDescription().getVersion()) >= 3.1) {
+				craftIRC = (CraftIRC) test;
+				irc = new CraftIRCHandler(towny, craftIRC, "towny");
+			} else
+				logger.warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
+		}
 
 	}
 
 	public void registerEvents() {
-		TownyPlayerListener = new TownyPlayerHighestListener(towny);
+		TownyPlayerListener = new TownyPlayerHighestListener(towny, irc);
 
 		pm.registerEvent(Event.Type.PLAYER_CHAT, TownyPlayerListener, Priority.Highest, this); //Run this lower so we go before herochat? ( it needs to see us cancel).
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, TownyPlayerListener, Priority.Highest, this);
