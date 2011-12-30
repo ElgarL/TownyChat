@@ -58,6 +58,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 					try {
 						if (plugin.getEssentials().getUser(player).isMuted()) {
 							TownyMessaging.sendErrorMsg(player, "Unable to talk...You are currently muted!");
+							event.setCancelled(true);
 							return;
 						}
 					} catch (TownyException e) {
@@ -125,6 +126,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			try {
 				if (plugin.getEssentials().getUser(player).isMuted()) {
 					TownyMessaging.sendErrorMsg(player, "Unable to talk...You are currently muted!");
+					event.setCancelled(true);
 					return;
 				}
 			} catch (TownyException e) {

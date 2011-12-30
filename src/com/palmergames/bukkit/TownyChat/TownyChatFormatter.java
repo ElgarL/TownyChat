@@ -31,7 +31,7 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{townformatted}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, TownyChatEvent event) throws Exception {
-				return formatTownyTag(event.getResident(), false, true);
+				return formatTownTag(event.getResident(), false, true);
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{towntag}"), new TownyChatReplacerCallable() {
@@ -246,7 +246,9 @@ public class TownyChatFormatter {
 	public static String formatTownTag(Resident resident, Boolean override, Boolean full) {
 		try {
 			if (resident.hasTown())
-				if (resident.getTown().hasTag())
+				if (full)
+					return String.format(TownySettings.getChatTownTagFormat(), resident.getTown().getName());
+				else if (resident.getTown().hasTag())
 					return String.format(TownySettings.getChatTownTagFormat(), resident.getTown().getTag());
 				else if (override)
 					return String.format(TownySettings.getChatTownTagFormat(), resident.getTown().getName());
@@ -259,7 +261,9 @@ public class TownyChatFormatter {
 	public static String formatNationTag(Resident resident, Boolean override, Boolean full) {
 		try {
 			if (resident.hasNation())
-				if (resident.getTown().getNation().hasTag())
+				if (full)
+					return String.format(TownySettings.getChatNationTagFormat(), resident.getTown().getNation().getName());
+				else if (resident.getTown().getNation().hasTag())
 					return String.format(TownySettings.getChatNationTagFormat(), resident.getTown().getNation().getTag());
 				else if (override)
 					return String.format(TownySettings.getChatNationTagFormat(), resident.getTown().getNation().getName());
