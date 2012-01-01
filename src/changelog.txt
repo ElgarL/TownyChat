@@ -40,4 +40,5 @@ v0.7:
 	        chat: '%foreground%[%red%%ircPrefix%%sender%%foreground%] %message%'
 v0.8:
 	- Fixed {townformatted} and {nationformatted} to display correctly.
+	- Updated to use new per world channel formats.
 	

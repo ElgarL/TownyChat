@@ -152,7 +152,12 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			
 			// This is Global chat.
 			if (TownySettings.isUsingModifyChat()) {
-				event.setFormat(TownySettings.getModifyChatFormat());
+				try {
+					event.setFormat(TownyUniverse.getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
+				} catch (NotRegisteredException e) {
+					// World not registered with Towny
+					e.printStackTrace();
+				}
 			}
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
@@ -176,7 +181,12 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			
 			// All chat modes are disabled, or this is Global chat.
 			if (TownySettings.isUsingModifyChat()) {
-				event.setFormat(TownySettings.getModifyChatFormat());
+				try {
+					event.setFormat(TownyUniverse.getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
+				} catch (NotRegisteredException e) {
+					// World not registered with Towny
+					e.printStackTrace();
+				}
 			}
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
@@ -196,7 +206,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
 			Town town = resident.getTown();
 
-			event.setFormat(TownySettings.getChatTownChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+			event.setFormat(TownyUniverse.getWorld(player.getWorld().getName()).getChatTownChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -217,7 +227,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
 			Nation nation = resident.getTown().getNation();
 
-			event.setFormat(TownySettings.getChatNationChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+			event.setFormat(TownyUniverse.getWorld(player.getWorld().getName()).getChatNationChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -238,7 +248,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			Resident resident = plugin.getTownyUniverse().getResident(player.getName());
 			Boolean bEssentials = plugin.isEssentials();
 			
-			event.setFormat(TownySettings.getChatDefaultChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+			event.setFormat(TownyUniverse.getWorld(player.getWorld().getName()).getChatDefaultChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -277,7 +287,7 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			Boolean bEssentials = plugin.isEssentials();
 
 			if (TownySettings.isUsingModifyChat()) {
-				event.setFormat(TownySettings.getModifyChatFormat());
+				event.setFormat(TownyUniverse.getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
 			}
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
