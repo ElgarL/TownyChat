@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerListener;
 
+import org.dynmap.DynmapAPI;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.Towny;
@@ -23,11 +24,13 @@ import com.palmergames.util.StringMgmt;
 
 public class TownyPlayerHighestListener extends PlayerListener {
 	private final Towny plugin;
-	private CraftIRCHandler ircHander;
+	private final CraftIRCHandler ircHander;
+	private final DynmapAPI dynMap;
 
-	public TownyPlayerHighestListener(Towny instance, CraftIRCHandler irc) {
+	public TownyPlayerHighestListener(Towny instance, CraftIRCHandler irc, DynmapAPI dynMap) {
 		this.plugin = instance;
 		this.ircHander = irc;
+		this.dynMap = dynMap;
 	}
 
 	@Override
@@ -298,6 +301,9 @@ public class TownyPlayerHighestListener extends PlayerListener {
 			// Relay to IRC
 			if (ircHander != null)
 				ircHander.IRCSender(msg);
+			
+			if (dynMap != null)
+				dynMap.postPlayerMessageToWeb(player, event.getMessage());
 			
 			for (Player test : plugin.getTownyUniverse().getOnlinePlayers()) {
 				if (!plugin.isPermissions() || (plugin.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {

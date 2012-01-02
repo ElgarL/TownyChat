@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="../../lib/Towny.jar"/>
 	<classpathentry kind="lib" path="E:/ElgarL/lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="E:/ElgarL/lib/CraftIRC-3.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="E:/ElgarL/lib/dynmap-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

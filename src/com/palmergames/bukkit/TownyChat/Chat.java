@@ -7,6 +7,7 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.dynmap.DynmapAPI;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
@@ -30,6 +31,7 @@ public class Chat extends JavaPlugin {
 	protected PluginManager pm;
 	private Towny towny = null;
 	private CraftIRC craftIRC = null;
+	private DynmapAPI dynMap = null;
 	
 	private CraftIRCHandler irc = null;
 
@@ -83,11 +85,16 @@ public class Chat extends JavaPlugin {
 				logger.warning("Non number format found for craftIRC version string!");
 			}
 		}
+		
+		test = pm.getPlugin("dynmap");
+		if (test != null) {
+			dynMap = (DynmapAPI) test;
+		}
 
 	}
 
 	public void registerEvents() {
-		TownyPlayerListener = new TownyPlayerHighestListener(towny, irc);
+		TownyPlayerListener = new TownyPlayerHighestListener(towny, irc, dynMap);
 
 		pm.registerEvent(Event.Type.PLAYER_CHAT, TownyPlayerListener, Priority.Highest, this); //Run this lower so we go before herochat? ( it needs to see us cancel).
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, TownyPlayerListener, Priority.Highest, this);
