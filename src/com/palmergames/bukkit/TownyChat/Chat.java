@@ -54,6 +54,7 @@ public class Chat extends JavaPlugin {
 			logger.severe("Could not schedule onLoadedTask.");
 			logger.severe("disabling TownyChat");
 			pm.disablePlugin(this);
+			return;
 		}
 
 	}

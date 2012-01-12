@@ -43,3 +43,19 @@ v0.8:
 	- Updated to use new per world channel formats.
 v0.9:
 	- TownyChat now passes player chat to Dynmap.
+v0.10:
+	- Code rewrite for new code locations in Towny.
+	- Added a spam filter so players can only send one message every two seconds.
+	- Added the ability to restrict channel ranges.
+	
+	  All custom channels (not town or nation) can now have an extra value
+	  appended to signify a range limit on chat.
+	  
+	  -1 = no limits
+	   0 = same world only
+	  any positive value = limited range (blocks) in the same world.
+	  
+	  eg. - /g,,,towny.chat.global,-1
+	        or a local channel that covers 100 blocks range
+	        /l,&f[local],&f,towny.chat.local,100
+	  
