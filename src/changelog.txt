@@ -58,4 +58,9 @@ v0.10:
 	  eg. - /g,,,towny.chat.global,-1
 	        or a local channel that covers 100 blocks range
 	        /l,&f[local],&f,towny.chat.local,100
+	        
+	- Added a new mode '/towny spy', or '/res set mode spy'.
+	  This requires you have the permission node 'towny.chat.spy' and be using TownyChat.
+	  If you toggle this mode on you will be able to see all town/nation/global, and all custom channel chat.
+	- If a player doesn't have the 'towny.chat.global' permission node, any open chat will pass through for any other plugins to handle.
 	  
