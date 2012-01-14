@@ -10,12 +10,13 @@ import org.bukkit.event.player.PlayerListener;
 import org.dynmap.DynmapAPI;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.towny.NotRegisteredException;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyException;
-import com.palmergames.bukkit.towny.TownyLogger;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.TownyChat.channels.Channel;
+import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
+import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -26,14 +27,14 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.util.StringMgmt;
 
 public class TownyPlayerHighestListener extends PlayerListener  {
-	private final Towny towny;
+	private final Chat plugin;
 	private final CraftIRCHandler ircHander;
 	private final DynmapAPI dynMap;
 	
 	private HashMap<Player, Long> SpamTime = new HashMap<Player, Long>();
 
-	public TownyPlayerHighestListener(Towny instance, CraftIRCHandler irc, DynmapAPI dynMap) {
-		this.towny = instance;
+	public TownyPlayerHighestListener(Chat instance, CraftIRCHandler irc, DynmapAPI dynMap) {
+		this.plugin = instance;
 		this.ircHander = irc;
 		this.dynMap = dynMap;
 	}
@@ -50,43 +51,41 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			return;
 		}
 		String split[] = event.getMessage().split("\\ ");
-		String command = split[0].trim().toLowerCase();
+		String command = split[0].trim().toLowerCase().replace("/", "");
 		String message = "";
 
 		if (split.length > 1)
 			message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
-		if (TownySettings.chatChannelExists(command)) {
-			event.setMessage(message);
+		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
+		if (channel != null) {
+			System.out.print("Channel Found");
 			
+			event.setMessage(message);
 
-			//if not muted and has permission
+			// if not muted and has permission
 			if (!isMuted(player)) {
-				
+
 				if (isSpam(player)) {
 					event.setCancelled(true);
 					return;
 				}
-				
-				if (!towny.isPermissions() || (towny.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, TownySettings.getChatChannelPermission(command)))) {
+				event.setMessage(message);
 
-					event.setMessage(message);
-					
-					// If no message toggle the chat mode.
-					if (message.isEmpty()) {
-						towny.setPlayerChatMode(player, command.replace("/", ""));
-						
-					} else {
-						// Process the chat
-						chatProcess(event, command, player);
-						
-					}
-					event.setCancelled(true);
-	
+				// If no message toggle the chat mode.
+				if (message.isEmpty()) {
+					if (plugin.getTowny().hasPlayerMode(player, channel.getName()))
+						plugin.getTowny().removePlayerMode(player);
+					else
+						plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
+
 				} else {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("msg_err_command_disable"));
-					event.setCancelled(true);
+					// Process the chat
+					chatProcess(event, channel, player);
+
 				}
+				event.setCancelled(true);
+
 			}
 		}
 	}
@@ -95,86 +94,93 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 	public void onPlayerChat(PlayerChatEvent event) {
 
 		Player player = event.getPlayer();
-		
+
 		// Check if essentials has this player muted.
 		if (!isMuted(player)) {
-			
+
 			if (isSpam(player)) {
 				event.setCancelled(true);
 				return;
 			}
-			
-			for (String channel : TownySettings.getChatChannels()) {
-				if (towny.hasPlayerMode(player, channel.replace("/", ""))) {
-					if (!towny.isPermissions() || (towny.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, TownySettings.getChatChannelPermission(channel)))) {
-						// Channel Chat
-						// Process the chat
-						chatProcess(event, channel, player);
-						event.setCancelled(true);
-						return;
-					}
+
+			for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
+				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
+					// Channel Chat mode set
+					// Process the chat
+					chatProcess(event, channel, player);
+					event.setCancelled(true);
+					return;
 				}
 			}
 			
-			if (TownySettings.isUsingModifyChat()) {
-                try {
-                        event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
-                        Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-                        
-                        TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
-                        event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-                } catch (NotRegisteredException e) {
-                        // World or resident not registered with Towny
-                        e.printStackTrace();
-                }
+			// Find a global channel this player has permissions for.
+			Channel channel = plugin.getChannelsHandler().getChannel(player, channelTypes.GLOBAL);
+					
+			if (channel != null) {
+				chatProcess(event, channel, player);
+				event.setCancelled(true);
+				return;
 			}
 			
-			// No modes set so this must be open/global chat.
-			if (!towny.isPermissions() || (towny.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(player, TownySettings.getChatChannelPermission("/g"))))
-				parseGlobalChannelChatCommand(event, "/g", player);
-			else
-				return;
-			
-			
 		}
-		event.setCancelled(true);
+
+		if (TownySettings.isUsingModifyChat()) {
+			try {
+				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
+				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+
+				TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
+				event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+			} catch (NotRegisteredException e) {
+				// World or resident not registered with Towny
+				e.printStackTrace();
+			}
+		}
 
 	}
+
+
 	
-	private void chatProcess(PlayerChatEvent event, String command, Player player) {
+	private void chatProcess(PlayerChatEvent event, Channel chan, Player player) {
 		
-		 if (command.equalsIgnoreCase("/tc")) {
-			// Town Chat
-			parseTownChatCommand(event, "/tc", player);
-				
-		} else if (command.equalsIgnoreCase("/nc")) {
-			// Nation chat
-			parseNationChatCommand(event, "/nc", player);
-				
-		} else if (command.equalsIgnoreCase("/g")) {
-			// Global chat
-			parseGlobalChannelChatCommand(event, "/g", player);
-				
-		} else {
+		
+		channelTypes exec = channelTypes.valueOf(chan.getType().name());
+		
+		switch (exec) {
+		
+		case TOWN:
+			parseTownChatCommand(event, chan, player);
+			break;
+		
+		case NATION:
+			parseNationChatCommand(event, chan, player);			
+			break;
 			
-			// Deal with custom channel cases (mod, admin etc)
-			parseDefaultChannelChatCommand(event, command, player);
+		case DEFAULT:
+			parseDefaultChannelChatCommand(event, chan, player);
+			
+			break;
+			
+		case GLOBAL:
+			parseGlobalChannelChatCommand(event, chan, player);
+			
 		}
 		
 	}
 
-	private void parseTownChatCommand(PlayerChatEvent event, String command, Player player) {
+	private void parseTownChatCommand(PlayerChatEvent event, Channel chan, Player player) {
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Town town = resident.getTown();
 
-			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatTownChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
+				.getChatTownChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
-			//TownyLogger.log.info(ChatTools.stripColour(msg));
+			plugin.getLogger().info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + msg));
 			
 			// Relay to IRC
 			if (ircHander != null)
@@ -182,24 +188,36 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			
 			sendSpy(player, "[Town Msg] " + town.getName() + ": " + msg);
 
-			TownyMessaging.sendTownMessage(town, msg);
+			// Send the town message
+			int count = 0;
+	        for (Player test : TownyUniverse.getOnlinePlayers(town))
+	        	if ((testDistance(player, test, chan.getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
+	        		count++;
+	                test.sendMessage(msg);
+	        	}
+	        
+	        if (count <= 1)
+				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
+			
+			
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
 	}
 
-	private void parseNationChatCommand(PlayerChatEvent event, String command, Player player) {
+	private void parseNationChatCommand(PlayerChatEvent event, Channel chan, Player player) {
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Nation nation = resident.getTown().getNation();
 
-			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatNationChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
+				.getChatNationChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
-			//TownyLogger.log.info(ChatTools.stripColour(msg));
+			plugin.getLogger().info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + msg));
 
 			// Relay to IRC
 			if (ircHander != null)
@@ -207,24 +225,36 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			
 			sendSpy(player, "[Nation Msg] " + nation.getName() + ": " + msg);
 			
-			TownyMessaging.sendNationMessage(nation, msg);
+			// Send the town message
+			int count = 0;
+	        for (Player test : TownyUniverse.getOnlinePlayers(nation))
+	        	if ((testDistance(player, test, chan.getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
+	        		count++;
+	                test.sendMessage(msg);
+	        	}
+	        
+	        if (count <= 1)
+	        	player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
+	        	
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
 		}
 	}
 
-	private void parseDefaultChannelChatCommand(PlayerChatEvent event, String command, Player player) {
+	private void parseDefaultChannelChatCommand(PlayerChatEvent event, Channel chan, Player player) {
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Boolean bEssentials = towny.isEssentials();
+			Boolean bEssentials = plugin.getTowny().isEssentials();
 			
-			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatDefaultChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
+			if (TownySettings.isUsingModifyChat())
+				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
+					.getChatDefaultChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
-			TownyLogger.log.info(ChatTools.stripColour(msg));
+			plugin.getLogger().info(ChatTools.stripColour(msg));
 			
 			// Relay to IRC
 			if (ircHander != null)
@@ -232,12 +262,13 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			
 			sendSpy(player, msg);
 			
+			int count = 0;
 			for (Player test : TownyUniverse.getOnlinePlayers()) {
-				if (!towny.isPermissions() || (towny.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {
+				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, chan.getPermission()))) {
 					
 					if (bEssentials) {
 						try {
-							User targetUser = towny.getEssentials().getUser(test);
+							User targetUser = plugin.getTowny().getEssentials().getUser(test);
 							// Don't send this message if the user is ignored
 							if (targetUser.isIgnoredPlayer(player.getName()))
 								continue;
@@ -245,9 +276,13 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 							// Failed to fetch user so ignore.
 						}
 					}
-					if ((testDistance(player, test, TownySettings.getChatChannelRange(command))) && (!towny.hasPlayerMode(test, "spy")))
+					if ((testDistance(player, test, chan.getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
+						count++;
 						TownyMessaging.sendMessage(test, msg);
+					}
 				}
+				if (count <= 1)
+					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
 			}
 
 		} catch (NotRegisteredException x) {
@@ -255,20 +290,20 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 		}
 	}
 	
-	private void parseGlobalChannelChatCommand(PlayerChatEvent event, String command, Player player) {
+	private void parseGlobalChannelChatCommand(PlayerChatEvent event, Channel chan, Player player) {
 		try {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Boolean bEssentials = towny.isEssentials();
+			Boolean bEssentials = plugin.getTowny().isEssentials();
 
-			if (TownySettings.isUsingModifyChat()) {
-				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatGlobalChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
-			}
+			if (TownySettings.isUsingModifyChat())
+				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
+					.getChatGlobalChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
-			TownyLogger.log.info(ChatTools.stripColour(msg));
+			plugin.getLogger().info(ChatTools.stripColour(msg));
 			
 			// Relay to IRC
 			if (ircHander != null)
@@ -279,12 +314,13 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			if (dynMap != null)
 				dynMap.postPlayerMessageToWeb(player, event.getMessage());
 			
+			int count = 0;
 			for (Player test : TownyUniverse.getOnlinePlayers()) {
-				if (!towny.isPermissions() || (towny.isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, TownySettings.getChatChannelPermission(command)))) {
+				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, chan.getPermission()))) {
 					
 					if (bEssentials) {
 						try {
-							User targetUser = towny.getEssentials().getUser(test);
+							User targetUser = plugin.getTowny().getEssentials().getUser(test);
 							// Don't send this message if the user is ignored
 							if (targetUser.isIgnoredPlayer(player.getName()))
 								continue;
@@ -292,9 +328,13 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 							// Failed to fetch user so ignore.
 						}
 					}
-					if (testDistance(player, test, TownySettings.getChatChannelRange(command)) && (!towny.hasPlayerMode(test, "spy")))
+					if (testDistance(player, test, chan.getRange()) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
+						count++;
 						TownyMessaging.sendMessage(test, msg);
+					}
 				}
+				if (count <= 1)
+					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
 			}
 
 			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());
@@ -306,7 +346,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 	private void sendSpy(Player player, String msg) {
 		
 		for (Player test : TownyUniverse.getOnlinePlayers()) {
-			if (towny.hasPlayerMode(test, "spy")) {
+			if (plugin.getTowny().hasPlayerMode(test, "spy")) {
 				TownyMessaging.sendMessage(test, msg);
 			}
 		}
@@ -314,9 +354,9 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 	}
 	private boolean isMuted(Player player) {
 		// Check if essentials has this player muted.
-		if (towny.isEssentials()) {
+		if (plugin.getTowny().isEssentials()) {
 			try {
-				if (towny.getEssentials().getUser(player).isMuted()) {
+				if (plugin.getTowny().getEssentials().getUser(player).isMuted()) {
 					TownyMessaging.sendErrorMsg(player, "Unable to talk...You are currently muted!");
 					return true;
 				}
@@ -345,12 +385,12 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			SpamTime.remove(player);
 		} else {
 			// No record found so ensure we don't trigger for spam
-			spam -= 3;
+			spam -= (plugin.getSpam_time() + 1);
 		}
 		
 		SpamTime.put(player, timeNow);
 		
-		if (timeNow - spam < 2) {
+		if (timeNow - spam < plugin.getSpam_time()) {
 			TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
 			return true;
 		}

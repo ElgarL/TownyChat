@@ -11,8 +11,10 @@ import org.dynmap.DynmapAPI;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
+import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.event.TownyPlayerHighestListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
+import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
 
 /**
@@ -27,6 +29,7 @@ public class Chat extends JavaPlugin {
 
 	private Logger logger = Logger.getLogger("com.palmergames.bukkit.TownyChat");
 	private TownyPlayerHighestListener TownyPlayerListener;
+	private ChannelsHolder channels = new ChannelsHolder(this);
 
 	protected PluginManager pm;
 	private Towny towny = null;
@@ -34,6 +37,8 @@ public class Chat extends JavaPlugin {
 	private DynmapAPI dynMap = null;
 	
 	private CraftIRCHandler irc = null;
+	
+	private long spam_time = 2;
 
 	@Override
 	public void onEnable() {
@@ -46,7 +51,8 @@ public class Chat extends JavaPlugin {
 		 * This executes the task with a 1 tick delay avoiding the bukkit
 		 * depends bug.
 		 */
-		if ((towny == null) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)) {
+		if ((towny == null) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)
+			|| (!loadChannels())) {
 			/*
 			 * We either failed to find Towny or the Scheduler failed to
 			 * register the task.
@@ -56,7 +62,12 @@ public class Chat extends JavaPlugin {
 			pm.disablePlugin(this);
 			return;
 		}
-
+		
+	}
+	
+	private boolean loadChannels() {
+		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
+		return channels.loadChannels(getChannelsPath(), "Channels.yml");
 	}
 
 	@Override
@@ -95,10 +106,39 @@ public class Chat extends JavaPlugin {
 	}
 
 	public void registerEvents() {
-		TownyPlayerListener = new TownyPlayerHighestListener(towny, irc, dynMap);
+		TownyPlayerListener = new TownyPlayerHighestListener(this, irc, dynMap);
 
 		pm.registerEvent(Event.Type.PLAYER_CHAT, TownyPlayerListener, Priority.Highest, this); //Run this lower so we go before herochat? ( it needs to see us cancel).
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, TownyPlayerListener, Priority.Highest, this);
+	}
+	
+	public String getRootPath() {
+		return getTowny().getDataFolder().getPath();
+	}
+
+	public String getChannelsPath() {
+		return getRootPath() + FileMgmt.fileSeparator() + "settings";
+	}
+	
+	/**
+	 * @return the channels
+	 */
+	public ChannelsHolder getChannelsHandler() {
+		return channels;
+	}
+
+	/**
+	 * @return the spam_time
+	 */
+	public long getSpam_time() {
+		return spam_time;
+	}
+
+	/**
+	 * @param spam_time the spam_time to set
+	 */
+	public void setSpam_time(long spam_time) {
+		this.spam_time = spam_time;
 	}
 
 	public Logger getLogger() {

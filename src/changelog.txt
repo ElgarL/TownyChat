@@ -66,4 +66,10 @@ v0.10:
 v0.11:
 	- Fixed channel tag for the global channel.
 	- Fixed range test trying to cross worlds.
+v0.12:
+	- Major rewrite to move all channel handling into TownyChat.
+	- All chat channels are now defined in their own file 'Channels.yml' found in the Towny/Settings folder.
+	- Range limits can now be applied to town and nation chat.
+	- You can create two identical channels, one with a range limit and one without. The player will use whichever they have permission for.
+	- towny_default_modes now uses the full chat channel name. To allow use of the default channel it would be towny_default_modes: 'general'
 	  
