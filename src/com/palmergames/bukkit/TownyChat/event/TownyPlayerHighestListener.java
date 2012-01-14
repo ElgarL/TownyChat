@@ -261,7 +261,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			Boolean bEssentials = towny.isEssentials();
 
 			if (TownySettings.isUsingModifyChat()) {
-				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
+				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatGlobalChannelFormat().replace("{channelTag}", TownySettings.getChatChannelName(command)).replace("{msgcolour}", TownySettings.getChatChannelColour(command)));
 			}
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
@@ -378,7 +378,10 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 		if (range == 0)
 			return player1.getWorld().equals(player2.getWorld());
 		
-		// Range check
-		return (player1.getLocation().distance(player2.getLocation()) < range);
+		// Range check (same world)
+		if (player1.getWorld().equals(player2.getWorld()))
+			return (player1.getLocation().distance(player2.getLocation()) < range);
+		else
+			return false;
 	}
 }

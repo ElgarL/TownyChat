@@ -63,4 +63,7 @@ v0.10:
 	  This requires you have the permission node 'towny.chat.spy' and be using TownyChat.
 	  If you toggle this mode on you will be able to see all town/nation/global, and all custom channel chat.
 	- If a player doesn't have the 'towny.chat.global' permission node, any open chat will pass through for any other plugins to handle.
+v0.11:
+	- Fixed channel tag for the global channel.
+	- Fixed range test trying to cross worlds.
 	  
