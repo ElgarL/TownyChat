@@ -197,7 +197,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 	        	}
 	        
 	        if (count <= 1)
-				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
+				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 			
 			
 		} catch (NotRegisteredException x) {
@@ -234,7 +234,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 	        	}
 	        
 	        if (count <= 1)
-	        	player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
+	        	player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 	        	
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getError());
@@ -281,7 +281,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 					}
 				}
 				if (count <= 1)
-					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
+					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 			}
 
 		} catch (NotRegisteredException x) {
@@ -333,7 +333,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 					}
 				}
 				if (count <= 1)
-					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so longely."));
+					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 			}
 
 			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());
