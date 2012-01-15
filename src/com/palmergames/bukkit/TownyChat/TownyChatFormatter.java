@@ -4,11 +4,11 @@ import java.util.regex.Pattern;
 
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
 
@@ -19,7 +19,7 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{worldname}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, TownyChatEvent event) throws Exception {
-				return String.format(TownySettings.getChatWorldFormat(), event.getEvent().getPlayer().getWorld().getName());
+				return String.format(ChatSettings.getWorldTag(), event.getEvent().getPlayer().getWorld().getName());
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{town}"), new TownyChatReplacerCallable() {
@@ -131,7 +131,7 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{townycolor}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, TownyChatEvent event) throws Exception {
-				return event.getResident().isMayor() ? (event.getResident().isKing() ? TownySettings.getKingColour() : TownySettings.getMayorColour()) : "";
+				return event.getResident().isMayor() ? (event.getResident().isKing() ? ChatSettings.getKingColour() : ChatSettings.getMayorColour()) : "";
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{group}"), new TownyChatReplacerCallable() {
@@ -228,13 +228,13 @@ public class TownyChatFormatter {
 
 				// Output depending on what tags are present
 				if ((!tTag.isEmpty()) && (!nTag.isEmpty()))
-					return String.format(TownySettings.getChatTownNationTagFormat(), nTag, tTag);
+					return String.format(ChatSettings.getBothTags(), nTag, tTag);
 
 				if (!nTag.isEmpty())
-					return String.format(TownySettings.getChatNationTagFormat(), nTag);
+					return String.format(ChatSettings.getNationTag(), nTag);
 
 				if (!tTag.isEmpty())
-					return String.format(TownySettings.getChatTownTagFormat(), tTag);
+					return String.format(ChatSettings.getTownTag(), tTag);
 
 			}
 		} catch (NotRegisteredException e) {
@@ -247,11 +247,11 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasTown())
 				if (full)
-					return String.format(TownySettings.getChatTownTagFormat(), resident.getTown().getName());
+					return String.format(ChatSettings.getTownTag(), resident.getTown().getName());
 				else if (resident.getTown().hasTag())
-					return String.format(TownySettings.getChatTownTagFormat(), resident.getTown().getTag());
+					return String.format(ChatSettings.getTownTag(), resident.getTown().getTag());
 				else if (override)
-					return String.format(TownySettings.getChatTownTagFormat(), resident.getTown().getName());
+					return String.format(ChatSettings.getTownTag(), resident.getTown().getName());
 
 		} catch (NotRegisteredException e) {
 		}
@@ -262,11 +262,11 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasNation())
 				if (full)
-					return String.format(TownySettings.getChatNationTagFormat(), resident.getTown().getNation().getName());
+					return String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName());
 				else if (resident.getTown().getNation().hasTag())
-					return String.format(TownySettings.getChatNationTagFormat(), resident.getTown().getNation().getTag());
+					return String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getTag());
 				else if (override)
-					return String.format(TownySettings.getChatNationTagFormat(), resident.getTown().getNation().getName());
+					return String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName());
 
 		} catch (NotRegisteredException e) {
 		}

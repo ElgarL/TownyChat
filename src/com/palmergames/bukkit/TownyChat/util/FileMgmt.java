@@ -17,6 +17,8 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 
+import com.palmergames.bukkit.TownyChat.Chat;
+
 
 
 public class FileMgmt {
@@ -30,7 +32,7 @@ public class FileMgmt {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getFile(String filepath, String resource) {
+	public static Map<String, Object> getFile(String filepath, String resource, Chat plugin) {
 
 		try {
 			File f = new File(filepath);
@@ -38,6 +40,10 @@ public class FileMgmt {
 				// Populate a new file
 				try {
 					String resString = convertStreamToString("/" + resource);
+					// If we have a plugin reference pass to load default.
+					if (plugin != null)
+						resString = plugin.getConfigurationHandler().setConfigs(resString, true);
+					
 					FileMgmt.stringToFile(resString, filepath);
 
 				} catch (IOException e) {

@@ -1,15 +1,11 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.TownyChat.Chat;
-import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 /**
@@ -22,7 +18,7 @@ public class ChannelsHolder {
 	
 	/** Constructor
 	 * 
-	 * @param towny
+	 * @param plugin
 	 */
 	public ChannelsHolder(Chat plugin) {
 		super();
@@ -45,6 +41,13 @@ public class ChannelsHolder {
 	 */
 	public void setChannels(HashMap<String, Channel> channels) {
 		this.channels = channels;
+	}
+	
+	public void addChannel(Channel chan) {
+		if (isChannel(chan.getName()))
+			channels.remove(chan);
+			
+		channels.put(chan.getName(), chan);
 	}
 	
 	public boolean isChannel(String channelName) {
@@ -90,77 +93,5 @@ public class ChannelsHolder {
 		}
 		return null;
 	}
-	
-	/**
-	 * Load all Channels form the Channels.yml
-	 * If it doesn't exist, create it from
-	 * the resource in this jar.
-	 * 
-	 * @param filepath
-	 * @param defaultRes
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public boolean loadChannels(String filepath, String defaultRes) {
 
-		String filename = filepath + FileMgmt.fileSeparator() + defaultRes;
-
-		Map<String, Object> file = FileMgmt.getFile(filename, defaultRes);
-		if (file != null) {
-
-			// Parse the channels
-			Map<String, Object> allChannelNodes = (Map<String, Object>) file.get("Channels");
-
-			// Load channels if the file is NOT empty
-			if (allChannelNodes != null) {
-				for (String channelKey : allChannelNodes.keySet()) {
-					if (channelKey.equalsIgnoreCase("spam_time"))
-						plugin.setSpam_time((Long)allChannelNodes.get(channelKey));
-						
-						
-					Map<String, Object> thisChannelNode = (Map<String, Object>) allChannelNodes.get(channelKey);
-					Channel channel = new Channel(channelKey.toLowerCase());
-
-					for (String key : thisChannelNode.keySet()) {
-						Object element = thisChannelNode.get(key);
-
-						if (key.equalsIgnoreCase("commands"))
-							if (element instanceof ArrayList)
-								channel.setCommands((List<String>) element);
-							else if (element instanceof String)
-								channel.setCommands(Arrays.asList(element.toString()));
-
-						if (key.equalsIgnoreCase("type"))
-							if (element instanceof String)
-								channel.setType(channelTypes.valueOf(element.toString()));
-
-						if (key.equalsIgnoreCase("channeltag"))
-							if (element instanceof String)
-								channel.setChannelTag(element.toString());
-
-						if (key.equalsIgnoreCase("messagecolour"))
-							if (element instanceof String)
-								channel.setMessageColour(element.toString());
-
-						if (key.equalsIgnoreCase("permission"))
-							if (element instanceof String)
-								channel.setPermission(element.toString());
-
-						if (key.equalsIgnoreCase("range"))
-							channel.setRange(Double.valueOf(element.toString()));
-					}
-					
-					channels.put(channel.getName(), channel);
-					
-					//System.out.print("Channel: " + channel.getName() + " : Type : " + channel.getType().name());
-				}
-				return true;
-				
-			}
-		}
-		return false;
-	}
-	
-
-	
 }

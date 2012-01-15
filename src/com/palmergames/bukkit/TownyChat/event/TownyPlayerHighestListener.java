@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
@@ -124,9 +125,9 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			
 		}
 
-		if (TownySettings.isUsingModifyChat()) {
+		if (ChatSettings.isModify_chat()) {
 			try {
-				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName()).getChatGlobalChannelFormat());
+				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL());
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
 				TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
@@ -173,8 +174,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Town town = resident.getTown();
 
-			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
-				.getChatTownChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
+			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getTOWN().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -201,7 +201,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			
 			
 		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getError());
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
 
@@ -210,8 +210,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Nation nation = resident.getTown().getNation();
 
-			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
-				.getChatNationChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
+			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getNATION().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -237,7 +236,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 	        	player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 	        	
 		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getError());
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
 
@@ -246,8 +245,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Boolean bEssentials = plugin.getTowny().isEssentials();
 			
-			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
-				.getChatDefaultChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
+			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getDEFAULT().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -285,7 +283,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			}
 
 		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getError());
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
 	
@@ -294,9 +292,8 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Boolean bEssentials = plugin.getTowny().isEssentials();
 
-			if (TownySettings.isUsingModifyChat())
-				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
-					.getChatGlobalChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
+			if (ChatSettings.isModify_chat())
+				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -338,7 +335,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 
 			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());
 		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getError());
+			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
 	
@@ -384,12 +381,12 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			SpamTime.remove(player);
 		} else {
 			// No record found so ensure we don't trigger for spam
-			spam -= (plugin.getSpam_time() + 1);
+			spam -= (ChatSettings.getSpam_time() + 1);
 		}
 		
 		SpamTime.put(player, timeNow);
 		
-		if (timeNow - spam < plugin.getSpam_time()) {
+		if (timeNow - spam < ChatSettings.getSpam_time()) {
 			TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
 			return true;
 		}
