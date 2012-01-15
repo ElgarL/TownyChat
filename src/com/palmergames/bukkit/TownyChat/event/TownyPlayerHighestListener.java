@@ -246,9 +246,8 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 			Boolean bEssentials = plugin.getTowny().isEssentials();
 			
-			if (TownySettings.isUsingModifyChat())
-				event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
-					.getChatDefaultChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
+			event.setFormat(TownyUniverse.getDataSource().getWorld(player.getWorld().getName())
+				.getChatDefaultChannelFormat().replace("{channelTag}", chan.getChannelTag()).replace("{msgcolour}", chan.getMessageColour()));
 
 			TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
