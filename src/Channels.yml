@@ -31,10 +31,6 @@
 # DarkPurple = &9, LightGreen = &a, LightBlue = &b
 # Rose = &c, LightPurple = &d, Yellow = &e, White = &f
 
-# Spam_time set the minimum time between messages to be flagged as spam
-spam_time: 2
-
-
 Channels:
     general:
         commands: [g]

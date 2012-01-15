@@ -197,27 +197,29 @@ public class ConfigurationHandler {
 
 				if (Key.equalsIgnoreCase("worlds")) {
 					Map<String, Object> allWorlds = (Map<String, Object>) file.get(Key);
-
-					for (String worlds : allWorlds.keySet()) {
-						Map<String, Object> world = (Map<String, Object>) allWorlds.get(worlds);
-
-						channelFormats group = new channelFormats(worlds);
-
-						for (String element : world.keySet()) {
-							if (element.equalsIgnoreCase("global"))
-								group.setGLOBAL(world.get(element).toString());
-
-							if (element.equalsIgnoreCase("town"))
-								group.setTOWN(world.get(element).toString());
-
-							if (element.equalsIgnoreCase("nation"))
-								group.setNATION(world.get(element).toString());
-
-							if (element.equalsIgnoreCase("default"))
-								group.setDEFAULT(world.get(element).toString());
+					
+					if (allWorlds != null) {
+						for (String worlds : allWorlds.keySet()) {
+							Map<String, Object> world = (Map<String, Object>) allWorlds.get(worlds);
+	
+							channelFormats group = new channelFormats(worlds);
+	
+							for (String element : world.keySet()) {
+								if (element.equalsIgnoreCase("global"))
+									group.setGLOBAL(world.get(element).toString());
+	
+								if (element.equalsIgnoreCase("town"))
+									group.setTOWN(world.get(element).toString());
+	
+								if (element.equalsIgnoreCase("nation"))
+									group.setNATION(world.get(element).toString());
+	
+								if (element.equalsIgnoreCase("default"))
+									group.setDEFAULT(world.get(element).toString());
+							}
+							System.out.print("Adding: " + group.getName());
+							ChatSettings.addFormatGroup(group);
 						}
-						System.out.print("Adding: " + group.getName());
-						ChatSettings.addFormatGroup(group);
 					}
 
 				}

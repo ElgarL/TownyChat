@@ -67,7 +67,7 @@ public class Chat extends JavaPlugin {
 	
 	private boolean load() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
-		return configuration.loadChannels(getChannelsPath(), "/Channels.yml");
+		return configuration.loadChannels(getChannelsPath(), "Channels.yml");
 	}
 
 	@Override
