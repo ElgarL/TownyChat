@@ -192,7 +192,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			int count = 0;
 	        for (Player test : TownyUniverse.getOnlinePlayers(town))
 	        	if ((testDistance(player, test, chan.getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-	        		count++;
+	        		count += 1;
 	                test.sendMessage(msg);
 	        	}
 	        
@@ -228,7 +228,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 			int count = 0;
 	        for (Player test : TownyUniverse.getOnlinePlayers(nation))
 	        	if ((testDistance(player, test, chan.getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-	        		count++;
+	        		count += 1;
 	                test.sendMessage(msg);
 	        	}
 	        
@@ -274,13 +274,13 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 						}
 					}
 					if ((testDistance(player, test, chan.getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-						count++;
+						count += 1;
 						TownyMessaging.sendMessage(test, msg);
 					}
-				}
-				if (count <= 1)
-					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
+				}				
 			}
+			if (count <= 1)
+				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 
 		} catch (NotRegisteredException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -325,13 +325,13 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 						}
 					}
 					if (testDistance(player, test, chan.getRange()) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-						count++;
+						count += 1;
 						TownyMessaging.sendMessage(test, msg);
 					}
 				}
-				if (count <= 1)
-					player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 			}
+			if (count <= 1)
+				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
 
 			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());
 		} catch (NotRegisteredException x) {
