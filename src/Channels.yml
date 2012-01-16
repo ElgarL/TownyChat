@@ -37,7 +37,7 @@ Channels:
         type: GLOBAL
         channeltag: '&f[g]'
         messagecolour: '&f'
-        permission: 'towny.chat.global'
+        permission: 'towny.chat.general'
         range: '-1'
         
     town:

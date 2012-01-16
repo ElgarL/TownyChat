@@ -73,4 +73,5 @@ v0.12:
 	- You can create two identical channels, one with a range limit and one without. The player will use whichever they have permission for.
 	- towny_default_modes now uses the full chat channel name. To allow use of the default channel it would be towny_default_modes: 'general'
 	- Moved ALL chat settings to 'ChatConfig.yml' found in the Towny/Settings folder.
-	  
+v0.13:
+	- Fixed channel modes when defaulting to a global channel not to place you in one of your own (Lonely spam).
