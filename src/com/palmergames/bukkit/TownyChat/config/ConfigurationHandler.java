@@ -217,7 +217,6 @@ public class ConfigurationHandler {
 								if (element.equalsIgnoreCase("default"))
 									group.setDEFAULT(world.get(element).toString());
 							}
-							System.out.print("Adding: " + group.getName());
 							ChatSettings.addFormatGroup(group);
 						}
 					}
