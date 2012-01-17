@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.TownyChat;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -110,8 +112,15 @@ public class Chat extends JavaPlugin {
 
 		pm.registerEvent(Event.Type.PLAYER_CHAT, TownyPlayerListener, Priority.Highest, this); //Run this lower so we go before herochat? ( it needs to see us cancel).
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, TownyPlayerListener, Priority.Highest, this);
+		
 	}
 	
+	public void registerPermissions() {
+		// Register all Permissions.
+		for (String perm : getChannelsHandler().getAllPermissions()) {
+			pm.addPermission(new Permission(perm, new HashMap<String, Boolean>()));
+		}
+	}
 	
 	
 	public String getRootPath() {

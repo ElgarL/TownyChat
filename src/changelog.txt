@@ -75,3 +75,6 @@ v0.12:
 	- Moved ALL chat settings to 'ChatConfig.yml' found in the Towny/Settings folder.
 v0.13:
 	- Fixed channel modes when defaulting to a global channel not to place you in one of your own (Lonely spam).
+v0.14:
+	- The default permission node for the global chat channel has changed to 'towny.chat.general'
+	- TownyChat now registers is't permissions with Bukkit.

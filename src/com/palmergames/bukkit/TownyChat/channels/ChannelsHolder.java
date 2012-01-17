@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 
@@ -93,5 +95,24 @@ public class ChannelsHolder {
 		}
 		return null;
 	}
+	
+	/**
+	 * Fetch all channel permissions
+	 * 
+	 * @return Set of all permission nodes
+	 */
+	public Set<String> getAllPermissions() {
+		
+		Set<String> perms = new HashSet<String>();
+		
+		for (Channel channel: channels.values()) {
+			if (!perms.contains(channel.getPermission())) {
+				perms.add(channel.getName());
+				
+			}
+		}
+		return perms;
+	}
+
 
 }

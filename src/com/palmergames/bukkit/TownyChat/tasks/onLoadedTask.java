@@ -33,6 +33,7 @@ public class onLoadedTask implements Runnable {
 			}
 			
 			plugin.getLogger().info("-******* TownyChat enabled *******-");
+			plugin.registerPermissions();
 			plugin.registerEvents();
 		}
 		
