@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="../../lib/bukkit-0.0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="../../lib/craftbukkit-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="../../lib/bukkit-1.1-R1-20120119.234317-45.jar"/>
+	<classpathentry kind="lib" path="../../lib/craftbukkit-1.1-R1-20120120.104802-76.jar"/>
 	<classpathentry kind="lib" path="../../lib/Towny.jar"/>
-	<classpathentry kind="lib" path="E:/ElgarL/lib/Essentials.jar"/>
-	<classpathentry kind="lib" path="E:/ElgarL/lib/CraftIRC-3.0.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="E:/ElgarL/lib/dynmap-api.jar"/>
+	<classpathentry kind="lib" path="../../lib/Essentials.jar"/>
+	<classpathentry kind="lib" path="../../lib/CraftIRC-3.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="../../lib/dynmap-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

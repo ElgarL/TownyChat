@@ -78,3 +78,5 @@ v0.13:
 v0.14:
 	- The default permission node for the global chat channel has changed to 'towny.chat.general'
 	- TownyChat now registers is't permissions with Bukkit.
+v0.15:
+	- Updated for the new Bukkit Event system.

@@ -3,9 +3,12 @@ package com.palmergames.bukkit.TownyChat.event;
 import java.util.HashMap;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerListener;
+//import org.bukkit.event.player.PlayerListener;
 
 import org.dynmap.DynmapAPI;
 import com.earth2me.essentials.User;
@@ -27,7 +30,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.util.StringMgmt;
 
-public class TownyPlayerHighestListener extends PlayerListener  {
+public class TownyPlayerHighestListener implements Listener  {
 	private final Chat plugin;
 	private final CraftIRCHandler ircHander;
 	private final DynmapAPI dynMap;
@@ -40,7 +43,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 		this.dynMap = dynMap;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 
 		Player player = event.getPlayer();
@@ -91,7 +94,7 @@ public class TownyPlayerHighestListener extends PlayerListener  {
 		}
 	}
 	
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerChat(PlayerChatEvent event) {
 
 		Player player = event.getPlayer();
