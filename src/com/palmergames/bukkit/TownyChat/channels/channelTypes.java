@@ -5,5 +5,6 @@ public enum channelTypes {
 	TOWN,
 	NATION,
 	DEFAULT,
-	GLOBAL
+	GLOBAL,
+	PRIVATE
 }

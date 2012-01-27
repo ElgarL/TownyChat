@@ -80,3 +80,5 @@ v0.14:
 	- TownyChat now registers is't permissions with Bukkit.
 v0.15:
 	- Updated for the new Bukkit Event system.
+v0.16:
+	- Lowered event priorities to HIGH to allow other plugins the chance to beat us to the event and cancel.

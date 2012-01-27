@@ -43,9 +43,12 @@ public class TownyPlayerHighestListener implements Listener  {
 		this.dynMap = dynMap;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 
+		if (event.isCancelled())
+			return;
+		
 		Player player = event.getPlayer();
 
 		// Test if this player is registered with Towny.
@@ -63,7 +66,7 @@ public class TownyPlayerHighestListener implements Listener  {
 
 		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
 		if (channel != null) {
-			System.out.print("Channel Found");
+			//System.out.print("Channel Found");
 			
 			event.setMessage(message);
 
@@ -94,9 +97,12 @@ public class TownyPlayerHighestListener implements Listener  {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerChat(PlayerChatEvent event) {
 
+		if (event.isCancelled())
+			return;
+		
 		Player player = event.getPlayer();
 
 		// Check if essentials has this player muted.
