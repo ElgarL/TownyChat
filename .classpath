@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="../lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="../lib/CraftIRC.jar"/>
 	<classpathentry kind="lib" path="../lib/dynmap-api.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Towny"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
