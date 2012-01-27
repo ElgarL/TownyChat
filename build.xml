@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="TownyChat" default="makejar" basedir=".">
   <target name ="makejar" description="Create a jar for the TownyChat project">
-    <jar jarfile="e:/ElgarL/lib/TownyChat.jar" includes="**" basedir="bin"/>
+    <jar jarfile="../lib/TownyChat.jar" includes="**" basedir="bin"/>
   </target>
 </project>
