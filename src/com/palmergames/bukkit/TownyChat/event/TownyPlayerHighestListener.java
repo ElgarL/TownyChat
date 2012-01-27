@@ -174,6 +174,12 @@ public class TownyPlayerHighestListener implements Listener  {
 		case GLOBAL:
 			parseGlobalChannelChatCommand(event, chan, player);
 			
+			break;
+			
+		case PRIVATE:
+			parseGlobalChannelChatCommand(event, chan, player);
+			
+			break;
 		}
 		
 	}
