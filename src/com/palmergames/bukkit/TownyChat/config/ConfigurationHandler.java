@@ -55,7 +55,7 @@ public class ConfigurationHandler {
 			if (allChannelNodes != null) {
 				for (String channelKey : allChannelNodes.keySet()) {
 					if (channelKey.equalsIgnoreCase("spam_time"))
-						ChatSettings.setSpam_time((Long)allChannelNodes.get(channelKey));
+						ChatSettings.setSpam_time((Double)allChannelNodes.get(channelKey));
 						
 						
 					Map<String, Object> thisChannelNode = (Map<String, Object>) allChannelNodes.get(channelKey);
@@ -123,7 +123,7 @@ public class ConfigurationHandler {
 			for (String Key : file.keySet()) {
 
 				if (Key.equalsIgnoreCase("spam_time"))
-					ChatSettings.setSpam_time( Long.parseLong((file.get(Key)).toString()) );
+					ChatSettings.setSpam_time( Double.parseDouble((file.get(Key)).toString()) );
 
 				if (Key.equalsIgnoreCase("modify_chat")) {
 					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
@@ -285,7 +285,7 @@ public class ConfigurationHandler {
 		String resident = "&f";
 		
 		
-		newConfig = newConfig.replace("[spam_time]", (defaults)? "2" : Long.toString(ChatSettings.getSpam_time()));
+		newConfig = newConfig.replace("[spam_time]", (defaults)? "0.5" : Double.toString(ChatSettings.getSpam_time()));
 		
 		newConfig = newConfig.replace("[globalformat]", (defaults)? global : ChatSettings.getFormatGroup("channel_formats").getGLOBAL());
 		newConfig = newConfig.replace("[townformat]", (defaults)? town : ChatSettings.getFormatGroup("channel_formats").getTOWN());

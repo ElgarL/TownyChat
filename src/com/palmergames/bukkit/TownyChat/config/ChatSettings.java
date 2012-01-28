@@ -12,7 +12,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 
 public class ChatSettings extends tag_formats {
 
-	private static long spam_time;
+	private static Double spam_time;
 	private static boolean modify_chat;
 	private static boolean per_world;
 
@@ -71,16 +71,16 @@ public class ChatSettings extends tag_formats {
 	/**
 	 * @return the spam_time
 	 */
-	public static long getSpam_time() {
+	public static Double getSpam_time() {
 		return spam_time;
 	}
 
 	/**
-	 * @param spam_time
+	 * @param d
 	 *            the spam_time to set
 	 */
-	public static void setSpam_time(long spam_time) {
-		ChatSettings.spam_time = spam_time;
+	public static void setSpam_time(Double d) {
+		ChatSettings.spam_time = d;
 	}
 
 	/**
