@@ -82,3 +82,4 @@ v0.15:
 	- Updated for the new Bukkit Event system.
 v0.16:
 	- Lowered event priorities to HIGH to allow other plugins the chance to beat us to the event and cancel.
+	- Fixed Op's with no default mode set using local chat. It will now try global, then world, then local in it's search order.

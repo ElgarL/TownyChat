@@ -82,17 +82,44 @@ public class ChannelsHolder {
 		return null;
 	}
 	
+	
+	/**
+	 * Find a channel we are able to talk in, starting with the greatest range.
+	 * 
+	 * @param player
+	 * @param type
+	 * @return channel or null if none.
+	 */
 	public Channel getChannel(Player player, channelTypes type) {
+		
+		Channel local = null;
+		Channel global = null;
+		Channel world = null;
 		
 		for (Channel channel: channels.values()) {
 			if (channel.getType().equals(type)) {
 				if (!plugin.getTowny().isPermissions()
 					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().hasPermission(player, channel.getPermission()))
-														|| (channel.getPermission().isEmpty()))))
-					return channel;
-				
+														|| (channel.getPermission().isEmpty())))) {
+					if (channel.getRange() == -1)
+						global = channel;
+					else if (channel.getRange() == 0)
+						world = channel;
+					else
+						local = channel;
+				}
 			}
 		}
+		
+		if (global != null)
+			return global;
+		
+		if (world != null)
+			return world;
+		
+		if (local != null)
+			return local;
+		
 		return null;
 	}
 	
