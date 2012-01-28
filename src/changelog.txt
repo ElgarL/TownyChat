@@ -83,3 +83,4 @@ v0.15:
 v0.16:
 	- Lowered event priorities to HIGH to allow other plugins the chance to beat us to the event and cancel.
 	- Fixed Op's with no default mode set using local chat. It will now try global, then world, then local in it's search order.
+	- Added a new command '/townychat reload'.

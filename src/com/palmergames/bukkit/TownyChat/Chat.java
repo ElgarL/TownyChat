@@ -11,6 +11,7 @@ import org.dynmap.DynmapAPI;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
+import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.event.TownyPlayerHighestListener;
@@ -28,10 +29,10 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class Chat extends JavaPlugin {
 
-	private Logger logger = Logger.getLogger("com.palmergames.bukkit.TownyChat");
+	private Logger logger;
 	private TownyPlayerHighestListener TownyPlayerListener;
-	private ChannelsHolder channels = new ChannelsHolder(this);
-	private ConfigurationHandler configuration = new ConfigurationHandler(this);
+	private ChannelsHolder channels;
+	private ConfigurationHandler configuration;
 
 	protected PluginManager pm;
 	private Towny towny = null;
@@ -44,6 +45,9 @@ public class Chat extends JavaPlugin {
 	public void onEnable() {
 
 		pm = getServer().getPluginManager();
+		logger = Logger.getLogger("com.palmergames.bukkit.TownyChat");
+		configuration = new ConfigurationHandler(this);
+		channels = new ChannelsHolder(this);
 
 		checkPlugins();
 
@@ -62,6 +66,8 @@ public class Chat extends JavaPlugin {
 			pm.disablePlugin(this);
 			return;
 		}
+
+		getCommand("townychat").setExecutor(new TownyChatCommand(this));
 		
 	}
 	
@@ -72,6 +78,7 @@ public class Chat extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		unregisterPermissions();
 		// reset any handles
 		towny = null;
 		pm = null;
@@ -116,6 +123,13 @@ public class Chat extends JavaPlugin {
 		// Register all Permissions.
 		for (String perm : getChannelsHandler().getAllPermissions()) {
 			pm.addPermission(new Permission(perm, new HashMap<String, Boolean>()));
+		}
+	}
+	
+	public void unregisterPermissions() {
+		// Register all Permissions.
+		for (String perm : getChannelsHandler().getAllPermissions()) {
+			pm.removePermission(new Permission(perm, new HashMap<String, Boolean>()));
 		}
 	}
 	

@@ -9,3 +9,7 @@ description: >
 softdepend: [Towny]
 
 commands:
+    townychat:
+        aliases: []
+        usage: /townychat reload
+        permission: townychat.reload
