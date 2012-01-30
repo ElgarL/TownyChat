@@ -32,7 +32,7 @@ public class ConfigurationHandler {
 	
 	
 	/**
-	 * Load all Channels form the Channels.yml
+	 * Load all Channels from the Channels.yml
 	 * If it doesn't exist, create it from
 	 * the resource in this jar.
 	 * 
