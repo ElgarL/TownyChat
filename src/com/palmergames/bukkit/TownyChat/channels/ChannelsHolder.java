@@ -101,11 +101,11 @@ public class ChannelsHolder {
 				if (!plugin.getTowny().isPermissions()
 					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().hasPermission(player, channel.getPermission()))
 														|| (channel.getPermission().isEmpty())))) {
-					if (channel.getRange() == -1)
+					if (channel.getRange() == -1) {
 						global = channel;
-					else if (channel.getRange() == 0)
+					} else if (channel.getRange() == 0) {
 						world = channel;
-					else
+					} else
 						local = channel;
 				}
 			}
