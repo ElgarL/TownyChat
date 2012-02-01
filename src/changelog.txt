@@ -85,3 +85,6 @@ v0.16:
 	- Fixed Op's with no default mode set using local chat. It will now try global, then world, then local in it's search order.
 	- Added a new command '/townychat reload'.
 	- spam_time now accepts smaller values (eg. 0.5).
+v0.17:
+	- If a player has no permissions for any channel but we are still set to modify chat, remove the channelTag and msgcolour entries.
+	- Fix Spam timer to work in milliseconds so values of 0.5 actually work.

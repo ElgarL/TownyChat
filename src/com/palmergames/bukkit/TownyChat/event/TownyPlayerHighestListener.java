@@ -136,7 +136,7 @@ public class TownyPlayerHighestListener implements Listener  {
 
 		if (ChatSettings.isModify_chat()) {
 			try {
-				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL());
+				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
 				TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
@@ -388,7 +388,7 @@ public class TownyPlayerHighestListener implements Listener  {
 	 */
 	private boolean isSpam(Player player) {
 		
-		long timeNow = System.currentTimeMillis()/1000;
+		long timeNow = System.currentTimeMillis();
 		long spam = timeNow;
 		
 		if (SpamTime.containsKey(player)) {
@@ -396,12 +396,12 @@ public class TownyPlayerHighestListener implements Listener  {
 			SpamTime.remove(player);
 		} else {
 			// No record found so ensure we don't trigger for spam
-			spam -= (ChatSettings.getSpam_time() + 1);
+			spam -= ((ChatSettings.getSpam_time() + 1)*1000);
 		}
 		
 		SpamTime.put(player, timeNow);
 		
-		if (timeNow - spam < ChatSettings.getSpam_time()) {
+		if (timeNow - spam < (ChatSettings.getSpam_time()*1000)) {
 			TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
 			return true;
 		}
