@@ -36,7 +36,8 @@ public class CraftIRCHandler extends BasePoint implements CommandEndPoint  {
 		this.plugin = plugin;
 		this.irc = irc;
 		// Register this as the tags endpoint
-		irc.registerEndPoint(tag, this);
+		if (irc != null)
+			irc.registerEndPoint(tag, this);
 		// Second argument below is the command name
 		//irc.registerCommand(tag, tag);
 	}

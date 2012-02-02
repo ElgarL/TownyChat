@@ -31,9 +31,9 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.util.StringMgmt;
 
 public class TownyPlayerHighestListener implements Listener  {
-	private final Chat plugin;
-	private final CraftIRCHandler ircHander;
-	private final DynmapAPI dynMap;
+	private Chat plugin;
+	private CraftIRCHandler ircHander;
+	private DynmapAPI dynMap;
 	
 	private HashMap<Player, Long> SpamTime = new HashMap<Player, Long>();
 

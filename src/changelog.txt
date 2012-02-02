@@ -88,3 +88,4 @@ v0.16:
 v0.17:
 	- If a player has no permissions for any channel but we are still set to modify chat, remove the channelTag and msgcolour entries.
 	- Fix Spam timer to work in milliseconds so values of 0.5 actually work.
+	- Fix craftIRC hook to not spam console with an invalid number format error if the wrong version is detected.
