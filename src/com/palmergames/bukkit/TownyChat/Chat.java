@@ -14,6 +14,7 @@ import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
+import com.palmergames.bukkit.TownyChat.event.HeroicDeathForwarder;
 import com.palmergames.bukkit.TownyChat.event.TownyPlayerHighestListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
@@ -40,6 +41,8 @@ public class Chat extends JavaPlugin {
 	private DynmapAPI dynMap = null;
 	
 	private CraftIRCHandler irc = null;
+	private HeroicDeathForwarder heroicDeathListener = null;
+
 
 	@Override
 	public void onEnable() {
@@ -80,6 +83,10 @@ public class Chat extends JavaPlugin {
 	public void onDisable() {
 		unregisterPermissions();
 		// reset any handles
+		irc = null;
+		craftIRC = null;
+		dynMap = null;
+		heroicDeathListener= null;
 		towny = null;
 		pm = null;
 		logger = null;
@@ -91,7 +98,9 @@ public class Chat extends JavaPlugin {
 		test = pm.getPlugin("Towny");
 		if (test != null && test instanceof Towny)
 			towny = (Towny) test;
-		
+		/**
+		 * Hook craftIRC
+		 */
 		test = pm.getPlugin("CraftIRC");
 		if (test != null) {
 			try {
@@ -102,6 +111,17 @@ public class Chat extends JavaPlugin {
 					logger.warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
 			} catch (NumberFormatException e) {
 				logger.warning("Non number format found for craftIRC version string!");
+			}
+		}
+		
+		/**
+		 * If we found craftIRC check for HeroicDeath
+		 */
+		if (irc != null) {
+			test = pm.getPlugin("HeroicDeath");
+			if (test != null) {
+				heroicDeathListener = new HeroicDeathForwarder(irc);
+				logger.info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
 			}
 		}
 		
@@ -116,6 +136,7 @@ public class Chat extends JavaPlugin {
 		TownyPlayerListener = new TownyPlayerHighestListener(this, irc, dynMap);
 
 		pm.registerEvents(TownyPlayerListener, this);
+		pm.registerEvents(heroicDeathListener, this);
 		
 	}
 	
@@ -162,6 +183,10 @@ public class Chat extends JavaPlugin {
 
 	public Towny getTowny() {
 		return towny;
+	}
+
+	public HeroicDeathForwarder getHeroicDeath() {
+		return heroicDeathListener;
 	}
 
 }
