@@ -30,8 +30,6 @@ public class HeroicDeathForwarder extends CustomEventListener implements Listene
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onHeroicDeathEvent(HeroicDeathEvent event) {
-		
-		System.out.print("New event triggered");
 
 		if (ircHandler != null)
 			ircHandler.IRCSender(event.getDeathCertificate().getMessage(), ChatSettings.getHeroicDeathTags());
