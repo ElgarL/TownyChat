@@ -90,3 +90,5 @@ v0.17:
 	- Fix Spam timer to work in milliseconds so values of 0.5 actually work.
 	- Fix craftIRC hook to not spam console with an invalid number format error if the wrong version is detected.
 	- Add support for our updated HeroicDeath jar (hopefully someone will take over support for heroic Death now it's updated).
+v0.18:
+	- Added craftIRC channel tag support. A new entry per channel will allow you to set the endpoint tags for all channels to craftIRC (craftIRCTag: 'admin').

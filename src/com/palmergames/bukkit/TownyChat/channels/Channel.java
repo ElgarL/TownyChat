@@ -7,7 +7,7 @@ public class Channel {
 	private String name;
 	private List<String> commands;
 	private channelTypes type;
-	private String channelTag, messageColour, permission;
+	private String channelTag, messageColour, permission, craftIRCTag;
 	private double range;
 	
 	/**
@@ -84,6 +84,21 @@ public class Channel {
 	 */
 	public void setPermission(String permission) {
 		this.permission = permission;
+	}
+	/**
+	 * @return the permission
+	 */
+	public String getCraftIRCTag() {
+		if (craftIRCTag.isEmpty())
+			return "admin";
+			
+		return craftIRCTag;
+	}
+	/**
+	 * @param permission the permission to set
+	 */
+	public void setCraftIRCTag(String craftIRCTag) {
+		this.craftIRCTag = craftIRCTag;
 	}
 	/**
 	 * @return the range

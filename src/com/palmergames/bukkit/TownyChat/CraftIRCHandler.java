@@ -55,14 +55,18 @@ public class CraftIRCHandler extends BasePoint implements CommandEndPoint  {
 	/**
 	 * @param message
 	 */
-	public void IRCSender(String message) {
+	public void IRCSender(String message, String tags) {
 		/**
-		 * admin is the channel tag to send ALL messages to.
+		 * Relay this to every channel tag listed
 		 */
-		RelayedMessage msg = irc.newMsgToTag(this, "admin", "chat");
-		//msg.setField("command", "");
-		msg.setField("message", message);
-		msg.post(false);
+		String[] tagArray = tags.split(",");
+		
+		for (String destinationTag : tagArray) {
+			RelayedMessage msg = irc.newMsgToTag(this, destinationTag.trim(), "chat");
+			//msg.setField("command", "");
+			msg.setField("message", message);
+			msg.post(false);
+		}
 	}
 
 }

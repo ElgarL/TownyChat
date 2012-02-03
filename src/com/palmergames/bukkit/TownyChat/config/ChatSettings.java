@@ -15,6 +15,8 @@ public class ChatSettings extends tag_formats {
 	private static Double spam_time;
 	private static boolean modify_chat;
 	private static boolean per_world;
+	private static boolean heroicDeathToIRC;
+	private static String heroicDeathTags;
 
 	private static Map<String, channelFormats> formatGroups = new HashMap<String, channelFormats>();
 
@@ -112,6 +114,39 @@ public class ChatSettings extends tag_formats {
 	public static void setPer_world(boolean per_world) {
 		ChatSettings.per_world = per_world;
 	}
+	
+	/**
+	 * @return the HeroicDeathToIRC
+	 */
+	public static boolean isHeroicDeathToIRC() {
+		return heroicDeathToIRC;
+	}
+
+	/**
+	 * @param HeroicDeathToIRC
+	 *            the HeroicDeathToIRC to set
+	 */
+	public static void setHeroicDeathToIRC(boolean HeroicDeathToIRC) {
+		ChatSettings.heroicDeathToIRC = HeroicDeathToIRC;
+	}
+	
+	/**
+	 * @return the heroicDeathTags
+	 */
+	public static String getHeroicDeathTags() {
+		return heroicDeathTags;
+	}
+
+	/**
+	 * @param heroicDeathTags
+	 *            the heroicDeathTags to set
+	 */
+	public static void setheroicDeathTags(String heroicDeathTags) {
+		ChatSettings.heroicDeathTags = heroicDeathTags;
+	}
+	
+	
+	
 
 	/**
 	 * Adds customizable channel formats for each world.

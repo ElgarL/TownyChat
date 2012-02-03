@@ -48,54 +48,63 @@ public class ConfigurationHandler {
 		Map<String, Object> file = FileMgmt.getFile(filename, defaultRes, null);
 		if (file != null) {
 
-			// Parse the channels
-			Map<String, Object> allChannelNodes = (Map<String, Object>) file.get("Channels");
-
-			// Load channels if the file is NOT empty
-			if (allChannelNodes != null) {
-				for (String channelKey : allChannelNodes.keySet()) {
-					if (channelKey.equalsIgnoreCase("spam_time"))
-						ChatSettings.setSpam_time((Double)allChannelNodes.get(channelKey));
-						
-						
-					Map<String, Object> thisChannelNode = (Map<String, Object>) allChannelNodes.get(channelKey);
-					Channel channel = new Channel(channelKey.toLowerCase());
-
-					for (String key : thisChannelNode.keySet()) {
-						Object element = thisChannelNode.get(key);
-
-						if (key.equalsIgnoreCase("commands"))
-							if (element instanceof ArrayList)
-								channel.setCommands((List<String>) element);
-							else if (element instanceof String)
-								channel.setCommands(Arrays.asList(element.toString()));
-
-						if (key.equalsIgnoreCase("type"))
-							if (element instanceof String)
-								channel.setType(channelTypes.valueOf(element.toString()));
-
-						if (key.equalsIgnoreCase("channeltag"))
-							if (element instanceof String)
-								channel.setChannelTag(element.toString());
-
-						if (key.equalsIgnoreCase("messagecolour"))
-							if (element instanceof String)
-								channel.setMessageColour(element.toString());
-
-						if (key.equalsIgnoreCase("permission"))
-							if (element instanceof String)
-								channel.setPermission(element.toString());
-
-						if (key.equalsIgnoreCase("range"))
-							channel.setRange(Double.valueOf(element.toString()));
-					}
-					
-					plugin.getChannelsHandler().addChannel(channel);
-					
-					//System.out.print("Channel: " + channel.getName() + " : Type : " + channel.getType().name());
-				}
-				return true;
+			for (String rootNode : file.keySet()) {
 				
+				if (rootNode.equalsIgnoreCase("Channels")) {
+					// Parse the channels
+					Map<String, Object> allChannelNodes = (Map<String, Object>) file.get("rootNode");
+		
+					// Load channels if the file is NOT empty
+					if (allChannelNodes != null) {
+						for (String channelKey : allChannelNodes.keySet()) {
+							if (channelKey.equalsIgnoreCase("spam_time"))
+								ChatSettings.setSpam_time((Double)allChannelNodes.get(channelKey));
+								
+								
+							Map<String, Object> thisChannelNode = (Map<String, Object>) allChannelNodes.get(channelKey);
+							Channel channel = new Channel(channelKey.toLowerCase());
+		
+							for (String key : thisChannelNode.keySet()) {
+								Object element = thisChannelNode.get(key);
+		
+								if (key.equalsIgnoreCase("commands"))
+									if (element instanceof ArrayList)
+										channel.setCommands((List<String>) element);
+									else if (element instanceof String)
+										channel.setCommands(Arrays.asList(element.toString()));
+		
+								if (key.equalsIgnoreCase("type"))
+									if (element instanceof String)
+										channel.setType(channelTypes.valueOf(element.toString()));
+		
+								if (key.equalsIgnoreCase("channeltag"))
+									if (element instanceof String)
+										channel.setChannelTag(element.toString());
+		
+								if (key.equalsIgnoreCase("messagecolour"))
+									if (element instanceof String)
+										channel.setMessageColour(element.toString());
+		
+								if (key.equalsIgnoreCase("permission"))
+									if (element instanceof String)
+										channel.setPermission(element.toString());
+								
+								if (key.equalsIgnoreCase("craftIRCTag"))
+									if (element instanceof String)
+										channel.setPermission(element.toString());
+		
+								if (key.equalsIgnoreCase("range"))
+									channel.setRange(Double.valueOf(element.toString()));
+							}
+							
+							plugin.getChannelsHandler().addChannel(channel);
+							
+							//System.out.print("Channel: " + channel.getName() + " : Type : " + channel.getType().name());
+						}
+						return true;
+						
+					}
+				}
 			}
 		}
 		return false;
@@ -124,6 +133,18 @@ public class ConfigurationHandler {
 
 				if (Key.equalsIgnoreCase("spam_time"))
 					ChatSettings.setSpam_time( Double.parseDouble((file.get(Key)).toString()) );
+				
+				if (Key.equalsIgnoreCase("HeroicDeathToIRC")) {
+					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
+					
+					for (String element : subNodes.keySet()) {
+						if (element.equalsIgnoreCase("enabled"))
+							ChatSettings.setHeroicDeathToIRC(Boolean.valueOf(subNodes.get(element).toString()));
+
+						if (element.equalsIgnoreCase("craftIRCTags"))
+							ChatSettings.setheroicDeathTags(subNodes.get(element).toString());
+					}
+				}
 
 				if (Key.equalsIgnoreCase("modify_chat")) {
 					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
@@ -286,6 +307,9 @@ public class ConfigurationHandler {
 		
 		
 		newConfig = newConfig.replace("[spam_time]", (defaults)? "0.5" : Double.toString(ChatSettings.getSpam_time()));
+		
+		newConfig = newConfig.replace("[hd_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isHeroicDeathToIRC()));
+		newConfig = newConfig.replace("[hd_tags]", (defaults)? "admin" : ChatSettings.getHeroicDeathTags());
 		
 		newConfig = newConfig.replace("[globalformat]", (defaults)? global : ChatSettings.getFormatGroup("channel_formats").getGLOBAL());
 		newConfig = newConfig.replace("[townformat]", (defaults)? town : ChatSettings.getFormatGroup("channel_formats").getTOWN());

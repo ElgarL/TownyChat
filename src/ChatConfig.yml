@@ -44,6 +44,13 @@
  
   # Spam_time set the minimum time between messages to be flagged as spam
   spam_time: [spam_time]
+  
+  # If using our updated HeroicDeath.jar and craftIRC 3.1 (dev), you can
+  #configure what IRC channels you want death messages relayed to.
+  HeroicDeathToIRC:
+    enabled: [hd_enable]
+    # comma delimited list of craftIRC channel tags 'admin,blah,blah'.
+    craftIRCTags: '[hd_tags]'
 
   channel_formats:
     # This is the format which will be used for GLOBAL chat/channels.

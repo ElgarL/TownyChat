@@ -199,7 +199,7 @@ public class TownyPlayerHighestListener implements Listener  {
 			
 			// Relay to IRC
 			if (ircHander != null)
-				ircHander.IRCSender(msg);
+				ircHander.IRCSender(msg, chan.getCraftIRCTag());
 			
 			sendSpy(player, "[Town Msg] " + town.getName() + ": " + msg);
 
@@ -235,7 +235,7 @@ public class TownyPlayerHighestListener implements Listener  {
 
 			// Relay to IRC
 			if (ircHander != null)
-				ircHander.IRCSender(msg);
+				ircHander.IRCSender(msg, chan.getCraftIRCTag());
 			
 			sendSpy(player, "[Nation Msg] " + nation.getName() + ": " + msg);
 			
@@ -270,7 +270,7 @@ public class TownyPlayerHighestListener implements Listener  {
 			
 			// Relay to IRC
 			if (ircHander != null)
-				ircHander.IRCSender(msg);
+				ircHander.IRCSender(msg, chan.getCraftIRCTag());
 			
 			sendSpy(player, msg);
 			
@@ -318,7 +318,7 @@ public class TownyPlayerHighestListener implements Listener  {
 			
 			// Relay to IRC
 			if (ircHander != null)
-				ircHander.IRCSender(msg);
+				ircHander.IRCSender(msg, chan.getCraftIRCTag());
 			
 			sendSpy(player, msg);
 			
