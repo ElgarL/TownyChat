@@ -89,7 +89,7 @@ public class Channel {
 	 * @return the permission
 	 */
 	public String getCraftIRCTag() {
-		if (craftIRCTag.isEmpty())
+		if ((craftIRCTag == null) || (craftIRCTag.isEmpty()))
 			return "admin";
 			
 		return craftIRCTag;

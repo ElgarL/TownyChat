@@ -52,7 +52,7 @@ public class ConfigurationHandler {
 				
 				if (rootNode.equalsIgnoreCase("Channels")) {
 					// Parse the channels
-					Map<String, Object> allChannelNodes = (Map<String, Object>) file.get("rootNode");
+					Map<String, Object> allChannelNodes = (Map<String, Object>) file.get(rootNode);
 		
 					// Load channels if the file is NOT empty
 					if (allChannelNodes != null) {
