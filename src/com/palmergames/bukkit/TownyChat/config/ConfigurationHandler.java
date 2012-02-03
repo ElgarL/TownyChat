@@ -91,7 +91,7 @@ public class ConfigurationHandler {
 								
 								if (key.equalsIgnoreCase("craftIRCTag"))
 									if (element instanceof String)
-										channel.setPermission(element.toString());
+										channel.setCraftIRCTag(element.toString());
 		
 								if (key.equalsIgnoreCase("range"))
 									channel.setRange(Double.valueOf(element.toString()));
