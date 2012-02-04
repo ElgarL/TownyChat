@@ -15,8 +15,8 @@ public class ChatSettings extends tag_formats {
 	private static Double spam_time;
 	private static boolean modify_chat;
 	private static boolean per_world;
-	private static boolean heroicDeathToIRC;
-	private static String heroicDeathTags;
+	private static boolean heroicDeathToIRC = true;
+	private static String heroicDeathTags ="admin";
 
 	private static Map<String, channelFormats> formatGroups = new HashMap<String, channelFormats>();
 
