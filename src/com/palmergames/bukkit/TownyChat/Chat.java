@@ -135,8 +135,10 @@ public class Chat extends JavaPlugin {
 	public void registerEvents() {
 		TownyPlayerListener = new TownyPlayerHighestListener(this, irc, dynMap);
 
-		pm.registerEvents(TownyPlayerListener, this);
-		pm.registerEvents(heroicDeathListener, this);
+		if (TownyPlayerListener != null)
+			pm.registerEvents(TownyPlayerListener, this);
+		if (heroicDeathListener != null)
+			pm.registerEvents(heroicDeathListener, this);
 		
 	}
 	

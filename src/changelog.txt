@@ -93,3 +93,5 @@ v0.17:
 v0.18:
 	- Added craftIRC channel tag support. A new entry per channel will allow you to set the endpoint tags for all channels to craftIRC (craftIRCTag: 'admin').
 	- Set default for new HeroicDeath interface to prevent new config errors.
+v0.19:
+	- Fix an error on startup if not using HeroicDeath.
