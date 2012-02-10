@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.TownyChat.event;
 
-import org.bukkit.event.CustomEventListener;
-import org.bukkit.event.Event;
+//import org.bukkit.event.CustomEventListener;
+//import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,8 +14,8 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
  * @author ElgarL
  * 
  */
-@SuppressWarnings("deprecation")
-public class HeroicDeathForwarder extends CustomEventListener implements Listener{
+//@SuppressWarnings("deprecation")
+public class HeroicDeathForwarder implements Listener{	// extends CustomEventListener
 
 	private CraftIRCHandler ircHandler = null;
 
@@ -39,6 +39,7 @@ public class HeroicDeathForwarder extends CustomEventListener implements Listene
 	/**
 	 * Old style Event handler
 	 */
+	/*
 	@Override
 	public void onCustomEvent(Event event) {
 
@@ -52,4 +53,5 @@ public class HeroicDeathForwarder extends CustomEventListener implements Listene
 			}
 		}
 	}
+	*/
 }

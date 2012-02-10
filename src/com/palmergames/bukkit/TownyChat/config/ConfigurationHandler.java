@@ -332,7 +332,7 @@ public class ConfigurationHandler {
 			if (!key.equalsIgnoreCase("channel_formats")) {
 				channelFormats world = ChatSettings.getFormatGroup(key);
 				
-				newConfig += "    " + key + ":" + System.getProperty("line.separator");
+				newConfig += "    '" + key + "':" + System.getProperty("line.separator");
 				
 				newConfig += "      global: '" + ((defaults)? global : world.getGLOBAL()) + "'" + System.getProperty("line.separator");
 				newConfig += "      town: '" + ((defaults)? town : world.getTOWN()) + "'" + System.getProperty("line.separator");
