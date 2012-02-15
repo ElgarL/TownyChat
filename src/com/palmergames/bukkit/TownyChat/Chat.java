@@ -146,7 +146,11 @@ public class Chat extends JavaPlugin {
 	public void registerPermissions() {
 		// Register all Permissions.
 		for (String perm : getChannelsHandler().getAllPermissions()) {
-			pm.addPermission(new Permission(perm, new HashMap<String, Boolean>()));
+			try {
+				pm.addPermission(new Permission(perm, new HashMap<String, Boolean>()));
+			} catch (IllegalArgumentException e) {
+				//permission already registered.
+			}
 		}
 	}
 	
