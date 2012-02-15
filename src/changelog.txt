@@ -100,3 +100,5 @@ v0.20:
 	- Add serialization of numeric world names.
 	- Fix spacing in default formats.
 	- Unregister the 'towny' endpoint tag so it won't error when performing a reload.
+v0.21:
+	- Fix getAllPermissions in ChannelsHolder (thanks phrstbrn).
