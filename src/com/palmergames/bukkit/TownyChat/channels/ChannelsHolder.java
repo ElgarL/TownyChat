@@ -134,7 +134,7 @@ public class ChannelsHolder {
 		
 		for (Channel channel: channels.values()) {
 			if (!perms.contains(channel.getPermission())) {
-				perms.add(channel.getName());
+				perms.add(channel.getPermission());
 				
 			}
 		}
