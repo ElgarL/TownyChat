@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat.event;
 
-import java.util.HashMap;
+import java.util.WeakHashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +35,7 @@ public class TownyPlayerHighestListener implements Listener  {
 	private CraftIRCHandler ircHander;
 	private DynmapAPI dynMap;
 	
-	private HashMap<Player, Long> SpamTime = new HashMap<Player, Long>();
+	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
 
 	public TownyPlayerHighestListener(Chat instance, CraftIRCHandler irc, DynmapAPI dynMap) {
 		this.plugin = instance;
