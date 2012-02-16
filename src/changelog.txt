@@ -102,3 +102,5 @@ v0.20:
 	- Unregister the 'towny' endpoint tag so it won't error when performing a reload.
 v0.21:
 	- Fix getAllPermissions in ChannelsHolder (thanks phrstbrn).
+	- Error trap registering permissions.
+	- Fix a possible small memory leak (phrstbrn).
