@@ -134,7 +134,7 @@ public class Chat extends JavaPlugin {
 	}
 
 	public void registerEvents() {
-		TownyPlayerListener = new TownyPlayerHighestListener(this, irc, dynMap);
+		TownyPlayerListener = new TownyPlayerHighestListener(this);
 
 		if (TownyPlayerListener != null)
 			pm.registerEvents(TownyPlayerListener, this);
@@ -190,6 +190,14 @@ public class Chat extends JavaPlugin {
 
 	public Towny getTowny() {
 		return towny;
+	}
+	
+	public CraftIRCHandler getIRC() {
+		return irc;
+	}
+	
+	public DynmapAPI getDynmap() {
+		return dynMap;
 	}
 
 	public HeroicDeathForwarder getHeroicDeath() {

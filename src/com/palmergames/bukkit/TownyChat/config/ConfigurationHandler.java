@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
+import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
 import com.palmergames.bukkit.TownyChat.channels.channelFormats;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
@@ -62,7 +63,7 @@ public class ConfigurationHandler {
 								
 								
 							Map<String, Object> thisChannelNode = (Map<String, Object>) allChannelNodes.get(channelKey);
-							Channel channel = new Channel(channelKey.toLowerCase());
+							Channel channel = new StandardChannel(plugin, channelKey.toLowerCase());
 		
 							for (String key : thisChannelNode.keySet()) {
 								Object element = thisChannelNode.get(key);

@@ -2,7 +2,9 @@ package com.palmergames.bukkit.TownyChat.channels;
 
 import java.util.List;
 
-public class Channel {
+import org.bukkit.event.player.PlayerChatEvent;
+
+public abstract class Channel {
 	
 	private String name;
 	private List<String> commands;
@@ -16,7 +18,6 @@ public class Channel {
 	 * @param name
 	 */
 	public Channel(String name) {
-		super();
 		this.name = name;
 	}
 	/**
@@ -112,6 +113,9 @@ public class Channel {
 	public void setRange(double range) {
 		this.range = range;
 	}
-	
+	/**
+	 * @param event the event to process
+	 */
+	public abstract void chatProcess(PlayerChatEvent event);
 	
 }
