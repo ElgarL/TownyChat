@@ -104,3 +104,5 @@ v0.21:
 	- Fix getAllPermissions in ChannelsHolder (thanks phrstbrn).
 	- Error trap registering permissions.
 	- Fix a possible small memory leak (phrstbrn).
+v0.22:
+	- Change channel sub classing method to allow 3rd party plugins to create their own channel types (phrstbrn).
