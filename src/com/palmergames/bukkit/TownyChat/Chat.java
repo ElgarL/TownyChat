@@ -84,8 +84,10 @@ public class Chat extends JavaPlugin {
 		unregisterPermissions();
 		// reset any handles
 		irc = null;
-		craftIRC.unregisterEndPoint("towny");
-		craftIRC = null;
+		if (craftIRC != null) {
+			craftIRC.unregisterEndPoint("towny");
+			craftIRC = null;
+		}
 		dynMap = null;
 		heroicDeathListener= null;
 		towny = null;
