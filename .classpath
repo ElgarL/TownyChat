@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="../lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="../lib/CraftIRC.jar"/>
 	<classpathentry kind="lib" path="../lib/dynmap-api.jar"/>
+	<classpathentry kind="lib" path="../lib/HeroicDeath.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Towny"/>
-	<classpathentry kind="lib" path="C:/Users/Steve/git/lib/HeroicDeath.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
