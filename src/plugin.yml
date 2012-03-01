@@ -1,6 +1,6 @@
 name: TownyChat
 main: com.palmergames.bukkit.TownyChat.Chat
-version: 0.22
+version: 0.23
 author: ElgarL, Shade, phrstbrn
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -8,8 +8,23 @@ description: >
 
 softdepend: [Towny]
 
+############################################################
+# +------------------------------------------------------+ #
+# |                 TownyChat commands                   | #
+# +------------------------------------------------------+ #
+############################################################
 commands:
     townychat:
         aliases: []
         usage: /townychat reload
         permission: townychat.reload
+        
+############################################################
+# +------------------------------------------------------+ #
+# |                     Permissions                      | #
+# +------------------------------------------------------+ #
+############################################################
+permissions:
+    townychat.reload:
+        description: Allows reloading of Townychat.
+        default: op

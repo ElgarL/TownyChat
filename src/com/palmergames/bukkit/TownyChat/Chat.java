@@ -186,10 +186,6 @@ public class Chat extends JavaPlugin {
 		return configuration;
 	}
 
-	public Logger getLogger() {
-		return logger;
-	}
-
 	public Towny getTowny() {
 		return towny;
 	}
