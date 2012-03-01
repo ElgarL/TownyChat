@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.TownyChat;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
@@ -30,7 +29,6 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class Chat extends JavaPlugin {
 
-	private Logger logger;
 	private TownyPlayerHighestListener TownyPlayerListener;
 	private ChannelsHolder channels;
 	private ConfigurationHandler configuration;
@@ -48,7 +46,6 @@ public class Chat extends JavaPlugin {
 	public void onEnable() {
 
 		pm = getServer().getPluginManager();
-		logger = Logger.getLogger("com.palmergames.bukkit.TownyChat");
 		configuration = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
 
@@ -64,8 +61,8 @@ public class Chat extends JavaPlugin {
 			 * We either failed to find Towny or the Scheduler failed to
 			 * register the task.
 			 */
-			logger.severe("Could not schedule onLoadedTask.");
-			logger.severe("disabling TownyChat");
+			getLogger().severe("Could not schedule onLoadedTask.");
+			getLogger().severe("disabling TownyChat");
 			pm.disablePlugin(this);
 			return;
 		}
@@ -92,7 +89,6 @@ public class Chat extends JavaPlugin {
 		heroicDeathListener= null;
 		towny = null;
 		pm = null;
-		logger = null;
 	}
 
 	private void checkPlugins() {
@@ -111,9 +107,9 @@ public class Chat extends JavaPlugin {
 					craftIRC = (CraftIRC) test;
 					irc = new CraftIRCHandler(towny, craftIRC, "towny");
 				} else
-					logger.warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
+					getLogger().warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
 			} catch (NumberFormatException e) {
-				logger.warning("Non number format found for craftIRC version string!");
+				getLogger().warning("Non number format found for craftIRC version string!");
 			}
 		}
 		
@@ -124,7 +120,7 @@ public class Chat extends JavaPlugin {
 			test = pm.getPlugin("HeroicDeath");
 			if (test != null) {
 				heroicDeathListener = new HeroicDeathForwarder(irc);
-				logger.info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
+				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
 			}
 		}
 		
