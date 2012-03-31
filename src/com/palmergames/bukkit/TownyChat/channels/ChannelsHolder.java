@@ -73,7 +73,7 @@ public class ChannelsHolder {
 		for (Channel channel: channels.values()) {
 			if (channel.getCommands().contains(command.toLowerCase())) {
 				if (!plugin.getTowny().isPermissions()
-					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().hasPermission(player, channel.getPermission()))
+					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission()))
 														|| (channel.getPermission().isEmpty()))))
 					return channel;
 				
@@ -99,7 +99,7 @@ public class ChannelsHolder {
 		for (Channel channel: channels.values()) {
 			if (channel.getType().equals(type)) {
 				if (!plugin.getTowny().isPermissions()
-					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().hasPermission(player, channel.getPermission()))
+					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission()))
 														|| (channel.getPermission().isEmpty())))) {
 					if (channel.getRange() == -1) {
 						global = channel;

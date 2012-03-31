@@ -108,3 +108,5 @@ v0.22:
 	- Change channel sub classing method to allow 3rd party plugins to create their own channel types (phrstbrn).
 v0.23:
 	- Update for craftbukkit-1.1-R6.
+v0.24:
+	- Update to refect permission changes in Towny.

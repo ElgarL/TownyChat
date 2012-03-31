@@ -160,7 +160,7 @@ public class StandardChannel extends Channel {
 			
 			int count = 0;
 			for (Player test : TownyUniverse.getOnlinePlayers()) {
-				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, getPermission()))) {
+				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(test, getPermission()))) {
 					
 					if (bEssentials) {
 						try {
@@ -216,7 +216,7 @@ public class StandardChannel extends Channel {
 			
 			int count = 0;
 			for (Player test : TownyUniverse.getOnlinePlayers()) {
-				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().hasPermission(test, getPermission()))) {
+				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(test, getPermission()))) {
 					
 					if (bEssentials) {
 						try {
