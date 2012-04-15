@@ -109,4 +109,6 @@ v0.22:
 v0.23:
 	- Update for craftbukkit-1.1-R6.
 v0.24:
-	- Update to refect permission changes in Towny.
+	- Update to reflect permission changes in Towny.
+v0.25:
+	- Update to account for the refactoring in Towny.
