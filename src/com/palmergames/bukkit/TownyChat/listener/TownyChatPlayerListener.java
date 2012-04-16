@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.TownyChat.event;
+package com.palmergames.bukkit.TownyChat.listener;
 
 import java.util.WeakHashMap;
 
@@ -15,6 +15,7 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
+import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -23,20 +24,17 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.util.StringMgmt;
 
-public class TownyPlayerHighestListener implements Listener  {
+public class TownyChatPlayerListener implements Listener  {
 	private Chat plugin;
 	
 	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
 
-	public TownyPlayerHighestListener(Chat instance) {
+	public TownyChatPlayerListener(Chat instance) {
 		this.plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-
-		if (event.isCancelled())
-			return;
 		
 		Player player = event.getPlayer();
 
@@ -62,11 +60,11 @@ public class TownyPlayerHighestListener implements Listener  {
 			// if not muted and has permission
 			if (!isMuted(player)) {
 
+			    event.setCancelled(true);
+
 				if (isSpam(player)) {
-					event.setCancelled(true);
 					return;
 				}
-				event.setMessage(message);
 
 				// If no message toggle the chat mode.
 				if (message.isEmpty()) {
@@ -78,18 +76,16 @@ public class TownyPlayerHighestListener implements Listener  {
 				} else {
 					// Process the chat
 					channel.chatProcess(event);
-
 				}
-				event.setCancelled(true);
-
 			}
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChat(PlayerChatEvent event) {
 
-		if (event.isCancelled())
+	    // We don't care about the events we already processed.
+		if (event instanceof TownyChatEvent)
 			return;
 		
 		Player player = event.getPlayer();
@@ -128,7 +124,7 @@ public class TownyPlayerHighestListener implements Listener  {
 				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-				TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
+				LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 				event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			} catch (NotRegisteredException e) {
 				// World or resident not registered with Towny
