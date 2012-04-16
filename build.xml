@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="TownyChat" default="jar" basedir=".">
-    <property name="build" value="target"/>
+    <property name="build" value="bin"/>
     <property file="build.properties"/>
     
     <target name="clean">
@@ -13,7 +13,7 @@
     
     <target name="compile" depends="init">
         <!-- Compile the java code -->
-        <javac srcdir="src" destdir="${build}">
+        <javac srcdir="src" destdir="${build}" includeantruntime="false">
             <classpath>
                 <pathelement location="${env.LIB}/bukkit.jar"/>
                 <pathelement location="${env.LIB}/craftbukkit.jar"/>
