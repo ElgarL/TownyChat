@@ -23,12 +23,12 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.util.StringMgmt;
 
-public class TownyPlayerHighestListener implements Listener  {
+public class TownyChatPlayerListener implements Listener  {
 	private Chat plugin;
 	
 	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
 
-	public TownyPlayerHighestListener(Chat instance) {
+	public TownyChatPlayerListener(Chat instance) {
 		this.plugin = instance;
 	}
 
