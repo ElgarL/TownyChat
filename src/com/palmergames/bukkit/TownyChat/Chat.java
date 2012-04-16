@@ -13,8 +13,8 @@ import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
-import com.palmergames.bukkit.TownyChat.event.HeroicDeathForwarder;
-import com.palmergames.bukkit.TownyChat.event.TownyPlayerHighestListener;
+import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
+import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
@@ -29,7 +29,7 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class Chat extends JavaPlugin {
 
-	private TownyPlayerHighestListener TownyPlayerListener;
+	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;
 	private ConfigurationHandler configuration;
 
@@ -132,7 +132,7 @@ public class Chat extends JavaPlugin {
 	}
 
 	public void registerEvents() {
-		TownyPlayerListener = new TownyPlayerHighestListener(this);
+		TownyPlayerListener = new TownyChatPlayerListener(this);
 
 		if (TownyPlayerListener != null)
 			pm.registerEvents(TownyPlayerListener, this);

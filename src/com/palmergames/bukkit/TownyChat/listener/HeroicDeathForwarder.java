@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.TownyChat.event;
+package com.palmergames.bukkit.TownyChat.listener;
 
 //import org.bukkit.event.CustomEventListener;
 //import org.bukkit.event.Event;
