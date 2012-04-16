@@ -9,6 +9,7 @@ import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
+import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -71,6 +72,13 @@ public class StandardChannel extends Channel {
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
+			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
+			event = new TownyChatEvent(player, msg);
+            plugin.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return;
+            msg = event.getMessage();
+			
 			plugin.getLogger().info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + msg));
 			
 			CraftIRCHandler ircHander = plugin.getIRC();
@@ -110,6 +118,13 @@ public class StandardChannel extends Channel {
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
 			
+			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
+            event = new TownyChatEvent(player, msg);
+            plugin.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return;
+            msg = event.getMessage();
+			
 			plugin.getLogger().info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + msg));
 			
 			CraftIRCHandler ircHander = plugin.getIRC();
@@ -147,6 +162,13 @@ public class StandardChannel extends Channel {
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
+			
+			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
+			event = new TownyChatEvent(player, msg);
+            plugin.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return;
+            msg = event.getMessage();
 			
 			plugin.getLogger().info(ChatTools.stripColour(msg));
 			
@@ -198,6 +220,13 @@ public class StandardChannel extends Channel {
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			String msg = chatEvent.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
+			
+			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
+			event = new TownyChatEvent(player, msg);
+            plugin.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled())
+                return;
+            msg = event.getMessage();
 			
 			plugin.getLogger().info(ChatTools.stripColour(msg));
 			

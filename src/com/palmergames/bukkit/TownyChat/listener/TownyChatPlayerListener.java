@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
+import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
@@ -32,11 +33,8 @@ public class TownyChatPlayerListener implements Listener  {
 		this.plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-
-		if (event.isCancelled())
-			return;
 		
 		Player player = event.getPlayer();
 
@@ -86,10 +84,11 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChat(PlayerChatEvent event) {
 
-		if (event.isCancelled())
+	    // We don't care about the events we already processed.
+		if (event instanceof TownyChatEvent)
 			return;
 		
 		Player player = event.getPlayer();
