@@ -14,7 +14,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.listener.TownyChatEvent;
+import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -128,7 +128,7 @@ public class TownyPlayerHighestListener implements Listener  {
 				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
 				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
 
-				TownyChatEvent chatEvent = new TownyChatEvent(event, resident);
+				LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 				event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			} catch (NotRegisteredException e) {
 				// World or resident not registered with Towny

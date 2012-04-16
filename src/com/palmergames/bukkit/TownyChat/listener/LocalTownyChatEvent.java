@@ -4,11 +4,11 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 import com.palmergames.bukkit.towny.object.Resident;
 
-public class TownyChatEvent {
+public class LocalTownyChatEvent {
   private PlayerChatEvent event;
   private Resident resident;
   
-  public TownyChatEvent(PlayerChatEvent event, Resident resident) {
+  public LocalTownyChatEvent(PlayerChatEvent event, Resident resident) {
     this.event = event;
     this.resident = resident;
   }
