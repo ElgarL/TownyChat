@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat;
 
-import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
+import com.palmergames.bukkit.TownyChat.listener.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.util.ReplacerCallable;
 
 public abstract class TownyChatReplacerCallable implements ReplacerCallable<TownyChatEvent> {
