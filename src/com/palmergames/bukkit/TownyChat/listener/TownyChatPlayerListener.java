@@ -60,11 +60,11 @@ public class TownyChatPlayerListener implements Listener  {
 			// if not muted and has permission
 			if (!isMuted(player)) {
 
+			    event.setCancelled(true);
+
 				if (isSpam(player)) {
-					event.setCancelled(true);
 					return;
 				}
-				event.setMessage(message);
 
 				// If no message toggle the chat mode.
 				if (message.isEmpty()) {
@@ -76,10 +76,7 @@ public class TownyChatPlayerListener implements Listener  {
 				} else {
 					// Process the chat
 					channel.chatProcess(event);
-
 				}
-				event.setCancelled(true);
-
 			}
 		}
 	}
