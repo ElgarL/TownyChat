@@ -60,9 +60,8 @@ public class TownyChatPlayerListener implements Listener  {
 			// if not muted and has permission
 			if (!isMuted(player)) {
 
-			    event.setCancelled(true);
-
 				if (isSpam(player)) {
+					event.setCancelled(true);
 					return;
 				}
 
@@ -78,6 +77,8 @@ public class TownyChatPlayerListener implements Listener  {
 					channel.chatProcess(event);
 				}
 			}
+			
+			event.setCancelled(true);
 		}
 	}
 	
@@ -133,6 +134,22 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 
 	}
+	
+	/**
+	 * Cancel our own events so they only get sent for formatting changes by others.
+	 * 
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerChatHighest(PlayerChatEvent event) {
+
+	    // We need to cancel events we spawned so only we deal with them.
+		if (event instanceof TownyChatEvent) {
+			((TownyChatEvent) event).setCanceledByTownyChat(true);
+			return;
+		}
+	}
+	
 	private boolean isMuted(Player player) {
 		// Check if essentials has this player muted.
 		if (plugin.getTowny().isEssentials()) {
@@ -148,6 +165,7 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 		return false;
 	}
+	
 	
 	/**
 	 * Test if this player is spamming chat.

@@ -114,3 +114,5 @@ v0.25:
 	- Update to account for the refactoring in Towny.
 v0.26:
 	- Throw a "fake" PlayerChatEvent which will allow TownyChat to have much increased compatibility with other plugins (dumptruckman).
+v0.27:
+	- Cancel our own event after all other plugins have had a bash at the formatting.
