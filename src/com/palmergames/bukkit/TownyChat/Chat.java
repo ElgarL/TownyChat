@@ -80,15 +80,20 @@ public class Chat extends JavaPlugin {
 	public void onDisable() {
 		unregisterPermissions();
 		// reset any handles
-		irc = null;
+		
 		if (craftIRC != null) {
 			craftIRC.unregisterEndPoint("towny");
 			craftIRC = null;
 		}
+		irc = null;
+		
 		dynMap = null;
 		heroicDeathListener= null;
 		towny = null;
 		pm = null;
+		
+		configuration = null;
+		channels = null;
 	}
 
 	private void checkPlugins() {
@@ -105,7 +110,7 @@ public class Chat extends JavaPlugin {
 			try {
 				if (Double.valueOf(test.getDescription().getVersion()) >= 3.1) {
 					craftIRC = (CraftIRC) test;
-					irc = new CraftIRCHandler(towny, craftIRC, "towny");
+					irc = new CraftIRCHandler(craftIRC, "towny");
 				} else
 					getLogger().warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
 			} catch (NumberFormatException e) {
@@ -132,12 +137,15 @@ public class Chat extends JavaPlugin {
 	}
 
 	public void registerEvents() {
-		TownyPlayerListener = new TownyChatPlayerListener(this);
-
-		if (TownyPlayerListener != null)
-			pm.registerEvents(TownyPlayerListener, this);
-		if (heroicDeathListener != null)
-			pm.registerEvents(heroicDeathListener, this);
+		
+		if (TownyPlayerListener == null) {
+			TownyPlayerListener = new TownyChatPlayerListener(this);
+	
+			if (TownyPlayerListener != null)
+				pm.registerEvents(TownyPlayerListener, this);
+			if (heroicDeathListener != null)
+				pm.registerEvents(heroicDeathListener, this);
+		}
 		
 	}
 	

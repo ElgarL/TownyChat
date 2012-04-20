@@ -118,3 +118,5 @@ v0.27:
 	- Cancel our own event after all other plugins have had a bash at the formatting.
 v0.28:
 	- Forget using any fake events and move to setting recipients. We should now be compatible with just about every other chat modifying plugin there is.
+v0.29:
+	- Fix a duplicating chat issue when relaying via craftIRC. 

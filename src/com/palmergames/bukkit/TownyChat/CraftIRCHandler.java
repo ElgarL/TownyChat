@@ -16,24 +16,36 @@ import com.palmergames.bukkit.towny.Towny;
  * Disable Auto paths and add the following to the 'paths:' section
  */
 /*
-    - source: 'minecraft'
-      target: 'admin'
-      formatting:
-        chat: '%message%'
-      
+	Set...
+ 		auto-paths: false
+ 		
+ 	Under channels:
+ 	
+ 	create your channel...
+ 	
+ 	- name: '#YourChannel'
+        password: ''
+        
+        #Identifies this channel's endpoint (for the paths: section).
+        tag: 'admin'
+ 	
+ 	Under paths:
+ 		
     - source: 'admin'     # These are endpoint tags
       target: 'minecraft'    #
       formatting:
         chat: '%foreground%[%red%%ircPrefix%%sender%%foreground%] %message%'
+        
+ 	
  
  */
-public class CraftIRCHandler extends BasePoint implements CommandEndPoint  {
+public class CraftIRCHandler extends BasePoint implements CommandEndPoint   {
 
 	Towny plugin;
 	CraftIRC irc;
 
-	public CraftIRCHandler(Towny plugin, CraftIRC irc, String tag) {
-		this.plugin = plugin;
+	public CraftIRCHandler( CraftIRC irc, String tag) {
+
 		this.irc = irc;
 		// Register this as the tags endpoint
 		if (irc != null)
@@ -46,10 +58,12 @@ public class CraftIRCHandler extends BasePoint implements CommandEndPoint  {
 	public Type getType() {
 		return Type.MINECRAFT;
 	}
-	
+
 	@Override
-	public void commandIn(RelayedCommand cmd) {
-		// Do nothing here as we do not process commands from IRC.
+	public void commandIn(RelayedCommand arg0) {
+
+		// TODO Auto-generated method stub
+		System.out.print("command");
 	}
 
 	/**
@@ -68,5 +82,6 @@ public class CraftIRCHandler extends BasePoint implements CommandEndPoint  {
 			msg.post(false);
 		}
 	}
+
 
 }
