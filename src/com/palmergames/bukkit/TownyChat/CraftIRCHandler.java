@@ -30,14 +30,19 @@ import com.palmergames.bukkit.towny.Towny;
         tag: 'admin'
  	
  	Under paths:
- 		
-    - source: 'admin'     # These are endpoint tags
-      target: 'minecraft'    #
-      formatting:
-        chat: '%foreground%[%red%%ircPrefix%%sender%%foreground%] %message%'
-        
- 	
- 
+
+	  - source: 'minecraft'
+	    target: 'admin'
+	    formatting:
+	      chat: '%message%'
+	    attributes:
+	        chat: false
+	      
+	  - source: 'admin'     # These are endpoint tags
+	    target: 'minecraft'    #
+	    formatting:
+	      chat: '%foreground%[%red%%ircPrefix%%sender%%foreground%] %message%'
+
  */
 public class CraftIRCHandler extends BasePoint implements CommandEndPoint   {
 
