@@ -1,5 +1,11 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.dynmap.DynmapAPI;
@@ -9,10 +15,7 @@ import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -31,268 +34,113 @@ public class StandardChannel extends Channel {
 
 	@Override
 	public void chatProcess(PlayerChatEvent event) {
+		
 		channelTypes exec = channelTypes.valueOf(getType().name());
 		
+		Player player = event.getPlayer();
+		Set<Player> recipients = null;
+		Resident resident = null;
+		Town town = null;
+		Nation nation = null;
+		String Format = "";
+		
+		try {
+			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			town = resident.getTown();
+			nation = resident.getTown().getNation();
+		} catch (NotRegisteredException e1) {
+			// Not in a town/nation (doesn't matter which)
+		}
+		
+		
+		/*
+		 *  Retrieve the channel specific format
+		 *  and compile a set of recipients
+		 */
 		switch (exec) {
 		
 		case TOWN:
-			parseTownChatCommand(event);
+			if (town == null) {
+				event.setCancelled(true);
+				return;
+			}
+			Format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
+			recipients = new HashSet<Player>(findRecipients(player, TownyUniverse.getOnlinePlayers(town)));
 			break;
 		
 		case NATION:
-			parseNationChatCommand(event);			
+			if (nation == null) {
+				event.setCancelled(true);
+				return;
+			}
+			Format = ChatSettings.getRelevantFormatGroup(player).getNATION();
+			recipients = new HashSet<Player>(findRecipients(player, TownyUniverse.getOnlinePlayers(nation)));
 			break;
 			
 		case DEFAULT:
-			parseDefaultChannelChatCommand(event);
-			
+			Format = ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
+			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(Arrays.asList(TownyUniverse.getOnlinePlayers()))));
 			break;
 			
 		case GLOBAL:
-			parseGlobalChannelChatCommand(event);
-			
+			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
+			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(Arrays.asList(TownyUniverse.getOnlinePlayers()))));
 			break;
 			
 		case PRIVATE:
-			parseGlobalChannelChatCommand(event);
-			
+			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
+			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(Arrays.asList(TownyUniverse.getOnlinePlayers()))));
 			break;
 		}
-	}
-
-	private void parseTownChatCommand(PlayerChatEvent event) {
-		Player player = event.getPlayer();
-		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Town town = resident.getTown();
-
-			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getTOWN().replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
-
-			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			
-			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
-			event = new TownyChatEvent(player, event.getMessage(), event.getFormat());
-            plugin.getServer().getPluginManager().callEvent(event);
-            
-            // If the event was canceled by anything other then TownyChat
-            if (event.isCancelled() && !((TownyChatEvent)event).isCanceledByTownyChat())
-                return;
-            
-            // Read the format after it's been updated by all other plugins.
-            String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
-			
+		
+		/*
+		 * Perform all replace functions on this format
+		 */
+		event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
+		LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
+		event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+		
+		/*
+		 *  Set all the listeners for Bukkit to send this message to.
+		 */
+        event.getRecipients().clear();
+        event.getRecipients().addAll(recipients);
+        
+        /*
+         * Perform any last channel specific functions
+         * like logging this chat and replaying to IRC/Dynmap.
+         */
+        String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
+        
+        switch (exec) {
+		
+		case TOWN:
 			plugin.getLogger().info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + msg));
-			
-			CraftIRCHandler ircHander = plugin.getIRC();
-			
-			// Relay to IRC
-			if (ircHander != null)
-				ircHander.IRCSender(msg, getCraftIRCTag());
-			
-			sendSpy(player, "[Town Msg] " + town.getName() + ": " + msg);
-
-			// Send the town message
-			int count = 0;
-	        for (Player test : TownyUniverse.getOnlinePlayers(town))
-	        	if ((testDistance(player, test, getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-	        		count += 1;
-	                test.sendMessage(msg);
-	        	}
-	        
-	        if (count <= 1)
-				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
-			
-			
-		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-
-	private void parseNationChatCommand(PlayerChatEvent event) {
-		Player player = event.getPlayer();
-		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Nation nation = resident.getTown().getNation();
-
-			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getNATION().replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
-
-			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			
-			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
-			event = new TownyChatEvent(player, event.getMessage(), event.getFormat());
-            plugin.getServer().getPluginManager().callEvent(event);
-            
-            // If the event was canceled by anything other then TownyChat
-            if (event.isCancelled() && !((TownyChatEvent)event).isCanceledByTownyChat())
-                return;
-            
-            // Read the format after it's been updated by all other plugins.
-            String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
-			
+			break;
+		
+		case NATION:
 			plugin.getLogger().info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + msg));
+			break;
 			
-			CraftIRCHandler ircHander = plugin.getIRC();
+		case DEFAULT:
+			break;
 			
-			// Relay to IRC
-			if (ircHander != null)
-				ircHander.IRCSender(msg, getCraftIRCTag());
-			
-			sendSpy(player, "[Nation Msg] " + nation.getName() + ": " + msg);
-			
-			// Send the town message
-			int count = 0;
-	        for (Player test : TownyUniverse.getOnlinePlayers(nation))
-	        	if ((testDistance(player, test, getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-	        		count += 1;
-	                test.sendMessage(msg);
-	        	}
-	        
-	        if (count <= 1)
-	        	player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
-	        	
-		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-
-	private void parseDefaultChannelChatCommand(PlayerChatEvent event) {
-		Player player = event.getPlayer();
-		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Boolean bEssentials = plugin.getTowny().isEssentials();
-			
-			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getDEFAULT().replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
-
-			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			
-			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
-			event = new TownyChatEvent(player, event.getMessage(), event.getFormat());
-            plugin.getServer().getPluginManager().callEvent(event);
-            
-            // If the event was canceled by anything other then TownyChat
-            if (event.isCancelled() && !((TownyChatEvent)event).isCanceledByTownyChat())
-                return;
-            
-            // Read the format after it's been updated by all other plugins.
-            String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
-			
-			plugin.getLogger().info(ChatTools.stripColour(msg));
-			
-			CraftIRCHandler ircHander = plugin.getIRC();
-			
-			// Relay to IRC
-			if (ircHander != null)
-				ircHander.IRCSender(msg, getCraftIRCTag());
-			
-			sendSpy(player, msg);
-			
-			int count = 0;
-			for (Player test : TownyUniverse.getOnlinePlayers()) {
-				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(test, getPermission()))) {
-					
-					if (bEssentials) {
-						try {
-							User targetUser = plugin.getTowny().getEssentials().getUser(test);
-							// Don't send this message if the user is ignored
-							if (targetUser.isIgnoredPlayer(player.getName()))
-								continue;
-						} catch (TownyException e) {
-							// Failed to fetch user so ignore.
-						}
-					}
-					if ((testDistance(player, test, getRange())) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-						count += 1;
-						TownyMessaging.sendMessage(test, msg);
-					}
-				}				
-			}
-			if (count <= 1)
-				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
-
-		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
-		}
-	}
-	
-	private void parseGlobalChannelChatCommand(PlayerChatEvent event) {
-		Player player = event.getPlayer();
-		try {
-			Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
-			Boolean bEssentials = plugin.getTowny().isEssentials();
-
-			if (ChatSettings.isModify_chat())
-				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
-
-			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-			
-			// Throw a "fake" chat event for other plugins to handle the chat after TownyChat has formatted it.
-			event = new TownyChatEvent(player, event.getMessage(), event.getFormat());
-            plugin.getServer().getPluginManager().callEvent(event);
-            
-            // If the event was canceled by anything other then TownyChat
-            if (event.isCancelled() && !((TownyChatEvent)event).isCanceledByTownyChat())
-                return;
-            
-            // Read the format after it's been updated by all other plugins.
-            String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
-			
-			plugin.getLogger().info(ChatTools.stripColour(msg));
-			
-			CraftIRCHandler ircHander = plugin.getIRC();
-			
-			// Relay to IRC
-			if (ircHander != null)
-				ircHander.IRCSender(msg, getCraftIRCTag());
-			
-			sendSpy(player, msg);
-			
+		case PRIVATE:
+		case GLOBAL:
 			DynmapAPI dynMap = plugin.getDynmap();
 			
 			if (dynMap != null)
 				dynMap.postPlayerMessageToWeb(player, event.getMessage());
-			
-			int count = 0;
-			for (Player test : TownyUniverse.getOnlinePlayers()) {
-				if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(test, getPermission()))) {
-					
-					if (bEssentials) {
-						try {
-							User targetUser = plugin.getTowny().getEssentials().getUser(test);
-							// Don't send this message if the user is ignored
-							if (targetUser.isIgnoredPlayer(player.getName()))
-								continue;
-						} catch (TownyException e) {
-							// Failed to fetch user so ignore.
-						}
-					}
-					if (testDistance(player, test, getRange()) && (!plugin.getTowny().hasPlayerMode(test, "spy"))) {
-						count += 1;
-						TownyMessaging.sendMessage(test, msg);
-					}
-				}
-			}
-			if (count <= 1)
-				player.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
-
-			// TownyMessaging.sendNationMessage(nation, chatEvent.getFormat());
-		} catch (NotRegisteredException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+			break;
 		}
-	}
-	
-	private void sendSpy(Player player, String msg) {
+        
+        // Relay to IRC
+        CraftIRCHandler ircHander = plugin.getIRC();
+        if (ircHander != null)
+        	ircHander.IRCSender(msg, getCraftIRCTag());
 		
-		for (Player test : TownyUniverse.getOnlinePlayers()) {
-			if (plugin.getTowny().hasPlayerMode(test, "spy")) {
-				TownyMessaging.sendMessage(test, msg);
-			}
-		}
-			
 	}
+
 	
 	/**
 	 * Check the distance between players and return a result based upon the range setting
@@ -320,6 +168,57 @@ public class StandardChannel extends Channel {
 			return (player1.getLocation().distance(player2.getLocation()) < range);
 		else
 			return false;
+	}
+	
+	/**
+	 * Compile a list of valid recipients for this message.
+	 * 
+	 * @param sender
+	 * @param list
+	 * @return Set containing a list of players for this message.
+	 */
+	private Set<Player> findRecipients(Player sender, List<Player> list) {
+		
+		Set<Player> recipients = new HashSet<Player>();
+		Boolean bEssentials = plugin.getTowny().isEssentials();
+		String sendersName = sender.getName();
+		
+		// Compile the list of recipients
+        for (Player test : list) {
+        	
+        	/*
+        	 * If Not using permissions, or the player has the correct permission node.
+        	 */
+        	if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(test, getPermission()))) {
+        		
+        		/*
+        		 * If the player is within range for this channel
+        		 * or the recipient has the spy mode.
+        		 */
+	        	if ((testDistance(sender, test, getRange())) || (plugin.getTowny().hasPlayerMode(test, "spy"))) {
+	        		
+	        		if (bEssentials) {
+						try {
+							User targetUser = plugin.getTowny().getEssentials().getUser(test);
+							/*
+							 *  Don't send this message if the user is ignored
+							 */
+							if (targetUser.isIgnoredPlayer(sendersName))
+								continue;
+						} catch (TownyException e) {
+							// Failed to fetch user so ignore.
+						}
+					}
+	        		
+	        		recipients.add(test);
+	        	}
+        	}
+        }
+        
+        //if (recipients.size() <= 1)
+        //	sender.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
+        
+        return recipients;
 	}
 
 }

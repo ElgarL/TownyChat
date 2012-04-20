@@ -8,13 +8,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-//import org.bukkit.event.player.PlayerListener;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.event.TownyChatEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
@@ -28,6 +26,7 @@ public class TownyChatPlayerListener implements Listener  {
 	private Chat plugin;
 	
 	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
+	private WeakHashMap<Player, String> directedChat = new WeakHashMap<Player, String>();
 
 	public TownyChatPlayerListener(Chat instance) {
 		this.plugin = instance;
@@ -53,29 +52,24 @@ public class TownyChatPlayerListener implements Listener  {
 
 		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
 		if (channel != null) {
-			//System.out.print("Channel Found");
-			
+
 			event.setMessage(message);
+			
+			/*
+			 *  If there is no message toggle the chat mode.
+			 */
+			if (message.isEmpty()) {
+				if (plugin.getTowny().hasPlayerMode(player, channel.getName()))
+					plugin.getTowny().removePlayerMode(player);
+				else
+					plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
 
-			// if not muted and has permission
-			if (!isMuted(player)) {
-
-				if (isSpam(player)) {
-					event.setCancelled(true);
-					return;
-				}
-
-				// If no message toggle the chat mode.
-				if (message.isEmpty()) {
-					if (plugin.getTowny().hasPlayerMode(player, channel.getName()))
-						plugin.getTowny().removePlayerMode(player);
-					else
-						plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
-
-				} else {
-					// Process the chat
-					channel.chatProcess(event);
-				}
+			} else {
+				/*
+				 * Flag this as directed chat and trigger a player chat event
+				 */
+				directedChat.put(player, command);
+				player.chat(message);
 			}
 			
 			event.setCancelled(true);
@@ -84,10 +78,6 @@ public class TownyChatPlayerListener implements Listener  {
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(PlayerChatEvent event) {
-
-	    // We don't care about the events we already processed.
-		if (event instanceof TownyChatEvent)
-			return;
 		
 		Player player = event.getPlayer();
 
@@ -99,12 +89,29 @@ public class TownyChatPlayerListener implements Listener  {
 				return;
 			}
 
+			/*
+			 * If this was directed chat send it via the relevant channel
+			 */
+			if (directedChat.containsKey(player)) {
+				Channel channel = plugin.getChannelsHandler().getChannel(player, directedChat.get(player));
+				directedChat.remove(player);
+				
+				if (channel != null) {
+					channel.chatProcess(event);
+					return;
+				}
+			}
+			
+			/*
+			 * Check the player for any channel modes.
+			 */
 			for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
 				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
-					// Channel Chat mode set
-					// Process the chat
+					/*
+					 *  Channel Chat mode set
+					 *  Process the chat
+					 */
 					channel.chatProcess(event);
-					event.setCancelled(true);
 					return;
 				}
 			}
@@ -114,12 +121,14 @@ public class TownyChatPlayerListener implements Listener  {
 					
 			if (channel != null) {
 				channel.chatProcess(event);
-				event.setCancelled(true);
 				return;
 			}
 			
 		}
 
+		/*
+		 * We found no channels available so modify the chat (if enabled) and exit.
+		 */
 		if (ChatSettings.isModify_chat()) {
 			try {
 				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
@@ -136,20 +145,11 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 	
 	/**
-	 * Cancel our own events so they only get sent for formatting changes by others.
+	 * Is this player Muted via Essentials?
 	 * 
-	 * @param event
+	 * @param player
+	 * @return true if muted
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerChatHighest(PlayerChatEvent event) {
-
-	    // We need to cancel events we spawned so only we deal with them.
-		if (event instanceof TownyChatEvent) {
-			((TownyChatEvent) event).setCanceledByTownyChat(true);
-			return;
-		}
-	}
-	
 	private boolean isMuted(Player player) {
 		// Check if essentials has this player muted.
 		if (plugin.getTowny().isEssentials()) {
