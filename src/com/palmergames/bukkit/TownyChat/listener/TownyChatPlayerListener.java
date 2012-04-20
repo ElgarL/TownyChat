@@ -82,7 +82,7 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(PlayerChatEvent event) {
 
 	    // We don't care about the events we already processed.
