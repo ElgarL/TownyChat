@@ -1,5 +1,10 @@
 package com.palmergames.bukkit.TownyChat;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginEnableEvent;
+
 import com.ensifera.animosity.craftirc.BasePoint;
 import com.ensifera.animosity.craftirc.CommandEndPoint;
 import com.ensifera.animosity.craftirc.CraftIRC;
@@ -46,17 +51,22 @@ import com.palmergames.bukkit.towny.Towny;
  */
 public class CraftIRCHandler extends BasePoint implements CommandEndPoint   {
 
-	Towny plugin;
+	Towny towny;
+	Chat plugin;
 	CraftIRC irc;
 
-	public CraftIRCHandler( CraftIRC irc, String tag) {
+	public CraftIRCHandler(Chat plugin, CraftIRC irc, String tag) {
 
 		this.irc = irc;
+		this.plugin = plugin;
 		// Register this as the tags endpoint
 		if (irc != null)
 			irc.registerEndPoint(tag, this);
 		// Second argument below is the command name
 		//irc.registerCommand(tag, tag);
+		
+		// register a Listen for any restarts of craftIRC
+		plugin.getServer().getPluginManager().registerEvents(new BukkitEvents(), plugin);
 	}
 
 	@Override
@@ -88,5 +98,18 @@ public class CraftIRCHandler extends BasePoint implements CommandEndPoint   {
 		}
 	}
 
+	protected class BukkitEvents implements Listener {
+
+		@EventHandler(priority = EventPriority.NORMAL)
+		public void onPluginEnable(PluginEnableEvent event) {
+
+			if ((irc != null) && (event.getPlugin().equals(irc)))
+				plugin.reload();
+
+
+		}
+
+	}
 
 }
+

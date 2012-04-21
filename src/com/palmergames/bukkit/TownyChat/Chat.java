@@ -95,7 +95,18 @@ public class Chat extends JavaPlugin {
 		configuration = null;
 		channels = null;
 	}
+	
+	/**
+	 * Perform a reload of this plugin.
+	 */
+	public void reload() {
+		onDisable();
+		onEnable();
+	}
 
+	/**
+	 * Attempt to hook any plugins we want to access.
+	 */
 	private void checkPlugins() {
 		Plugin test;
 
@@ -110,7 +121,7 @@ public class Chat extends JavaPlugin {
 			try {
 				if (Double.valueOf(test.getDescription().getVersion()) >= 3.1) {
 					craftIRC = (CraftIRC) test;
-					irc = new CraftIRCHandler(craftIRC, "towny");
+					irc = new CraftIRCHandler(this, craftIRC, "towny");
 				} else
 					getLogger().warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
 			} catch (NumberFormatException e) {

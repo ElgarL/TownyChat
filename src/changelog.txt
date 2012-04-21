@@ -119,4 +119,5 @@ v0.27:
 v0.28:
 	- Forget using any fake events and move to setting recipients. We should now be compatible with just about every other chat modifying plugin there is.
 v0.29:
-	- Fix a duplicating chat issue when relaying via craftIRC. 
+	- Fix a duplicating chat issue when relaying via craftIRC.
+	- Reload TownyChat if we detect craftIRC perform a reload (no more unregistered tags after reloading craftIRC).

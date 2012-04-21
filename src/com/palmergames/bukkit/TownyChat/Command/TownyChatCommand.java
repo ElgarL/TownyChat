@@ -36,8 +36,7 @@ public class TownyChatCommand implements CommandExecutor {
 			}
 			
 			if (args[0].equalsIgnoreCase("reload")) {
-				plugin.onDisable();
-				plugin.onEnable();
+				plugin.reload();
 				TownyMessaging.sendMsg(sender, "[TownyChat] Settings reloaded!");
 				return true;
 			}
