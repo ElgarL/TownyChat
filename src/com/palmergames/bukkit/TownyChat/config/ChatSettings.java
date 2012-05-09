@@ -176,60 +176,56 @@ class tag_formats extends chat_colours{
 	private static String WorldTag, TownTag, NationTag, BothTags;
 
 	/**
-	 * @return the WORLD
+	 * @return the World tag
 	 */
 	public static String getWorldTag() {
 		return WorldTag;
 	}
 
 	/**
-	 * @param WORLD
-	 *            the wORLD to set
+	 * @param tag the World tag to set
 	 */
 	public static void setWorldTag(String tag) {
 		tag_formats.WorldTag = tag;
 	}
 
 	/**
-	 * @return the TOWN
+	 * @return the TownTag
 	 */
 	public static String getTownTag() {
 		return TownTag;
 	}
 
 	/**
-	 * @param TOWN
-	 *            the TOWN to set
+	 * @param tag the TOWN tag to set
 	 */
 	public static void setTownTag(String tag) {
 		tag_formats.TownTag = tag;
 	}
 
 	/**
-	 * @return the NATION
+	 * @return NationTag
 	 */
 	public static String getNationTag() {
 		return NationTag;
 	}
 
 	/**
-	 * @param NATION
-	 *            the NATION to set
+	 * @param tag the NATION tag to set
 	 */
 	public static void setNationTag(String tag) {
 		tag_formats.NationTag = tag;
 	}
 
 	/**
-	 * @return the BOTH
+	 * @return BothTags the nation and town tags
 	 */
 	public static String getBothTags() {
 		return BothTags;
 	}
 
 	/**
-	 * @param BOTH
-	 *            the BOTH to set
+	 * @param tag the Nation and Town tags to set
 	 */
 	public static void setBothTags(String tag) {
 		tag_formats.BothTags = tag;
@@ -242,48 +238,45 @@ class chat_colours {
 	private static String KING, MAYOR, RESIDENT;
 
 	/**
-	 * @return the kING
+	 * @return KING the KING colour
 	 */
 	public static String getKingColour() {
 		return KING;
 	}
 
 	/**
-	 * @param KING
-	 *            the KING to set
+	 * @param colour the colour to set
 	 */
 	public static void setKingColour(String colour) {
 		chat_colours.KING = colour;
 	}
 
 	/**
-	 * @return the MAYOR
+	 * @return MAYOR the MAYOR colour
 	 */
 	public static String getMayorColour() {
 		return MAYOR;
 	}
 
 	/**
-	 * @param MAYOR
-	 *            the MAYOR to set
+	 * @param colour the colour to set
 	 */
 	public static void setMayorColour(String colour) {
 		chat_colours.MAYOR = colour;
 	}
 
 	/**
-	 * @return the RESIDENT
+	 * @return RESIDENT the RESIDENT colour
 	 */
 	public static String getResidentColour() {
 		return RESIDENT;
 	}
 
 	/**
-	 * @param RESIDENT
-	 *            the RESIDENT to set
+	 * @param tag the RESIDENT colour tag to set
 	 */
-	public static void setResidentColour(String tag) {
-		chat_colours.RESIDENT = tag;
+	public static void setResidentColour(String colour) {
+		chat_colours.RESIDENT = colour;
 	}
 	
 }

@@ -116,7 +116,7 @@ public class FileMgmt {
 	 * 
 	 * @param source
 	 * @param FileName
-	 * @return
+	 * @return true on success
 	 */
 	public static boolean stringToFile(String source, String FileName) {
 

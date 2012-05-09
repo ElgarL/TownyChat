@@ -96,7 +96,7 @@ public abstract class Channel {
 		return craftIRCTag;
 	}
 	/**
-	 * @param permission the permission to set
+	 * @param craftIRCTag the CraftIRC channel Tag to set
 	 */
 	public void setCraftIRCTag(String craftIRCTag) {
 		this.craftIRCTag = craftIRCTag;

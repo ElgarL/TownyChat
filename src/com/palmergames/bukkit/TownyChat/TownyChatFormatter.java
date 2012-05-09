@@ -193,7 +193,7 @@ public class TownyChatFormatter {
 	 * @param resident
 	 * @param override	use full names if no tag is present
 	 * @param full		Only use full names (no tags).
-	 * @return
+	 * @return string containing the correctly formatted nation/town data
 	 */
 	public static String formatTownyTag(Resident resident, Boolean override, Boolean full) {
 		try {
