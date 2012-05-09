@@ -273,7 +273,7 @@ class chat_colours {
 	}
 
 	/**
-	 * @param tag the RESIDENT colour tag to set
+	 * @param colour the RESIDENT colour tag to set
 	 */
 	public static void setResidentColour(String colour) {
 		chat_colours.RESIDENT = colour;
