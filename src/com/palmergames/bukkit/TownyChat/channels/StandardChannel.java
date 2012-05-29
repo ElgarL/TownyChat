@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.ChatTools;
 
 public class StandardChannel extends Channel {
 
@@ -109,18 +108,18 @@ public class StandardChannel extends Channel {
         
         /*
          * Perform any last channel specific functions
-         * like logging this chat and replaying to IRC/Dynmap.
+         * like logging this chat and relaying to IRC/Dynmap.
          */
         String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
         
         switch (exec) {
 		
 		case TOWN:
-			plugin.getLogger().info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + msg));
+			//plugin.getLogger().info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + msg));
 			break;
 		
 		case NATION:
-			plugin.getLogger().info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + msg));
+			//plugin.getLogger().info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + msg));
 			break;
 			
 		case DEFAULT:

@@ -121,3 +121,5 @@ v0.28:
 v0.29:
 	- Fix a duplicating chat issue when relaying via craftIRC.
 	- Reload TownyChat if we detect craftIRC perform a reload (no more unregistered tags after reloading craftIRC).
+v0.30:
+	- Stop adding extra logs now that chat is being passed back to bukkit.
