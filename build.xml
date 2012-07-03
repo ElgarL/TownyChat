@@ -33,6 +33,7 @@
         	<fileset dir="./src" includes="Channels.yml"/>
         	<fileset dir="./src" includes="ChatConfig.yml"/>
         	<fileset dir="./src" includes="plugin.yml"/>
+        	<zipfileset excludes="META-INF/*.SF" src="../lib/pircbot.jar"/>
         </jar>
     </target>
 </project>

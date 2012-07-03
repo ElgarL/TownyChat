@@ -11,6 +11,7 @@ import org.dynmap.DynmapAPI;
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
+import com.palmergames.bukkit.TownyChat.IRC.IRCMain;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
@@ -68,6 +69,8 @@ public class Chat extends JavaPlugin {
 		}
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
+		
+		new IRCMain(this);
 		
 	}
 	
