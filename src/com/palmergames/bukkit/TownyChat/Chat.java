@@ -70,7 +70,6 @@ public class Chat extends JavaPlugin {
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
 		
-		new IRCMain(this);
 		
 	}
 	
