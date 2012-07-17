@@ -9,10 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapAPI;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
-import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
-import com.palmergames.bukkit.TownyChat.IRC.IRCMain;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
@@ -39,7 +38,11 @@ public class Chat extends JavaPlugin {
 	private CraftIRC craftIRC = null;
 	private DynmapAPI dynMap = null;
 	
-	private CraftIRCHandler irc = null;
+	private IRCHandler irc = null;
+	
+	
+
+
 	private HeroicDeathForwarder heroicDeathListener = null;
 
 
@@ -48,16 +51,13 @@ public class Chat extends JavaPlugin {
 
 		pm = getServer().getPluginManager();
 		configuration = new ConfigurationHandler(this);
-		channels = new ChannelsHolder(this);
-
-		checkPlugins();
-
+		setChannels(new ChannelsHolder(this));
+		
 		/*
 		 * This executes the task with a 1 tick delay avoiding the bukkit
 		 * depends bug.
 		 */
-		if ((towny == null) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)
-			|| (!load())) {
+		if ((!checkTowny()) || (!load()) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)) {
 			/*
 			 * We either failed to find Towny or the Scheduler failed to
 			 * register the task.
@@ -66,7 +66,10 @@ public class Chat extends JavaPlugin {
 			getLogger().severe("disabling TownyChat");
 			pm.disablePlugin(this);
 			return;
-		}
+		} 
+		checkPlugins();
+		
+
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
 		
@@ -95,7 +98,7 @@ public class Chat extends JavaPlugin {
 		pm = null;
 		
 		configuration = null;
-		channels = null;
+		setChannels(null);
 	}
 	
 	/**
@@ -111,34 +114,14 @@ public class Chat extends JavaPlugin {
 	 */
 	private void checkPlugins() {
 		Plugin test;
-
-		test = pm.getPlugin("Towny");
-		if (test != null && test instanceof Towny)
-			towny = (Towny) test;
-		/**
-		 * Hook craftIRC
-		 */
-		test = pm.getPlugin("CraftIRC");
-		if (test != null) {
-			try {
-				if (Double.valueOf(test.getDescription().getVersion()) >= 3.1) {
-					craftIRC = (CraftIRC) test;
-					irc = new CraftIRCHandler(this, craftIRC, "towny");
-				} else
-					getLogger().warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
-			} catch (NumberFormatException e) {
-				getLogger().warning("Non number format found for craftIRC version string!");
-			}
-		}
-		
 		/**
 		 * If we found craftIRC check for HeroicDeath
 		 */
-		if (irc != null) {
+		if (ChatSettings.getIRCEnabled()) {
 			test = pm.getPlugin("HeroicDeath");
 			if (test != null) {
 				heroicDeathListener = new HeroicDeathForwarder(irc);
-				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
+				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to IRC.");
 			}
 		}
 		
@@ -146,9 +129,20 @@ public class Chat extends JavaPlugin {
 		if (test != null) {
 			dynMap = (DynmapAPI) test;
 		}
-
 	}
 
+	private boolean checkTowny() {
+		Plugin test;
+
+		test = pm.getPlugin("Towny");
+		if (test != null && test instanceof Towny) {
+			towny = (Towny) test;
+		} else {
+			return false;
+		}
+		return true;
+	}
+	
 	public void registerEvents() {
 		
 		if (TownyPlayerListener == null) {
@@ -193,7 +187,7 @@ public class Chat extends JavaPlugin {
 	 * @return the channels
 	 */
 	public ChannelsHolder getChannelsHandler() {
-		return channels;
+		return getChannels();
 	}
 
 	/**
@@ -207,7 +201,7 @@ public class Chat extends JavaPlugin {
 		return towny;
 	}
 	
-	public CraftIRCHandler getIRC() {
+	public IRCHandler getIRC() {
 		return irc;
 	}
 	
@@ -219,4 +213,19 @@ public class Chat extends JavaPlugin {
 		return heroicDeathListener;
 	}
 
+	public ChannelsHolder getChannels() {
+		return channels;
+	}
+
+	private void setChannels(ChannelsHolder channels) {
+		this.channels = channels;
+	}
+
+	public IRCHandler getIrc() {
+		return irc;
+	}
+
+	public void setIrc(IRCHandler irc) {
+		this.irc = irc;
+	}
 }

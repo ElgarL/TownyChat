@@ -131,7 +131,6 @@ public class ChannelsHolder {
 	public Set<String> getAllPermissions() {
 		
 		Set<String> perms = new HashSet<String>();
-		
 		for (Channel channel: channels.values()) {
 			if (!perms.contains(channel.getPermission())) {
 				perms.add(channel.getPermission());
@@ -139,6 +138,20 @@ public class ChannelsHolder {
 			}
 		}
 		return perms;
+	}
+	
+	
+	public Set<Channel> isRelayIRC(String channelName) {
+		
+		Set<Channel> chanToSend = new HashSet<Channel>(); 
+		for (Channel channel: channels.values()) {
+			System.out.println(channelName + ": " + channel.getIRCChannels());
+			if (channel.getIRCChannels().toLowerCase().contains(channelName.toLowerCase()) && channel.isRelayIRCToGame()) {
+			
+				chanToSend.add(channel);
+			}
+		}
+		return chanToSend;
 	}
 
 

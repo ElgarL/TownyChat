@@ -1,38 +1,42 @@
-package com.palmergames.bukkit.TownyChat.IRC;
+package com.palmergames.bukkit.TownyChat;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.bukkit.entity.Player;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 
-import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.channels.Channel;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
+import com.palmergames.bukkit.TownyChat.util.IRCUtil;
 
 
 
-public class IRCMain extends PircBot implements Runnable {
+public class IRCHandler extends PircBot {
 	
 	
 	static Chat plugin;
-	static IRCMain bot;
-	private String nickName;
+	static IRCHandler bot;
+	private String currentNick;
+	private int takenInt = 0;
 	private HashMap<String, Integer> connectionTries = new HashMap<String, Integer>();
 	
-	public IRCMain(Chat plugin) {
-		IRCMain.plugin = plugin;
+	public IRCHandler(Chat plugin) {
+		this.currentNick = ChatSettings.getBotNick().substring(0, Math.min(11, ChatSettings.getBotNick().length() - 1));
+		IRCHandler.plugin = plugin;
 		try {
 			this.init();
 		} catch (NickAlreadyInUseException e) {
 
 			// TODO: Does this work?
-			nickName += "_"; // Change nickName if it is taken
+			fixNick();
 			onReload();
 		
 		} catch (IOException e) {
 		} catch (IrcException e) {
 		}
+		
 	}
 	
 	/**
@@ -65,14 +69,6 @@ public class IRCMain extends PircBot implements Runnable {
 	}
 	
 	/**
-	 * Sets the bot's NickName
-	 * @param newNick
-	 */
-	public void setBotNick(String newNick) {
-		this.changeNick(newNick);
-	}
-	
-	/**
 	 * Call this when some one has done a TownyChat reload!
 	 */
 	public void onReload() {
@@ -83,7 +79,7 @@ public class IRCMain extends PircBot implements Runnable {
 		try {
 			init();
 		} catch (NickAlreadyInUseException e) {
-			nickName += "_";
+			fixNick();
 			onReload();
 		} catch (IOException e) {
 		} catch (IrcException e) {
@@ -100,26 +96,17 @@ public class IRCMain extends PircBot implements Runnable {
 	public void init() throws NickAlreadyInUseException, IOException, IrcException {
 		// TODO: Add stuff in the config for this!
 		this.setVerbose(false);
-		this.setName(nickName);
-		this.connect("irc.esper.net");
-		this.joinChannel("#towny-dev");
-		
-	}
-	
-	/**
-	 * This will send a message to IRC via the bot!
-	 * @param channel
-	 * @param message
-	 */
-	public static void sendMesage(String channel, String message) {
-		bot.sendMessage(channel, message);
+		this.setName(currentNick);
+		this.connect(ChatSettings.getServer(), ChatSettings.getPort(), ChatSettings.getServerPassword());
 	}
 	
 	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message) {
-		Player[] onlinePlayers = plugin.getServer().getOnlinePlayers();
-		for (Player player : onlinePlayers)
-			player.sendMessage(sender + " " + message); // TODO: Get the format you want irc to be in
+		for (Channel sendTo : plugin.getChannelsHandler().isRelayIRC(channel)) {
+			sendTo.sendMessage(IRCUtil.ircToIRCChat(sender, channel, message, "+@Stuff", sendTo.getFormat()));
+			
+		}
+		
 	}
 	
 	@Override
@@ -151,15 +138,15 @@ public class IRCMain extends PircBot implements Runnable {
 		}
 	}
 
-	@Override
-	public void run() {
-		try {
-			init();
-		} catch (NickAlreadyInUseException e) {
-			this.nickName += "_";
-			onReload();
-		} catch (IOException e) {
-		} catch (IrcException e) {
-		}
+	/**
+	 *
+	 */
+	private void fixNick() {
+		currentNick = ChatSettings.getBotNick().substring(0, Math.min(11, ChatSettings.getBotNick().length() - 1) - Integer.toString(this.takenInt).length()) + this.takenInt;
+	}
+	
+	private String getRank(String name) {
+		return name; // @ || +
+		// Loop thing from hal
 	}
 }

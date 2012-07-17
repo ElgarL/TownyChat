@@ -90,9 +90,16 @@ public class ConfigurationHandler {
 									if (element instanceof String)
 										channel.setPermission(element.toString());
 								
-								if (key.equalsIgnoreCase("craftIRCTag"))
+								if (key.equalsIgnoreCase("IRCChannel"))
 									if (element instanceof String)
-										channel.setCraftIRCTag(element.toString());
+										channel.setIRCChannels(element.toString());
+								
+								if (key.equalsIgnoreCase("IRCSendToGame")) 
+										channel.setRelayIRCToGame(Boolean.valueOf(element.toString()));
+									
+								if (key.equalsIgnoreCase("IRCToGameChatFormat"))
+									if (element instanceof String)
+										channel.setFormat(element.toString());
 		
 								if (key.equalsIgnoreCase("range"))
 									channel.setRange(Double.valueOf(element.toString()));
@@ -135,6 +142,31 @@ public class ConfigurationHandler {
 				if (Key.equalsIgnoreCase("spam_time"))
 					ChatSettings.setSpam_time( Double.parseDouble((file.get(Key)).toString()) );
 				
+				if (Key.equalsIgnoreCase("IRC")) {
+					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
+					
+					for (String element : subNodes.keySet()) {
+						if (element.equalsIgnoreCase("enabled"))
+							ChatSettings.setIRCEnabled(Boolean.valueOf(subNodes.get(element).toString()));
+
+						if (element.equalsIgnoreCase("server"))
+							ChatSettings.setServer(subNodes.get(element).toString());
+						
+						if (element.equalsIgnoreCase("serverpassword"))
+							ChatSettings.setServerPassword(subNodes.get(element).toString());
+						
+						if (element.equalsIgnoreCase("port"))
+							ChatSettings.setPort(Integer.parseInt(subNodes.get(element).toString()));
+						
+						if (element.equalsIgnoreCase("botnick"))
+							ChatSettings.setBotNick(subNodes.get(element).toString());
+						
+						if (element.equalsIgnoreCase("botpassword"))
+							ChatSettings.setBotPassword(subNodes.get(element).toString());
+					}
+				}
+					
+				
 				if (Key.equalsIgnoreCase("HeroicDeathToIRC")) {
 					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
 					
@@ -142,7 +174,7 @@ public class ConfigurationHandler {
 						if (element.equalsIgnoreCase("enabled"))
 							ChatSettings.setHeroicDeathToIRC(Boolean.valueOf(subNodes.get(element).toString()));
 
-						if (element.equalsIgnoreCase("craftIRCTags"))
+						if (element.equalsIgnoreCase("IRCChannel"))
 							ChatSettings.setheroicDeathTags(subNodes.get(element).toString());
 					}
 				}
@@ -308,6 +340,13 @@ public class ConfigurationHandler {
 		
 		
 		newConfig = newConfig.replace("[spam_time]", (defaults)? "0.5" : Double.toString(ChatSettings.getSpam_time()));
+		
+		newConfig = newConfig.replace("[irc_enable]", (defaults)? "false" : Boolean.toString(ChatSettings.getIRCEnabled()));
+		newConfig = newConfig.replace("[irc_server]", (defaults)? "irc.esper.net" : ChatSettings.getServer());
+		newConfig = newConfig.replace("[irc_serverpassword]", (defaults)? "" : ChatSettings.getServerPassword());
+		newConfig = newConfig.replace("[irc_port]", (defaults)? "6667" : Integer.toString(ChatSettings.getPort()));
+		newConfig = newConfig.replace("[irc_botnick]", (defaults)? "TownyIRC" : ChatSettings.getBotNick());
+		newConfig = newConfig.replace("[irc_botpassword]", (defaults)? "" : ChatSettings.getBotPassword());
 		
 		newConfig = newConfig.replace("[hd_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isHeroicDeathToIRC()));
 		newConfig = newConfig.replace("[hd_tags]", (defaults)? "admin" : ChatSettings.getHeroicDeathTags());

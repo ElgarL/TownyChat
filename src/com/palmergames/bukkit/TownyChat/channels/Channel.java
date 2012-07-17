@@ -9,8 +9,10 @@ public abstract class Channel {
 	private String name;
 	private List<String> commands;
 	private channelTypes type;
-	private String channelTag, messageColour, permission, craftIRCTag;
+	private String channelTag, messageColour, permission, IRCChannel;
 	private double range;
+	private boolean relayIRCToGame = false;
+	private String format;
 	
 	/**
 	 * Constructor
@@ -87,19 +89,19 @@ public abstract class Channel {
 		this.permission = permission;
 	}
 	/**
-	 * @return the permission
+	 * @return Channel list
 	 */
-	public String getCraftIRCTag() {
-		if ((craftIRCTag == null) || (craftIRCTag.isEmpty()))
-			return "admin";
+	public String getIRCChannels() {
+		if ((IRCChannel == null) || (IRCChannel.isEmpty()))
+			return "";
 			
-		return craftIRCTag;
+		return IRCChannel;
 	}
 	/**
-	 * @param craftIRCTag the CraftIRC channel Tag to set
+	 * @param IRCChannels the PIRC channel Tag to set
 	 */
-	public void setCraftIRCTag(String craftIRCTag) {
-		this.craftIRCTag = craftIRCTag;
+	public void setIRCChannels(String IRCChannel) {
+		this.IRCChannel = IRCChannel;
 	}
 	/**
 	 * @return the range
@@ -117,5 +119,48 @@ public abstract class Channel {
 	 * @param event the event to process
 	 */
 	public abstract void chatProcess(PlayerChatEvent event);
+	
+	/**
+	 * Is the channel going to receive messages from IRC
+	 * 
+	 * @return
+	 */
+	public Boolean isRelayIRCToGame() { 
+		return relayIRCToGame;
+	}
+	
+	/**
+	 * Set if we can send messages to this channel from IRC
+	 * 
+	 * @param relayIRCToGame
+	 */
+	public void setRelayIRCToGame(boolean relayIRCToGameCan) {
+		this.relayIRCToGame = relayIRCToGameCan;
+	}
+	
+	/**
+	 * Send a message to game.
+	 * @param sender
+	 * @param msg
+	 */
+	public abstract void sendMessage(String msg);
+	
+	/**
+	 * Get the format
+	 * 
+	 * @return Format of chat from IRC to game!
+	 */
+	public String getFormat() {
+		return format;
+	}
+	
+	/**
+	 * Set format
+	 * 
+	 * @param format
+	 */
+	public void setFormat(String format) {
+		this.format = format;
+	}
 	
 }

@@ -17,7 +17,14 @@ public class ChatSettings extends tag_formats {
 	private static boolean per_world;
 	private static boolean heroicDeathToIRC = true;
 	private static String heroicDeathTags ="admin";
-
+	// Pirc settings
+	private static String server;
+	private static int port;
+	private static String serverPassword;
+	private static String botNick;
+	private static String botPassword;
+	private static boolean IRCEnabled;
+	
 	private static Map<String, channelFormats> formatGroups = new HashMap<String, channelFormats>();
 
 	/**
@@ -166,6 +173,55 @@ public class ChatSettings extends tag_formats {
 
 		return updated;
 
+	}
+
+	// PIRC getter/setters
+	public static String getServer() {
+		return server;
+	}
+
+	public static void setServer(String server) {
+		ChatSettings.server = server;
+	}
+
+	public static String getServerPassword() {
+		return serverPassword;
+	}
+
+	public static void setServerPassword(String serverPassword) {
+		ChatSettings.serverPassword = serverPassword;
+	}
+
+	public static String getBotNick() {
+		return botNick;
+	}
+
+	public static void setBotNick(String botNick) {
+		ChatSettings.botNick = botNick;
+	}
+
+	public static int getPort() {
+		return port;
+	}
+
+	public static void setPort(int port) {
+		ChatSettings.port = port;
+	}
+
+	public static String getBotPassword() {
+		return botPassword;
+	}
+
+	public static void setBotPassword(String botPassword) {
+		ChatSettings.botPassword = botPassword;
+	}
+
+	public static boolean getIRCEnabled() {
+		return IRCEnabled;
+	}
+
+	public static void setIRCEnabled(Boolean isIRCEnabled) {
+		IRCEnabled = isIRCEnabled;
 	}
 
 }
