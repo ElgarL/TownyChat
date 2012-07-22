@@ -176,42 +176,103 @@ public class ChatSettings extends tag_formats {
 	}
 
 	// PIRC getter/setters
+	
+	/**
+	 * get IRC Server
+	 * 
+	 * @return server
+	 * 
+	 */
 	public static String getServer() {
 		return server;
 	}
 
+	/**
+	 * Set the IRC server string
+	 * 
+	 * @param server
+	 * 
+	 */
 	public static void setServer(String server) {
 		ChatSettings.server = server;
 	}
 
+	/**
+	 * Get IRC server password
+	 * 
+	 * @return String server password
+	 * 
+	 */
 	public static String getServerPassword() {
 		return serverPassword;
 	}
 
+	/**
+	 * Set IRC server password
+	 * 
+	 * @param serverPassword
+	 * 
+	 */
 	public static void setServerPassword(String serverPassword) {
 		ChatSettings.serverPassword = serverPassword;
 	}
 
+	/**
+	 * Get IRC bot nick
+	 * 
+	 * @return string botnick
+	 * 
+	 */
 	public static String getBotNick() {
 		return botNick;
 	}
 
+	/**
+	 * Setting the botnick
+	 * 
+	 * @param botNick
+	 * 
+	 */
 	public static void setBotNick(String botNick) {
 		ChatSettings.botNick = botNick;
 	}
 
+	/**
+	 * 
+	 * Get the port to connect to IRC.
+	 * 
+	 * @return Int port
+	 * 
+	 */
 	public static int getPort() {
 		return port;
 	}
 
+	/**
+	 * Set the port to connect to, IRC.
+	 * 
+	 * @param Int port
+	 * 
+	 */
 	public static void setPort(int port) {
 		ChatSettings.port = port;
 	}
 
+	/**
+	 * Find the IRC
+	 * 
+	 * @return botPassword
+	 */
 	public static String getBotPassword() {
 		return botPassword;
 	}
 
+	/**
+	 * Set the IRC bot's password
+	 * 
+	 * @param botPassword
+	 * 
+	 */
 	public static void setBotPassword(String botPassword) {
 		ChatSettings.botPassword = botPassword;
 	}

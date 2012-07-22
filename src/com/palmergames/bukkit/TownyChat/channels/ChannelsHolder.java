@@ -52,9 +52,17 @@ public class ChannelsHolder {
 		channels.put(chan.getName(), chan);
 	}
 	
+	/**
+	 * If it is a towny chat channel.
+	 * 
+	 * @param channelName String
+	 * 
+	 * @return boolean [True, false]
+	 */
 	public boolean isChannel(String channelName) {
 		return channels.containsKey(channelName.toLowerCase());
 	}
+	
 	
 	public Channel getChannel(String channelName) {
 		return channels.get(channelName.toLowerCase());
@@ -141,6 +149,14 @@ public class ChannelsHolder {
 	}
 	
 	
+	/**
+	 * If the channel is going relay to game.
+	 * 
+	 * @param channelName
+	 * 
+	 * @return Set of channels
+	 * 
+	 */
 	public Set<Channel> isRelayIRC(String channelName) {
 		
 		Set<Channel> chanToSend = new HashSet<Channel>(); 

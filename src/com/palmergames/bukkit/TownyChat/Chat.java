@@ -131,6 +131,12 @@ public class Chat extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Check if towny is used.
+	 * 
+	 * @return boolean [True, False]
+	 * 
+	 */
 	private boolean checkTowny() {
 		Plugin test;
 
@@ -143,6 +149,9 @@ public class Chat extends JavaPlugin {
 		return true;
 	}
 	
+	/**
+	 * Register event listeners with bukkit
+	 */
 	public void registerEvents() {
 		
 		if (TownyPlayerListener == null) {
@@ -156,6 +165,11 @@ public class Chat extends JavaPlugin {
 		
 	}
 	
+	/**
+	 * 
+	 * Register permissions with bukkit
+	 * 
+	 */
 	public void registerPermissions() {
 		// Register all Permissions.
 		for (String perm : getChannelsHandler().getAllPermissions()) {
@@ -167,18 +181,33 @@ public class Chat extends JavaPlugin {
 		}
 	}
 	
+	/**
+	 * 
+	 * Unregister all custom permissions
+	 * 
+	 */
 	public void unregisterPermissions() {
-		// Register all Permissions.
+		// Unregister all custom permissions.
 		for (String perm : getChannelsHandler().getAllPermissions()) {
 			pm.removePermission(new Permission(perm, new HashMap<String, Boolean>()));
 		}
 	}
 	
-	
+	/**
+	 * Get root path to towny
+	 * 
+	 * @return File path
+	 * 
+	 */
 	public String getRootPath() {
 		return getTowny().getDataFolder().getPath();
 	}
 
+	/**
+	 * Get channels folder path
+	 * 
+	 * @return File path
+	 */
 	public String getChannelsPath() {
 		return getRootPath() + FileMgmt.fileSeparator() + "settings";
 	}
@@ -197,34 +226,77 @@ public class Chat extends JavaPlugin {
 		return configuration;
 	}
 
+	/**
+	 * Get towny
+	 * 
+	 * @return Get towny
+	 */
 	public Towny getTowny() {
 		return towny;
 	}
 	
+	/**
+	 * Get IRC handler
+	 * 
+	 * @return IRC Instance
+	 * 
+	 */
 	public IRCHandler getIRC() {
 		return irc;
 	}
 	
+	/**
+	 * Get Dynmap handler
+	 * 
+	 * @return Dynmap Instance
+	 * 
+	 */
 	public DynmapAPI getDynmap() {
 		return dynMap;
 	}
 
+	/**
+	 * Get HeroicDeath listener
+	 * 
+	 * @return heroicDeathListener Instance
+	 * 
+	 */
 	public HeroicDeathForwarder getHeroicDeath() {
 		return heroicDeathListener;
 	}
 
+	/**
+	 * Get channels
+	 * 
+	 * @return ChannelsHolder
+	 */
 	public ChannelsHolder getChannels() {
 		return channels;
 	}
 
+	/**
+	 * SetChannels
+	 * 
+	 * @param channels
+	 */
 	private void setChannels(ChannelsHolder channels) {
 		this.channels = channels;
 	}
 
+	/**
+	 * Getter for IRC
+	 * 
+	 * @return IRCHandler
+	 */
 	public IRCHandler getIrc() {
 		return irc;
 	}
 
+	/**
+	 * Set IRC
+	 * 
+	 * @param IRCHandler
+	 */
 	public void setIrc(IRCHandler irc) {
 		this.irc = irc;
 	}
