@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
 
 import com.earth2me.essentials.User;
@@ -33,7 +33,7 @@ public class StandardChannel extends Channel {
 	}
 
 	@Override
-	public void chatProcess(PlayerChatEvent event) {
+	public void chatProcess(AsyncPlayerChatEvent event) {
 		
 		channelTypes exec = channelTypes.valueOf(getType().name());
 		

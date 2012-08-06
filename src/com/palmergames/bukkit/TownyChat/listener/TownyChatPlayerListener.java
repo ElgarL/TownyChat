@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -53,7 +53,6 @@ public class TownyChatPlayerListener implements Listener  {
 		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
 		if (channel != null) {
 
-			event.setMessage(message);
 			
 			/*
 			 *  If there is no message toggle the chat mode.
@@ -68,6 +67,8 @@ public class TownyChatPlayerListener implements Listener  {
 				/*
 				 * Flag this as directed chat and trigger a player chat event
 				 */
+				event.setMessage(message);
+				
 				directedChat.put(player, command);
 				player.chat(message);
 			}
@@ -77,7 +78,7 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
-	public void onPlayerChat(PlayerChatEvent event) {
+	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		
 		Player player = event.getPlayer();
 

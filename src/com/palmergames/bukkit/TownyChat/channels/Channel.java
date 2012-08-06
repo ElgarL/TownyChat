@@ -2,7 +2,7 @@ package com.palmergames.bukkit.TownyChat.channels;
 
 import java.util.List;
 
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public abstract class Channel {
 	
@@ -116,6 +116,6 @@ public abstract class Channel {
 	/**
 	 * @param event the event to process
 	 */
-	public abstract void chatProcess(PlayerChatEvent event);
+	public abstract void chatProcess(AsyncPlayerChatEvent event);
 	
 }

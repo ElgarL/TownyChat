@@ -1,14 +1,14 @@
 package com.palmergames.bukkit.TownyChat.listener;
 
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.palmergames.bukkit.towny.object.Resident;
 
 public class LocalTownyChatEvent {
-  private PlayerChatEvent event;
+  private AsyncPlayerChatEvent event;
   private Resident resident;
   
-  public LocalTownyChatEvent(PlayerChatEvent event, Resident resident) {
+  public LocalTownyChatEvent(AsyncPlayerChatEvent event, Resident resident) {
     this.event = event;
     this.resident = resident;
   }
@@ -25,7 +25,7 @@ public class LocalTownyChatEvent {
    * 
    * @return the PlayerChatEvent
    */
-  public PlayerChatEvent getEvent() {
+  public AsyncPlayerChatEvent getEvent() {
     return event;
   }
   
