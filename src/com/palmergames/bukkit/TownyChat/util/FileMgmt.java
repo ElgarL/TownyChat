@@ -19,12 +19,13 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 
 import com.palmergames.bukkit.TownyChat.Chat;
 
+public class FileMgmt
+{
 
-
-public class FileMgmt {
-
-	public static void checkFolders(String[] folders) {
-		for (String folder : folders) {
+	public static void checkFolders(String[] folders)
+	{
+		for (String folder : folders)
+		{
 			File f = new File(folder);
 			if (!(f.exists() && f.isDirectory()))
 				f.mkdir();
@@ -32,21 +33,29 @@ public class FileMgmt {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getFile(String filepath, String resource, Chat plugin) {
+	public static Map<String, Object> getFile(String filepath, String resource,
+			Chat plugin)
+	{
 
-		try {
+		try
+		{
 			File f = new File(filepath);
-			if (!(f.exists() && f.isFile())) {
+			if (!(f.exists() && f.isFile()))
+			{
 				// Populate a new file
-				try {
+				try
+				{
 					String resString = convertStreamToString("/" + resource);
 					// If we have a plugin reference pass to load default.
 					if (plugin != null)
-						resString = plugin.getConfigurationHandler().setConfigs(resString, true);
-					
+						resString = plugin.getConfigurationHandler()
+								.setConfigs(resString, true);
+
 					FileMgmt.stringToFile(resString, filepath);
 
-				} catch (IOException e) {
+				}
+				catch (IOException e)
+				{
 					// No resource file found
 					e.printStackTrace();
 					return null;
@@ -59,21 +68,32 @@ public class FileMgmt {
 			Object channelsRootDataNode;
 
 			FileInputStream fileInputStream = new FileInputStream(f);
-			try {
-				channelsRootDataNode = yamlChannels.load(new UnicodeReader(fileInputStream));
-				if (channelsRootDataNode == null) {
+			try
+			{
+				channelsRootDataNode = yamlChannels.load(new UnicodeReader(
+						fileInputStream));
+				if (channelsRootDataNode == null)
+				{
 					throw new NullPointerException();
 				}
-			} catch (Exception ex) {
-				throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + f.getPath(), ex);
-			} finally {
+			}
+			catch (Exception ex)
+			{
+				throw new IllegalArgumentException(
+						"The following file couldn't pass on Parser.\n"
+								+ f.getPath(), ex);
+			}
+			finally
+			{
 				fileInputStream.close();
 			}
 
 			if (channelsRootDataNode instanceof Map)
 				return (Map<String, Object>) channelsRootDataNode;
 
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -82,32 +102,43 @@ public class FileMgmt {
 	}
 
 	// pass a resource name and it will return it's contents as a string
-	public static String convertStreamToString(String name) throws IOException {
-		if (name != null) {
+	public static String convertStreamToString(String name) throws IOException
+	{
+		if (name != null)
+		{
 			Writer writer = new StringWriter();
 			InputStream is = FileMgmt.class.getResourceAsStream(name);
 
 			char[] buffer = new char[1024];
-			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			try
+			{
+				Reader reader = new BufferedReader(new InputStreamReader(is,
+						"UTF-8"));
 				int n;
-				while ((n = reader.read(buffer)) != -1) {
+				while ((n = reader.read(buffer)) != -1)
+				{
 					writer.write(buffer, 0, n);
 				}
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				System.out.println("Exception ");
-			} finally {
-				try {
+			}
+			finally
+			{
+				try
+				{
 					is.close();
-				} catch (NullPointerException e) {
+				}
+				catch (NullPointerException e)
+				{
 					// Failed to open a stream
 					throw new IOException();
 				}
 			}
 			return writer.toString();
-		} else {
-			return "";
 		}
+		return "";
 	}
 
 	/**
@@ -118,13 +149,18 @@ public class FileMgmt {
 	 * @param FileName
 	 * @return true on success
 	 */
-	public static boolean stringToFile(String source, String FileName) {
+	public static boolean stringToFile(String source, String FileName)
+	{
 
-		if (source != null) {
+		if (source != null)
+		{
 			// Save the string to file (*.yml)
-			try {
+			try
+			{
 				return stringToFile(source, new File(FileName));
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				e.printStackTrace();
 			}
 		}
@@ -143,11 +179,15 @@ public class FileMgmt {
 	 * @return True on success.
 	 * @throws IOException
 	 */
-	public static boolean stringToFile(String source, File file) throws IOException {
+	public static boolean stringToFile(String source, File file)
+			throws IOException
+	{
 
-		try {
+		try
+		{
 
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			OutputStreamWriter out = new OutputStreamWriter(
+					new FileOutputStream(file), "UTF-8");
 
 			// BufferedWriter out = new BufferedWriter(new
 			// FileWriter(FileName));
@@ -158,13 +198,16 @@ public class FileMgmt {
 			out.close();
 			return true;
 
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			System.out.println("Exception ");
 			return false;
 		}
 	}
 
-	public static String fileSeparator() {
+	public static String fileSeparator()
+	{
 		return System.getProperty("file.separator");
 	}
 }

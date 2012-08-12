@@ -1,38 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="TownyChat" default="jar" basedir=".">
-    <property name="build" value="bin"/>
-    <property file="build.properties"/>
-    
-    <target name="clean">
-        <delete dir="${build}"/>
+<project name="TownyChat" default="package">
+
+    <target name="init" description="Initialize directories, etc.">
+        <mkdir dir="bin" />
+        <mkdir dir="dist" />
     </target>
 
-    <target name="init" depends="clean">
-        <mkdir dir="${build}"/>
-    </target>   
-    
-    <target name="compile" depends="init">
-        <!-- Compile the java code -->
-        <javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.6" source="1.6">
+    <target name="clean" depends="init" description="Clean up all the temp stuff and previous builds">
+        <delete>
+            <fileset dir="bin" />
+            <fileset dir="dist" />
+        </delete>
+    </target>
+
+    <target name="compile" depends="clean, init" description="Compile all the code">
+        <javac debug="true" debuglevel="lines,vars,source" deprecation="true" srcdir="src" destdir="bin">
             <classpath>
-                <pathelement location="${env.LIB}/bukkit.jar"/>
-                <pathelement location="${env.LIB}/craftbukkit.jar"/>
-            	<pathelement location="${env.LIB}/Towny.jar"/>
-            	<pathelement location="${env.LIB}/Essentials.jar"/>
-            	<pathelement location="${env.LIB}/CraftIRC.jar"/>
-            	<pathelement location="${env.LIB}/dynmap-api.jar"/>
-            	<pathelement location="${env.LIB}/HeroicDeath.jar"/>
+                <fileset dir="lib" includes="*.jar" />
             </classpath>
         </javac>
-    </target>   
-    
-    <target name="jar" depends="compile">
-        <!-- Build the jar file -->
-        <jar basedir="${build}" destfile="${env.LIB}/TownyChat.jar">
-	        <fileset dir="./src" includes="changelog.txt"/>
-        	<fileset dir="./src" includes="Channels.yml"/>
-        	<fileset dir="./src" includes="ChatConfig.yml"/>
-        	<fileset dir="./src" includes="plugin.yml"/>
-        </jar>
     </target>
+
+    <target name="package" depends="compile" description="Make the distributable jar file">
+        <copy todir="bin" overwrite="true">
+            <fileset dir="." includes="plugin.yml" />
+        	<fileset dir="." includes="changelog.txt" />
+        	<fileset dir="." includes="Channels.yml" />
+        	<fileset dir="." includes="ChatConfig.yml" />
+        </copy>
+        <jar basedir="bin" jarfile="dist/${ant.project.name}.jar" defaultexcludes="true" />
+    </target>
+
+
 </project>
