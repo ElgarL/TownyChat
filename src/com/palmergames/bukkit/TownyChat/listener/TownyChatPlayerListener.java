@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
 public class TownyChatPlayerListener implements Listener  {
@@ -64,6 +66,13 @@ public class TownyChatPlayerListener implements Listener  {
 					plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
 
 			} else {
+				// Notify player he is muted
+				if (channel.isMuted(player.getName())) {
+					TownyMessaging.sendErrorMsg(player, "You are currently muted in " + channel.getName() + "!");
+					event.setCancelled(true);
+					return;
+				}
+				
 				/*
 				 * Flag this as directed chat and trigger a player chat event
 				 */
@@ -78,10 +87,19 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerQuit(final PlayerQuitEvent event) {
+		String name = event.getPlayer().getName(); 
+		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
+			channel.forgetPlayer(name);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		
 		Player player = event.getPlayer();
-
+		String playerName = player.getName();
+		
 		// Check if essentials has this player muted.
 		if (!isMuted(player)) {
 
@@ -98,6 +116,17 @@ public class TownyChatPlayerListener implements Listener  {
 				directedChat.remove(player);
 				
 				if (channel != null) {
+					// Notify player he is muted
+					if (channel.isMuted(player.getName())) {
+						TownyMessaging.sendErrorMsg(player, "You are currently muted in " + Colors.White + channel.getName() + Colors.Rose + "!");
+						event.setCancelled(true);
+						return;
+					}
+					// If player sends a message to a channel it had left
+					// tell the channel to add the player back
+					if (channel.isAbsent(playerName)) {
+						channel.forgetPlayer(playerName);
+					}
 					channel.chatProcess(event);
 					return;
 				}
@@ -108,6 +137,12 @@ public class TownyChatPlayerListener implements Listener  {
 			 */
 			for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
 				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
+					// Notify player he is muted
+					if (channel.isMuted(player.getName())) {
+						TownyMessaging.sendErrorMsg(player, "You are currently muted in " + Colors.White + channel.getName() + Colors.Rose + "!");
+						event.setCancelled(true);
+						return;
+					}
 					/*
 					 *  Channel Chat mode set
 					 *  Process the chat
@@ -118,9 +153,16 @@ public class TownyChatPlayerListener implements Listener  {
 			}
 			
 			// Find a global channel this player has permissions for.
-			Channel channel = plugin.getChannelsHandler().getChannel(player, channelTypes.GLOBAL);
+			Channel channel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
 					
 			if (channel != null) {
+				// Notify player he is muted
+				if (channel.isMuted(player.getName())) {
+					TownyMessaging.sendErrorMsg(player, "You are currently muted in " + Colors.White + channel.getName() + Colors.Rose + "!");
+					event.setCancelled(true);
+					return;
+				}
+
 				channel.chatProcess(event);
 				return;
 			}

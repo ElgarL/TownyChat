@@ -90,6 +90,10 @@ public class ConfigurationHandler {
 									if (element instanceof String)
 										channel.setPermission(element.toString());
 								
+								if (key.equalsIgnoreCase("leavepermission"))
+									if (element instanceof String)
+										channel.setLeavePermission(element.toString());
+
 								if (key.equalsIgnoreCase("craftIRCTag"))
 									if (element instanceof String)
 										channel.setCraftIRCTag(element.toString());
@@ -98,6 +102,10 @@ public class ConfigurationHandler {
 									channel.setRange(Double.valueOf(element.toString()));
 							}
 							
+							// If no leave permission is set, create a default permission name
+							if (channel.getLeavePermission() == null) {
+								channel.setLeavePermission("towny.chat.leave." + channel.getName().toLowerCase());
+							}
 							plugin.getChannelsHandler().addChannel(channel);
 							
 							//System.out.print("Channel: " + channel.getName() + " : Type : " + channel.getType().name());

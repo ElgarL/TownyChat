@@ -32,6 +32,7 @@ public class StandardChannel extends Channel {
 		this.plugin = instance;
 	}
 
+
 	@Override
 	public void chatProcess(AsyncPlayerChatEvent event) {
 		
@@ -51,7 +52,6 @@ public class StandardChannel extends Channel {
 		} catch (NotRegisteredException e1) {
 			// Not in a town/nation (doesn't matter which)
 		}
-		
 		
 		/*
 		 *  Retrieve the channel specific format
@@ -209,7 +209,14 @@ public class StandardChannel extends Channel {
 							// Failed to fetch user so ignore.
 						}
 					}
-	        		
+
+	        		// Spy's can leave channels and we'll respect that
+	        		if (absentPlayers != null) {
+	        			// Ignore players who have left this channel
+	        			if (absentPlayers.containsKey(test.getName())) {
+	        				continue;
+	        			}
+	        		}
 	        		recipients.add(test);
 	        	}
         	}
@@ -220,5 +227,4 @@ public class StandardChannel extends Channel {
         
         return recipients;
 	}
-
 }
