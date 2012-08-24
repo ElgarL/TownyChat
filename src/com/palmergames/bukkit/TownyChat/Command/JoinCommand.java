@@ -34,7 +34,7 @@ public class JoinCommand implements CommandExecutor {
 		Player player = ((Player)sender);
 		
 		String name = null;
-		if (label.equalsIgnoreCase("leave")){
+		if (label.equalsIgnoreCase("join")){
 			name = args[0];
 		} else {
 			name = args[1];
