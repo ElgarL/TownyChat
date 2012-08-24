@@ -214,7 +214,12 @@ public abstract class Channel {
 	public void setLeavePermission(String permission) {
 		leavePermission = permission;;
 	}
-	
+
+	public boolean hasMuteList() {
+		if (mutedPlayers == null || mutedPlayers.isEmpty()) return false;
+		return true;
+	}
+
 	public Set<String> getMuteList() {
 		return mutedPlayers.keySet();
 	}
