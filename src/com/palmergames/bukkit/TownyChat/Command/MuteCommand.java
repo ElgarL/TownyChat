@@ -59,7 +59,7 @@ public class MuteCommand implements CommandExecutor {
 		mutee = muteePlayer.getName();
 		
 		if (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().isTownyAdmin(muteePlayer)){
-			TownyMessaging.sendErrorMsg(sender, "[TownyChat] You can't mute an Towny administrator.");
+			TownyMessaging.sendErrorMsg(sender, "[TownyChat] You can't mute a Towny administrator.");
 			return true;
 		}
 
