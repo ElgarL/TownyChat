@@ -36,7 +36,7 @@ public class UnmuteCommand implements CommandExecutor {
 		
 		String name = null;
 		String mutee = null;
-		if (label.equalsIgnoreCase("mute")){
+		if (label.equalsIgnoreCase("unmute")){
 			name = args[0];
 			mutee = args[1];
 		} else {
