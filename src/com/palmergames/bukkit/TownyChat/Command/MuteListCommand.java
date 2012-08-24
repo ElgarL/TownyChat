@@ -83,15 +83,18 @@ public class MuteListCommand implements CommandExecutor {
 		
 		// TODO Support paging through this list
 		int count = 0;
-		Iterator<String> iter = chan.getMuteList().iterator();
-		boolean first = true;
 		String players = "";
-		while(iter.hasNext()) {
-			if (!first) {
-				players += Colors.Green + ", "+ Colors.White;
+
+		if (chan.hasMuteList()) {
+			Iterator<String> iter = chan.getMuteList().iterator();
+			boolean first = true;
+			while(iter.hasNext()) {
+				if (!first) {
+					players += Colors.Green + ", "+ Colors.White;
+				}
+				players += iter.next();
+				count++;
 			}
-			players += iter.next();
-			count++;
 		}
 
 		if (count == 0) {
