@@ -95,13 +95,21 @@ public class TownyChatPlayerListener implements Listener  {
 			 */
 			if (message.isEmpty()) {
 				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
-					plugin.getTowny().removePlayerMode(player);
 					// Find what the next channel is if any
 					Channel nextChannel = null;
 					if (plugin.getChannelsHandler().getDefaultChannel() != null && plugin.getChannelsHandler().getDefaultChannel().isPresent(player.getName())) {
 						nextChannel = plugin.getChannelsHandler().getDefaultChannel();
-						TownyUtil.addPlayerMode(plugin.getTowny(), player, nextChannel.getName(), true);
+						if (!nextChannel.getName().equalsIgnoreCase(channel.getName())) {
+							TownyUtil.removeAndSetPlayerMode(plugin.getTowny(), player, channel.getName(), nextChannel.getName(), true);
+						} else {
+							// They're talking on default channel and want to leave but can't because they'll be put default again
+							// Their only option out is to leave the channel if they have permission to do so.
+							TownyMessaging.sendErrorMsg(player, "[TownyChat] You are already talking in the default channel. To switch to another channel use that channel's command.");
+						}
+					} else {
+						plugin.getTowny().removePlayerMode(player);
 					}
+					
 					if (nextChannel == null) {
 						nextChannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
 					}
@@ -164,6 +172,7 @@ public class TownyChatPlayerListener implements Listener  {
 						return;
 					}
 
+					plugin.getLogger().info("onPlayerChat: Processing directed message for " + channel.getName());
 					channel.chatProcess(event);
 					return;
 				}

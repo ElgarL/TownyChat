@@ -91,9 +91,7 @@ public class LeaveCommand implements CommandExecutor {
 		if (plugin.getTowny().hasPlayerMode(player, chan.getName())) {
 			if (plugin.getChannelsHandler().getDefaultChannel() != null && plugin.getChannelsHandler().getDefaultChannel().isPresent(player.getName())) {
 				nextChannel = plugin.getChannelsHandler().getDefaultChannel();
-				if (TownyUtil.removePlayerMode(plugin.getTowny(), player, chan.getName(), false)) {
-					TownyUtil.addPlayerMode(plugin.getTowny(), player, nextChannel.getName(), true);
-				}
+				TownyUtil.removeAndSetPlayerMode(plugin.getTowny(), player, chan.getName(), nextChannel.getName(), true);
 			}
 		}
 		if (nextChannel == null) {

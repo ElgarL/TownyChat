@@ -41,4 +41,29 @@ public class TownyUtil {
 		towny.setPlayerMode(player, modes.toArray(new String[modes.size()]), notify);
 		return true;
 	}
+
+	public static boolean removeAndSetPlayerMode(Towny towny, Player player, String removeMode, String addMode, boolean notify) {
+		List<String> modes = towny.getPlayerMode(player);
+		boolean modesChanged = false;
+		if (removeMode != null && towny.hasPlayerMode(player, removeMode)) {
+			Iterator<String> iter = modes.iterator();
+			while (iter.hasNext()) {
+				String s = iter.next();
+				if (s == null) continue;
+				if (s.equalsIgnoreCase(removeMode)) {
+					iter.remove();
+					modesChanged = true;
+				}
+			}
+		}
+		if (addMode != null) {
+			modes.add(addMode);
+			modesChanged = true;
+		}
+		if (modesChanged) {
+			towny.setPlayerMode(player, modes.toArray(new String[modes.size()]), notify);
+			return true;
+		}
+		return false;
+	}
 }
