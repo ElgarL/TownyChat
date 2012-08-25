@@ -66,23 +66,23 @@ public class AsyncChatHookEvent extends Event {
 		return event.getPlayer();
 	}
 	
-	public void SetRecipients(Set<Player> recipients) {
+	public void setRecipients(Set<Player> recipients) {
 		changed = true;
 		event.getRecipients().clear();
 		event.getRecipients().addAll(recipients);
 	}
 	
-	public void SetFormat(String format) {
+	public void setFormat(String format) {
 		changed = true;
 		event.setFormat(format);
 	}
 	
-	public void SetMessage(String message) {
+	public void setMessage(String message) {
 		changed = true;
 		event.setFormat(message);
 	}
 	
-	public void SetCancelled(boolean cancel) {
+	public void setCancelled(boolean cancel) {
 		changed = (cancel == true);
 		event.setCancelled(cancel);
 	}
