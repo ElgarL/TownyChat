@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 public class ChannelsHolder {
 	
 	private Chat plugin;
+	private Channel defaultChan = null;
 	
 	/** Constructor
 	 * 
@@ -27,6 +28,13 @@ public class ChannelsHolder {
 		this.plugin = plugin;
 	}
 
+	public void setDefaultChannel(Channel channel) {
+		defaultChan = channel;
+	}
+	
+	public Channel getDefaultChannel() {
+		return defaultChan;
+	}
 	
 	// Container for all channels
 	private Map<String,Channel> channels = new HashMap<String,Channel>();

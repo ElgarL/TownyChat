@@ -18,16 +18,15 @@ public class TownyUtil {
 		}
 		
 		List<String> modes = towny.getPlayerMode(player);
-		int pos = 0;
+		int newmodecount = modes.size();
 		Iterator<String> iter = modes.iterator();
 		while (iter.hasNext()) {
 			String s = iter.next();
 			if (mode.equalsIgnoreCase(s)) {
-				modes.remove(pos);
-				towny.setPlayerMode(player, modes.toArray(new String[modes.size()]), notify);
+				iter.remove();
+				towny.setPlayerMode(player, modes.toArray(new String[newmodecount-1]), notify);
 				return true;
 			}
-			pos++;
 		}
 		return false;
 	}

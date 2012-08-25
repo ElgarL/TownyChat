@@ -16,6 +16,7 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -33,6 +34,38 @@ public class TownyChatPlayerListener implements Listener  {
 
 	public TownyChatPlayerListener(Chat instance) {
 		this.plugin = instance;
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerJoin(final PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		String name = player.getName();
+		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
+			// If the channel is auto join, they will be added
+			// If the channel is not auto join, they will marked as absent
+			// TODO: Only do this for channels the user has permissions for
+			channel.forgetPlayer(name);
+		}
+		Channel channel = plugin.getChannelsHandler().getDefaultChannel();
+		if (channel != null) {
+			// See if we have permissions for the default channel
+			channel = plugin.getChannelsHandler().getChannel(player, channel.getCommands().get(0));
+			if (channel != null) {
+				// Schedule it as delayed task because Towny may not have processed this just yet
+				// and would reset the mode otherwise
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new onPlayerJoinTask(plugin, player, channel), 5);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerQuit(final PlayerQuitEvent event) {
+		String name = event.getPlayer().getName(); 
+		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
+			// If the channel is auto join, they will be added
+			// If the channel is not auto join, they will marked as absent
+			channel.forgetPlayer(name);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -53,10 +86,9 @@ public class TownyChatPlayerListener implements Listener  {
 		if (split.length > 1)
 			message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
+		// Check if they used a channel command or alias
 		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
 		if (channel != null) {
-
-			
 			/*
 			 *  If there is no message toggle the chat mode.
 			 */
@@ -88,28 +120,9 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
-	public void onPlayerQuit(final PlayerQuitEvent event) {
-		String name = event.getPlayer().getName(); 
-		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
-			channel.forgetPlayer(name);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOW)
-	public void onPlayerJoin(final PlayerJoinEvent event) {
-		String name = event.getPlayer().getName(); 
-		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
-			// If the channel is auto join, they will be added
-			// If the channel is not auto join, they will marked as absent
-			channel.forgetPlayer(name);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		
 		Player player = event.getPlayer();
-		String playerName = player.getName();
 		
 		// Check if essentials has this player muted.
 		if (!isMuted(player)) {
@@ -133,11 +146,7 @@ public class TownyChatPlayerListener implements Listener  {
 						event.setCancelled(true);
 						return;
 					}
-					// If player sends a message to a channel it had left
-					// tell the channel to add the player back
-					if (channel.isAbsent(playerName)) {
-						channel.forgetPlayer(playerName);
-					}
+
 					channel.chatProcess(event);
 					return;
 				}
@@ -177,7 +186,6 @@ public class TownyChatPlayerListener implements Listener  {
 				channel.chatProcess(event);
 				return;
 			}
-			
 		}
 
 		/*
