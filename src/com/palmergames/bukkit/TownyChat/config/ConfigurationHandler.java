@@ -88,6 +88,16 @@ public class ConfigurationHandler {
 									}
 								}
 
+								if (key.equalsIgnoreCase("autojoin")) {
+									if (element instanceof Boolean) {
+										channel.setAutoJoin((Boolean)element);
+									} else if (element instanceof String) {
+										channel.setAutoJoin(Boolean.parseBoolean(element.toString()));
+									} else if (element instanceof Integer) {
+										channel.setAutoJoin(Integer.parseInt(element.toString()) != 0);
+									}
+								}
+
 								if (key.equalsIgnoreCase("channeltag"))
 									if (element instanceof String)
 										channel.setChannelTag(element.toString());

@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -93,7 +94,17 @@ public class TownyChatPlayerListener implements Listener  {
 			channel.forgetPlayer(name);
 		}
 	}
-	
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerJoin(final PlayerJoinEvent event) {
+		String name = event.getPlayer().getName(); 
+		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
+			// If the channel is auto join, they will be added
+			// If the channel is not auto join, they will marked as absent
+			channel.forgetPlayer(name);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		

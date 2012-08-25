@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public abstract class Channel {
@@ -17,6 +15,7 @@ public abstract class Channel {
 	private String channelTag, messageColour, permission, leavePermission, craftIRCTag;
 	private double range;
 	private boolean hooked=false;
+	private boolean autojoin=true;
 	protected ConcurrentMap<String, Integer> absentPlayers = null;  
 	protected ConcurrentMap<String, Integer> mutedPlayers = null;
 	
@@ -130,7 +129,13 @@ public abstract class Channel {
 	 * Used to reset channel settings for a given player
 	 */
 	public void forgetPlayer(String name) {
-		join(name);
+		// If the channel is auto join, they will be added
+		// If the channel is not auto join, they will marked as absent
+		if (autojoin) {
+			join(name);
+		} else {
+			leave(name);
+		}
 	}
 	
 	/*
@@ -231,5 +236,13 @@ public abstract class Channel {
 
 	public boolean isHooked() {
 		return hooked;
+	}
+	
+	public void setAutoJoin(boolean autojoin) {
+		this.autojoin = autojoin;
+	}
+	
+	public boolean isAutoJoin() {
+		return autojoin;
 	}
 }
