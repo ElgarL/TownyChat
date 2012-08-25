@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.TownyChat.Command;
 
-import java.util.logging.Level;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -88,35 +86,23 @@ public class LeaveCommand implements CommandExecutor {
 		// Announce it
 		TownyMessaging.sendMsg(sender, "[TownyChat] You left " + Colors.White + chan.getName());
 
-		// Remove this channel from player modes
-		if (TownyUtil.removePlayerMode(plugin.getTowny(), player, chan.getName(), false)) {
-			
-		}
 		
-		Channel newchannel = null;
-		// Find us a new channel to speak on
-		newchannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
-		if (newchannel == null) {
-			newchannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.NATION);
-			if (newchannel == null) {
-				newchannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.TOWN);
-				if (newchannel == null) {
-					newchannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.DEFAULT);
-					if (newchannel == null) {
-						newchannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.PRIVATE);
-					}
+		Channel nextChannel = null;
+		if (plugin.getTowny().hasPlayerMode(player, chan.getName())) {
+			if (plugin.getChannelsHandler().getDefaultChannel() != null && plugin.getChannelsHandler().getDefaultChannel().isPresent(player.getName())) {
+				nextChannel = plugin.getChannelsHandler().getDefaultChannel();
+				if (TownyUtil.removePlayerMode(plugin.getTowny(), player, chan.getName(), false)) {
+					TownyUtil.addPlayerMode(plugin.getTowny(), player, nextChannel.getName(), true);
 				}
 			}
 		}
-
-		if (newchannel != null) {
-			TownyUtil.addPlayerMode(plugin.getTowny(), player, newchannel.getName(), true);
-			TownyMessaging.sendMsg(sender, "[TownyChat] You are now talking in " + Colors.White + newchannel.getName());
-		} else {
-			TownyMessaging.sendMsg(sender, "[TownyChat] You are now in blissful silence.");
+		if (nextChannel == null) {
+			nextChannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
 		}
-
+		if (nextChannel != null) {
+			TownyMessaging.sendMsg(sender, "[TownyChat] You are now talking in " + Colors.White + nextChannel.getName());
+		}
+		
 		return true;
 	}
-
 }
