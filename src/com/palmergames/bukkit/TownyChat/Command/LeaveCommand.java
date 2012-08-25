@@ -86,7 +86,7 @@ public class LeaveCommand implements CommandExecutor {
 		// Announce it
 		TownyMessaging.sendMsg(sender, "[TownyChat] You left " + Colors.White + chan.getName());
 
-		
+		// Find what the next channel is if any
 		Channel nextChannel = null;
 		if (plugin.getTowny().hasPlayerMode(player, chan.getName())) {
 			if (plugin.getChannelsHandler().getDefaultChannel() != null && plugin.getChannelsHandler().getDefaultChannel().isPresent(player.getName())) {
@@ -99,7 +99,9 @@ public class LeaveCommand implements CommandExecutor {
 		if (nextChannel == null) {
 			nextChannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
 		}
-		if (nextChannel != null) {
+		
+		// If the new channel is not us, announce it
+		if (nextChannel != null && !chan.getName().equalsIgnoreCase(nextChannel.getName())) {
 			TownyMessaging.sendMsg(sender, "[TownyChat] You are now talking in " + Colors.White + nextChannel.getName());
 		}
 		
