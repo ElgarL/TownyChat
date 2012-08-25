@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -19,6 +17,7 @@ import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -26,6 +25,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
 
 public class StandardChannel extends Channel {
 
@@ -56,6 +56,14 @@ public class StandardChannel extends Channel {
 			// Not in a town/nation (doesn't matter which)
 		}
 		
+		boolean notifyjoin = false;
+		// If player sends a message to a channel it had left
+		// tell the channel to add the player back
+		if (isAbsent(player.getName())) {
+			join(player.getName());
+			notifyjoin = true;
+		}
+
 		/*
 		 *  Retrieve the channel specific format
 		 *  and compile a set of recipients
@@ -123,7 +131,11 @@ public class StandardChannel extends Channel {
                 event.getRecipients().addAll(hookEvent.getRecipients());
             }
         }
-        
+
+        if (notifyjoin) {
+			TownyMessaging.sendMsg(player, "You join " + Colors.White + getName());
+        }
+
         /*
          * Perform any last channel specific functions
          * like logging this chat and relaying to IRC/Dynmap.
