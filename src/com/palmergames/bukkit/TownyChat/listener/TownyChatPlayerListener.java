@@ -17,6 +17,7 @@ import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
+import com.palmergames.bukkit.TownyChat.util.TownyUtil;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -93,11 +94,27 @@ public class TownyChatPlayerListener implements Listener  {
 			 *  If there is no message toggle the chat mode.
 			 */
 			if (message.isEmpty()) {
-				if (plugin.getTowny().hasPlayerMode(player, channel.getName()))
+				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
 					plugin.getTowny().removePlayerMode(player);
-				else
+					// Find what the next channel is if any
+					Channel nextChannel = null;
+					if (plugin.getChannelsHandler().getDefaultChannel() != null && plugin.getChannelsHandler().getDefaultChannel().isPresent(player.getName())) {
+						nextChannel = plugin.getChannelsHandler().getDefaultChannel();
+						TownyUtil.addPlayerMode(plugin.getTowny(), player, nextChannel.getName(), true);
+					}
+					if (nextChannel == null) {
+						nextChannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
+					}
+					
+					// If the new channel is not us, announce it
+					if (nextChannel != null && !channel.getName().equalsIgnoreCase(nextChannel.getName())) {
+						TownyMessaging.sendMsg(player, "[TownyChat] You are now talking in " + Colors.White + nextChannel.getName());
+					}
+				}
+				else {
 					plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
-
+					TownyMessaging.sendMsg(player, "[TownyChat] You are now talking in " + Colors.White + channel.getName());
+				}
 			} else {
 				// Notify player he is muted
 				if (channel.isMuted(player.getName())) {
@@ -203,7 +220,6 @@ public class TownyChatPlayerListener implements Listener  {
 				e.printStackTrace();
 			}
 		}
-
 	}
 	
 	/**
