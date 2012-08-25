@@ -23,22 +23,21 @@ commands:
         description: Channel leaving and joining
         usage: /<command> leave|join channel
     leave:
-        aliases: [ch leave]
         description: Leaves a channel
         usage: /<command> channel
     join:
-        aliases: [ch join]
         description: Joins a channel
         usage: /<command> channel
-    mute:
+    chmute:
+        aliases: [mute]
         description: Mutes a player in a channel
         usage: /<command> channel player
         permission: townychat.mod.mute
     mutelist:
         description: Displays mute list for a channel
         usage: /<command> channel
-        permission: townychat.mod.list.mute
-    unmute:
+    chunmute:
+        aliases: [unmute]
         description: Unmutes a player in a channel
         usage: /<command> channel player
         permission: townychat.mod.unmute

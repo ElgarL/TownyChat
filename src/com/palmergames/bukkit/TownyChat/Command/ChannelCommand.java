@@ -33,11 +33,11 @@ public class ChannelCommand implements CommandExecutor {
 		}
 
 		if (args[0].equalsIgnoreCase("mute")) {
-			return plugin.getCommand("mute").getExecutor().onCommand(sender, cmd, label, args); 
+			return plugin.getCommand("chmute").getExecutor().onCommand(sender, cmd, label, args); 
 		}
 
 		if (args[0].equalsIgnoreCase("unmute")) {
-			return plugin.getCommand("unmute").getExecutor().onCommand(sender, cmd, label, args); 
+			return plugin.getCommand("chunmute").getExecutor().onCommand(sender, cmd, label, args); 
 		}
 
 		if (args[0].equalsIgnoreCase("mutelist")) {

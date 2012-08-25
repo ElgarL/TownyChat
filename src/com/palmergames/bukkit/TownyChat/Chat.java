@@ -77,8 +77,8 @@ public class Chat extends JavaPlugin {
 		getCommand("channel").setExecutor(new ChannelCommand(this));
 		getCommand("join").setExecutor(new JoinCommand(this));
 		getCommand("leave").setExecutor(new LeaveCommand(this));
-		getCommand("mute").setExecutor(new MuteCommand(this));
-		getCommand("unmute").setExecutor(new UnmuteCommand(this));
+		getCommand("chmute").setExecutor(new MuteCommand(this));
+		getCommand("chunmute").setExecutor(new UnmuteCommand(this));
 		getCommand("mutelist").setExecutor(new MuteListCommand(this));
 	}
 	

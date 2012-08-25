@@ -23,6 +23,7 @@ public class MuteCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,	String[] args) {
 		// If not our command
 		if ((!label.equalsIgnoreCase("mute") || args.length != 2) && 
+			(!label.equalsIgnoreCase("chmute") || args.length != 2) && 
 			(!label.equalsIgnoreCase("ch") || args.length != 3 || !args[0].equalsIgnoreCase("mute"))) {
 			TownyMessaging.sendErrorMsg(sender, "[TownyChat] Error: Invalid command!");
 			return false;
@@ -34,14 +35,14 @@ public class MuteCommand implements CommandExecutor {
 
 		Player player = ((Player)sender);
 		
-		String name = null;
+		String channelName = null;
 		String mutee = null;
-		if (label.equalsIgnoreCase("mute")){
-			name = args[0];
+		if (label.equalsIgnoreCase("chmute") || label.equalsIgnoreCase("mute")){
+			channelName = args[0];
 			mutee = args[1];
 		} else {
-			name = args[1];
-			mutee = args[1];
+			channelName = args[1];
+			mutee = args[2];
 		}
 		
 		String mutePerm = plugin.getChannelsHandler().getMutePermission();
@@ -70,13 +71,13 @@ public class MuteCommand implements CommandExecutor {
 			return true;
 		}
 
-		Channel chan = plugin.getChannelsHandler().getChannel(name);
+		Channel chan = plugin.getChannelsHandler().getChannel(channelName);
 
 		// If we can't find the channel by name, look up all the channel commands for an alias
 		if (chan == null) {
 			for(Channel chan2 : plugin.getChannelsHandler().getAllChannels().values()) {
 				for (String command : chan2.getCommands()) {
-					if (command.equalsIgnoreCase(name)) {
+					if (command.equalsIgnoreCase(channelName)) {
 						chan = chan2;
 						break;
 					}
@@ -88,17 +89,17 @@ public class MuteCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(sender, "[TownyChat] There is no channel called " + Colors.White + name);
+			TownyMessaging.sendErrorMsg(sender, "[TownyChat] There is no channel called " + Colors.White + channelName);
 			return true;
 		}
 
 		
-		if (!chan.mute(name)) {
+		if (!chan.mute(mutee)) {
 			TownyMessaging.sendMsg(sender, "[TownyChat] Player is already muted in "+ Colors.White + chan.getName());
 			return true;
 		}
 		
-		TownyMessaging.sendMsg(sender, "[TownyChat] " + Colors.White + name + Colors.Green +" is now muted in "+ Colors.White + chan.getName());
+		TownyMessaging.sendMsg(sender, "[TownyChat] " + Colors.White + mutee + Colors.Green +" is now muted in "+ Colors.White + chan.getName());
 		return true;
 	}
 }
