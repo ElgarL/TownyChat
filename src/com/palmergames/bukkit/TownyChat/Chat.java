@@ -227,5 +227,4 @@ public class Chat extends JavaPlugin {
 	public HeroicDeathForwarder getHeroicDeath() {
 		return heroicDeathListener;
 	}
-
 }
