@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
@@ -15,6 +17,7 @@ import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
+import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -27,11 +30,11 @@ import com.palmergames.bukkit.util.BukkitTools;
 public class StandardChannel extends Channel {
 
 	private Chat plugin;
+	
 	public StandardChannel(Chat instance, String name) {
 		super(name);
 		this.plugin = instance;
 	}
-
 
 	@Override
 	public void chatProcess(AsyncPlayerChatEvent event) {
@@ -105,6 +108,21 @@ public class StandardChannel extends Channel {
 		 */
         event.getRecipients().clear();
         event.getRecipients().addAll(recipients);
+        
+        if (isHooked()) {
+        	AsyncChatHookEvent hookEvent = new AsyncChatHookEvent(event, this);
+            Bukkit.getServer().getPluginManager().callEvent(hookEvent);
+            if (hookEvent.isCancelled()) {
+            	event.setCancelled(true);
+            	return;
+            }
+            if (hookEvent.isChanged()) {
+            	event.setMessage(hookEvent.getMessage());
+            	event.setFormat(hookEvent.getFormat());
+                event.getRecipients().clear();
+                event.getRecipients().addAll(hookEvent.getRecipients());
+            }
+        }
         
         /*
          * Perform any last channel specific functions

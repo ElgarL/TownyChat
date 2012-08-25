@@ -16,6 +16,7 @@ public abstract class Channel {
 	private channelTypes type;
 	private String channelTag, messageColour, permission, leavePermission, craftIRCTag;
 	private double range;
+	private boolean hooked=false;
 	protected ConcurrentMap<String, Integer> absentPlayers = null;  
 	protected ConcurrentMap<String, Integer> mutedPlayers = null;
 	
@@ -222,5 +223,13 @@ public abstract class Channel {
 
 	public Set<String> getMuteList() {
 		return mutedPlayers.keySet();
+	}
+	
+	public void setHooked(boolean hooked) {
+		this.hooked = hooked;
+	}
+
+	public boolean isHooked() {
+		return hooked;
 	}
 }

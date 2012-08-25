@@ -77,7 +77,17 @@ public class ConfigurationHandler {
 								if (key.equalsIgnoreCase("type"))
 									if (element instanceof String)
 										channel.setType(channelTypes.valueOf(element.toString()));
-		
+
+								if (key.equalsIgnoreCase("hooked")) {
+									if (element instanceof Boolean) {
+										channel.setHooked((Boolean)element);
+									} else if (element instanceof String) {
+										channel.setHooked(Boolean.parseBoolean(element.toString()));
+									} else if (element instanceof Integer) {
+										channel.setHooked(Integer.parseInt(element.toString()) != 0);
+									}
+								}
+
 								if (key.equalsIgnoreCase("channeltag"))
 									if (element instanceof String)
 										channel.setChannelTag(element.toString());
