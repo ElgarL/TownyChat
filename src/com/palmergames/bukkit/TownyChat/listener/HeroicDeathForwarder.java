@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.herocraftonline.squallseed31.heroicdeath.HeroicDeathEvent;
-import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
+import com.palmergames.bukkit.TownyChat.IRCHandler;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 
 /**
@@ -17,9 +17,9 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 //@SuppressWarnings("deprecation")
 public class HeroicDeathForwarder implements Listener{	// extends CustomEventListener
 
-	private CraftIRCHandler ircHandler = null;
+	private IRCHandler ircHandler = null;
 
-	public HeroicDeathForwarder(CraftIRCHandler irc) {
+	public HeroicDeathForwarder(IRCHandler irc) {
 		this.ircHandler = irc;
 	}
 
@@ -32,7 +32,7 @@ public class HeroicDeathForwarder implements Listener{	// extends CustomEventLis
 	public void onHeroicDeathEvent(HeroicDeathEvent event) {
 
 		if (ircHandler != null)
-			ircHandler.IRCSender(event.getDeathCertificate().getMessage(), ChatSettings.getHeroicDeathTags());
+			ircHandler.sendMessage(ChatSettings.getHeroicDeathTags(), event.getDeathCertificate().getMessage());
 
 	}
 

@@ -52,9 +52,17 @@ public class ChannelsHolder {
 		channels.put(chan.getName(), chan);
 	}
 	
+	/**
+	 * If it is a towny chat channel.
+	 * 
+	 * @param channelName String
+	 * 
+	 * @return boolean [True, false]
+	 */
 	public boolean isChannel(String channelName) {
 		return channels.containsKey(channelName.toLowerCase());
 	}
+	
 	
 	public Channel getChannel(String channelName) {
 		return channels.get(channelName.toLowerCase());
@@ -131,7 +139,6 @@ public class ChannelsHolder {
 	public Set<String> getAllPermissions() {
 		
 		Set<String> perms = new HashSet<String>();
-		
 		for (Channel channel: channels.values()) {
 			if (!perms.contains(channel.getPermission())) {
 				perms.add(channel.getPermission());
@@ -139,6 +146,28 @@ public class ChannelsHolder {
 			}
 		}
 		return perms;
+	}
+	
+	
+	/**
+	 * If the channel is going relay to game.
+	 * 
+	 * @param channelName
+	 * 
+	 * @return Set of channels
+	 * 
+	 */
+	public Set<Channel> isRelayIRC(String channelName) {
+		
+		Set<Channel> chanToSend = new HashSet<Channel>(); 
+		for (Channel channel: channels.values()) {
+			System.out.println(channelName + ": " + channel.getIRCChannels());
+			if (channel.getIRCChannels().toLowerCase().contains(channelName.toLowerCase()) && channel.isRelayIRCToGame()) {
+			
+				chanToSend.add(channel);
+			}
+		}
+		return chanToSend;
 	}
 
 

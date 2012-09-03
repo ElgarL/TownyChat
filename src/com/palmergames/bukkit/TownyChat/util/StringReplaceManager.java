@@ -36,7 +36,7 @@ public class StringReplaceManager<E> {
 		for (int i = 0; i < replacementPatterns.size(); i++) {
 			Matcher matcher = replacementPatterns.get(i).matcher(out);
 			Object replacer = replacements.get(i);
-			StringBuffer sb = new StringBuffer();
+			StringBuffer sb = new StringBuffer(); 
 			
 			while (matcher.find()) {
 				String match = matcher.group();

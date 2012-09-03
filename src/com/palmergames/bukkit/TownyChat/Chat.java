@@ -9,9 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapAPI;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
-import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
@@ -38,7 +38,11 @@ public class Chat extends JavaPlugin {
 	private CraftIRC craftIRC = null;
 	private DynmapAPI dynMap = null;
 	
-	private CraftIRCHandler irc = null;
+	private IRCHandler irc = null;
+	
+	
+
+
 	private HeroicDeathForwarder heroicDeathListener = null;
 
 
@@ -47,16 +51,13 @@ public class Chat extends JavaPlugin {
 
 		pm = getServer().getPluginManager();
 		configuration = new ConfigurationHandler(this);
-		channels = new ChannelsHolder(this);
-
-		checkPlugins();
-
+		setChannels(new ChannelsHolder(this));
+		
 		/*
 		 * This executes the task with a 1 tick delay avoiding the bukkit
 		 * depends bug.
 		 */
-		if ((towny == null) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)
-			|| (!load())) {
+		if ((!checkTowny()) || (!load()) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)) {
 			/*
 			 * We either failed to find Towny or the Scheduler failed to
 			 * register the task.
@@ -65,9 +66,13 @@ public class Chat extends JavaPlugin {
 			getLogger().severe("disabling TownyChat");
 			pm.disablePlugin(this);
 			return;
-		}
+		} 
+		checkPlugins();
+		
+
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
+		
 		
 	}
 	
@@ -93,7 +98,7 @@ public class Chat extends JavaPlugin {
 		pm = null;
 		
 		configuration = null;
-		channels = null;
+		setChannels(null);
 	}
 	
 	/**
@@ -109,34 +114,14 @@ public class Chat extends JavaPlugin {
 	 */
 	private void checkPlugins() {
 		Plugin test;
-
-		test = pm.getPlugin("Towny");
-		if (test != null && test instanceof Towny)
-			towny = (Towny) test;
-		/**
-		 * Hook craftIRC
-		 */
-		test = pm.getPlugin("CraftIRC");
-		if (test != null) {
-			try {
-				if (Double.valueOf(test.getDescription().getVersion()) >= 3.1) {
-					craftIRC = (CraftIRC) test;
-					irc = new CraftIRCHandler(this, craftIRC, "towny");
-				} else
-					getLogger().warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
-			} catch (NumberFormatException e) {
-				getLogger().warning("Non number format found for craftIRC version string!");
-			}
-		}
-		
 		/**
 		 * If we found craftIRC check for HeroicDeath
 		 */
-		if (irc != null) {
+		if (ChatSettings.getIRCEnabled()) {
 			test = pm.getPlugin("HeroicDeath");
 			if (test != null) {
 				heroicDeathListener = new HeroicDeathForwarder(irc);
-				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
+				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to IRC.");
 			}
 		}
 		
@@ -144,9 +129,29 @@ public class Chat extends JavaPlugin {
 		if (test != null) {
 			dynMap = (DynmapAPI) test;
 		}
-
 	}
 
+	/**
+	 * Check if towny is used.
+	 * 
+	 * @return boolean [True, False]
+	 * 
+	 */
+	private boolean checkTowny() {
+		Plugin test;
+
+		test = pm.getPlugin("Towny");
+		if (test != null && test instanceof Towny) {
+			towny = (Towny) test;
+		} else {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Register event listeners with bukkit
+	 */
 	public void registerEvents() {
 		
 		if (TownyPlayerListener == null) {
@@ -160,6 +165,11 @@ public class Chat extends JavaPlugin {
 		
 	}
 	
+	/**
+	 * 
+	 * Register permissions with bukkit
+	 * 
+	 */
 	public void registerPermissions() {
 		// Register all Permissions.
 		for (String perm : getChannelsHandler().getAllPermissions()) {
@@ -171,18 +181,33 @@ public class Chat extends JavaPlugin {
 		}
 	}
 	
+	/**
+	 * 
+	 * Unregister all custom permissions
+	 * 
+	 */
 	public void unregisterPermissions() {
-		// Register all Permissions.
+		// Unregister all custom permissions.
 		for (String perm : getChannelsHandler().getAllPermissions()) {
 			pm.removePermission(new Permission(perm, new HashMap<String, Boolean>()));
 		}
 	}
 	
-	
+	/**
+	 * Get root path to towny
+	 * 
+	 * @return File path
+	 * 
+	 */
 	public String getRootPath() {
 		return getTowny().getDataFolder().getPath();
 	}
 
+	/**
+	 * Get channels folder path
+	 * 
+	 * @return File path
+	 */
 	public String getChannelsPath() {
 		return getRootPath() + FileMgmt.fileSeparator() + "settings";
 	}
@@ -191,7 +216,7 @@ public class Chat extends JavaPlugin {
 	 * @return the channels
 	 */
 	public ChannelsHolder getChannelsHandler() {
-		return channels;
+		return getChannels();
 	}
 
 	/**
@@ -201,20 +226,78 @@ public class Chat extends JavaPlugin {
 		return configuration;
 	}
 
+	/**
+	 * Get towny
+	 * 
+	 * @return Get towny
+	 */
 	public Towny getTowny() {
 		return towny;
 	}
 	
-	public CraftIRCHandler getIRC() {
+	/**
+	 * Get IRC handler
+	 * 
+	 * @return IRC Instance
+	 * 
+	 */
+	public IRCHandler getIRC() {
 		return irc;
 	}
 	
+	/**
+	 * Get Dynmap handler
+	 * 
+	 * @return Dynmap Instance
+	 * 
+	 */
 	public DynmapAPI getDynmap() {
 		return dynMap;
 	}
 
+	/**
+	 * Get HeroicDeath listener
+	 * 
+	 * @return heroicDeathListener Instance
+	 * 
+	 */
 	public HeroicDeathForwarder getHeroicDeath() {
 		return heroicDeathListener;
 	}
 
+	/**
+	 * Get channels
+	 * 
+	 * @return ChannelsHolder
+	 */
+	public ChannelsHolder getChannels() {
+		return channels;
+	}
+
+	/**
+	 * SetChannels
+	 * 
+	 * @param channels
+	 */
+	private void setChannels(ChannelsHolder channels) {
+		this.channels = channels;
+	}
+
+	/**
+	 * Getter for IRC
+	 * 
+	 * @return IRCHandler
+	 */
+	public IRCHandler getIrc() {
+		return irc;
+	}
+
+	/**
+	 * Set IRC
+	 * 
+	 * @param IRCHandler
+	 */
+	public void setIrc(IRCHandler irc) {
+		this.irc = irc;
+	}
 }

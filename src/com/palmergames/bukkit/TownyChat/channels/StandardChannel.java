@@ -12,10 +12,11 @@ import org.dynmap.DynmapAPI;
 
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
-import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
+import com.palmergames.bukkit.TownyChat.IRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.TownyChat.util.IRCUtil;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -135,10 +136,10 @@ public class StandardChannel extends Channel {
 		}
         
         // Relay to IRC
-        CraftIRCHandler ircHander = plugin.getIRC();
-        if (ircHander != null)
-        	ircHander.IRCSender(msg, getCraftIRCTag());
-		
+        IRCHandler ircHander = plugin.getIRC();
+        if (ircHander != null) {
+        	ircHander.sendMessage(getIRCChannels(), IRCUtil.gameToIRCColours(msg));
+        }
 	}
 
 	
@@ -220,5 +221,17 @@ public class StandardChannel extends Channel {
         
         return recipients;
 	}
-
+	
+	/**
+	 * Send message to players in a channel
+	 * @param msg
+	 */
+	@Override
+	public void sendMessage(String msg) {
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(player, getPermission()))) {
+				player.sendMessage(msg);
+			}
+		}
+	}
 }

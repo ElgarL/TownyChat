@@ -45,6 +45,16 @@
   # Spam_time set the minimum time between messages to be flagged as spam
   spam_time: [spam_time]
   
+  # IRC config
+  IRC:
+    enabled: [irc_enable]
+    server: '[irc_server]'
+    # Not always used.
+    serverpassword: '[irc_serverpassword]'
+    port: '[irc_port]'
+    botnick: '[irc_botnick]'
+    botpassword: '[irc_botpassword]'
+  
   # If using our updated HeroicDeath.jar and craftIRC 3.1 (dev), you can
   #configure what IRC channels you want death messages relayed to.
   HeroicDeathToIRC:
