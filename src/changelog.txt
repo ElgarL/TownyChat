@@ -123,3 +123,6 @@ v0.29:
 	- Reload TownyChat if we detect craftIRC perform a reload (no more unregistered tags after reloading craftIRC).
 v0.30:
 	- Stop adding extra logs now that chat is being passed back to bukkit.
+v0.31:
+	- Update for the Bukkit move to AsyncPlayerChatEvent.
+	- Fix in onPlayerCommandPreprocess for an empty message error.
