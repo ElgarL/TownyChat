@@ -18,7 +18,30 @@ commands:
         aliases: []
         usage: /townychat reload
         permission: townychat.reload
-        
+    channel:
+        aliases: [ch]
+        description: Channel leaving and joining
+        usage: /<command> leave|join channel
+    leave:
+        description: Leaves a channel
+        usage: /<command> channel
+    join:
+        description: Joins a channel
+        usage: /<command> channel
+    chmute:
+        aliases: [mute]
+        description: Mutes a player in a channel
+        usage: /<command> channel player
+        permission: townychat.mod.mute
+    mutelist:
+        description: Displays mute list for a channel
+        usage: /<command> channel
+    chunmute:
+        aliases: [unmute]
+        description: Unmutes a player in a channel
+        usage: /<command> channel player
+        permission: townychat.mod.unmute
+            
 ############################################################
 # +------------------------------------------------------+ #
 # |                     Permissions                      | #

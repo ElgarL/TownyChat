@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
@@ -77,7 +75,42 @@ public class ConfigurationHandler {
 								if (key.equalsIgnoreCase("type"))
 									if (element instanceof String)
 										channel.setType(channelTypes.valueOf(element.toString()));
-		
+
+								if (key.equalsIgnoreCase("hooked")) {
+									if (element instanceof Boolean) {
+										channel.setHooked((Boolean)element);
+									} else if (element instanceof String) {
+										channel.setHooked(Boolean.parseBoolean(element.toString()));
+									} else if (element instanceof Integer) {
+										channel.setHooked(Integer.parseInt(element.toString()) != 0);
+									}
+								}
+
+								if (key.equalsIgnoreCase("autojoin")) {
+									if (element instanceof Boolean) {
+										channel.setAutoJoin((Boolean)element);
+									} else if (element instanceof String) {
+										channel.setAutoJoin(Boolean.parseBoolean(element.toString()));
+									} else if (element instanceof Integer) {
+										channel.setAutoJoin(Integer.parseInt(element.toString()) != 0);
+									}
+								}
+
+								if (key.equalsIgnoreCase("default")) {
+									boolean set = false;
+									if (element instanceof Boolean) {
+										set = (element != null && ((Boolean)element) == true);
+									} else if (element instanceof String) {
+										set = Boolean.parseBoolean((String)element);
+									} else if (element instanceof Integer) {
+										set = (element != null && ((Integer)element) != 0);
+									}
+									if (set) {
+										plugin.getChannelsHandler().setDefaultChannel(channel);
+										plugin.getLogger().info("Default Channel set to " + channel.getName());
+									}
+								}
+
 								if (key.equalsIgnoreCase("channeltag"))
 									if (element instanceof String)
 										channel.setChannelTag(element.toString());
@@ -90,6 +123,10 @@ public class ConfigurationHandler {
 									if (element instanceof String)
 										channel.setPermission(element.toString());
 								
+								if (key.equalsIgnoreCase("leavepermission"))
+									if (element instanceof String)
+										channel.setLeavePermission(element.toString());
+
 								if (key.equalsIgnoreCase("craftIRCTag"))
 									if (element instanceof String)
 										channel.setCraftIRCTag(element.toString());
@@ -98,6 +135,10 @@ public class ConfigurationHandler {
 									channel.setRange(Double.valueOf(element.toString()));
 							}
 							
+							// If no leave permission is set, create a default permission name
+							if (channel.getLeavePermission() == null) {
+								channel.setLeavePermission("towny.chat.leave." + channel.getName().toLowerCase());
+							}
 							plugin.getChannelsHandler().addChannel(channel);
 							
 							//System.out.print("Channel: " + channel.getName() + " : Type : " + channel.getType().name());
