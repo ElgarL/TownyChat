@@ -82,12 +82,12 @@ public class UnmuteCommand implements CommandExecutor {
 		}
 
 		
-		if (!chan.mute(mutee)) {
+		if (!chan.unmute(mutee)) {
 			TownyMessaging.sendMsg(sender, "[TownyChat] Player is not muted in "+ Colors.White + chan.getName());
 			return true;
 		}
 		
-		TownyMessaging.sendMsg(sender, "[TownyChat] " + Colors.White + mutee + Colors.Green +" is now muted in "+ Colors.White + chan.getName());
+		TownyMessaging.sendMsg(sender, "[TownyChat] " + Colors.White + mutee + Colors.Green +" is now unmuted in "+ Colors.White + chan.getName());
 		return true;
 	}
 }
