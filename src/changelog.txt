@@ -126,3 +126,6 @@ v0.30:
 v0.31:
 	- Update for the Bukkit move to AsyncPlayerChatEvent.
 	- Fix in onPlayerCommandPreprocess for an empty message error.
+v0.32:
+	- Don't check version of CraftIRC. Will work with all versions post 3.1.
+	- Fix for not colouring resident titles.
