@@ -98,6 +98,8 @@ public class StandardChannel extends Channel {
 		 */
 		if (ChatSettings.isModify_chat())
 			event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
+		else
+			event.setFormat(event.getFormat().replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
 		
 		LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 		event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
