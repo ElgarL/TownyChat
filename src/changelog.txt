@@ -129,3 +129,5 @@ v0.31:
 v0.32:
 	- Don't check version of CraftIRC. Will work with all versions post 3.1.
 	- Fix for not colouring resident titles.
+v0.33:
+	- Only modify the chat format if modify_chat = true for all channels.
