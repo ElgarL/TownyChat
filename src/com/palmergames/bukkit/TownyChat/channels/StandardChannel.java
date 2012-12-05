@@ -77,6 +77,7 @@ public class StandardChannel extends Channel {
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
 			recipients = new HashSet<Player>(findRecipients(player, TownyUniverse.getOnlinePlayers(town)));
+			recipients = checkSpying(recipients);
 			break;
 		
 		case NATION:
@@ -86,6 +87,7 @@ public class StandardChannel extends Channel {
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getNATION();
 			recipients = new HashSet<Player>(findRecipients(player, TownyUniverse.getOnlinePlayers(nation)));
+			recipients = checkSpying(recipients);
 			break;
 			
 		case DEFAULT:
@@ -107,7 +109,9 @@ public class StandardChannel extends Channel {
 		/*
 		 * Perform all replace functions on this format
 		 */
-		event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
+		if (ChatSettings.isModify_chat())
+			event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
+		
 		LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 		event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 		
@@ -171,7 +175,6 @@ public class StandardChannel extends Channel {
 		
 	}
 
-	
 	/**
 	 * Check the distance between players and return a result based upon the range setting
 	 * -1 = no limit
@@ -257,4 +260,27 @@ public class StandardChannel extends Channel {
         
         return recipients;
 	}
+	
+	/**
+	 * Add all spying players to the recipients list.
+	 * 
+	 * @param recipients
+	 * @return new recipients including spying.
+	 */
+	private Set<Player> checkSpying(Set<Player> recipients) {
+
+		List<Player> allOnline = new ArrayList<Player>(Arrays.asList(BukkitTools.getOnlinePlayers()));
+		
+		// Compile the list of recipients with spy perms
+        for (Player test : allOnline) {
+        	
+        	if ((plugin.getTowny().hasPlayerMode(test, "spy")) && !(recipients.contains(test))) {
+        		recipients.add(test);
+        	}
+
+        }
+		
+		return recipients;
+	}
+
 }

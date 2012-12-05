@@ -129,15 +129,8 @@ public class Chat extends JavaPlugin {
 		 */
 		test = pm.getPlugin("CraftIRC");
 		if (test != null) {
-			try {
-				if (Double.valueOf(test.getDescription().getVersion()) >= 3.1) {
-					craftIRC = (CraftIRC) test;
-					irc = new CraftIRCHandler(this, craftIRC, "towny");
-				} else
-					getLogger().warning("TownyChat requires CraftIRC version 3.1 or higher to relay chat.");
-			} catch (NumberFormatException e) {
-				getLogger().warning("Non number format found for craftIRC version string!");
-			}
+			craftIRC = (CraftIRC) test;
+			irc = new CraftIRCHandler(this, craftIRC, "towny");
 		}
 		
 		/**
