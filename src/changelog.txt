@@ -133,3 +133,5 @@ v0.33:
 	- Only modify the chat format if modify_chat = true for all channels.
 v0.34:
 	- Make sure craftIRC is loaded first (if using)
+v0.35:
+	- Fix chat spy.
