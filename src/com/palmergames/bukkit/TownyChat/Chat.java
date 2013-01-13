@@ -10,7 +10,13 @@ import org.dynmap.DynmapAPI;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
+import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
+import com.palmergames.bukkit.TownyChat.Command.JoinCommand;
+import com.palmergames.bukkit.TownyChat.Command.LeaveCommand;
+import com.palmergames.bukkit.TownyChat.Command.MuteCommand;
+import com.palmergames.bukkit.TownyChat.Command.MuteListCommand;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
+import com.palmergames.bukkit.TownyChat.Command.UnmuteCommand;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
@@ -68,7 +74,12 @@ public class Chat extends JavaPlugin {
 		}
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
-		
+		getCommand("channel").setExecutor(new ChannelCommand(this));
+		getCommand("join").setExecutor(new JoinCommand(this));
+		getCommand("leave").setExecutor(new LeaveCommand(this));
+		getCommand("chmute").setExecutor(new MuteCommand(this));
+		getCommand("chunmute").setExecutor(new UnmuteCommand(this));
+		getCommand("mutelist").setExecutor(new MuteListCommand(this));
 	}
 	
 	private boolean load() {
@@ -209,5 +220,4 @@ public class Chat extends JavaPlugin {
 	public HeroicDeathForwarder getHeroicDeath() {
 		return heroicDeathListener;
 	}
-
 }

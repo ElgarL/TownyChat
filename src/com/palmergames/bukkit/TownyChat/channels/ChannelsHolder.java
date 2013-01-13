@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 public class ChannelsHolder {
 	
 	private Chat plugin;
+	private Channel defaultChan = null;
 	
 	/** Constructor
 	 * 
@@ -27,6 +28,13 @@ public class ChannelsHolder {
 		this.plugin = plugin;
 	}
 
+	public void setDefaultChannel(Channel channel) {
+		defaultChan = channel;
+	}
+	
+	public Channel getDefaultChannel() {
+		return defaultChan;
+	}
 	
 	// Container for all channels
 	private Map<String,Channel> channels = new HashMap<String,Channel>();
@@ -84,6 +92,49 @@ public class ChannelsHolder {
 	
 	
 	/**
+	 * Find a channel we are able to talk in, and have not left, starting with the greatest range.
+	 * 
+	 * @param player
+	 * @param type
+	 * @return channel or null if none.
+	 */
+	public Channel getActiveChannel(Player player, channelTypes type) {
+		
+		Channel local = null;
+		Channel global = null;
+		Channel world = null;
+		
+		String name = player.getName();
+		
+		for (Channel channel: channels.values()) {
+			if (!channel.isPresent(name)) continue;
+			if (!channel.getType().equals(type)) continue;
+			if (!plugin.getTowny().isPermissions() || 
+				(plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission())) || 
+						                               (channel.getPermission().isEmpty())))) {
+				if (channel.getRange() == -1) {
+					global = channel;
+				} else if (channel.getRange() == 0) {
+					world = channel;
+				} else
+					local = channel;
+			}
+		}
+		
+		if (global != null)
+			return global;
+		
+		if (world != null)
+			return world;
+		
+		if (local != null)
+			return local;
+		
+		return null;
+	}
+	
+	
+	/**
 	 * Find a channel we are able to talk in, starting with the greatest range.
 	 * 
 	 * @param player
@@ -97,17 +148,16 @@ public class ChannelsHolder {
 		Channel world = null;
 		
 		for (Channel channel: channels.values()) {
-			if (channel.getType().equals(type)) {
-				if (!plugin.getTowny().isPermissions()
-					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission()))
-														|| (channel.getPermission().isEmpty())))) {
-					if (channel.getRange() == -1) {
-						global = channel;
-					} else if (channel.getRange() == 0) {
-						world = channel;
-					} else
-						local = channel;
-				}
+			if (!channel.getType().equals(type)) continue;
+			if (!plugin.getTowny().isPermissions() || 
+					(plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission())) || 
+							                               (channel.getPermission().isEmpty())))) {
+				if (channel.getRange() == -1) {
+					global = channel;
+				} else if (channel.getRange() == 0) {
+					world = channel;
+				} else
+					local = channel;
 			}
 		}
 		
@@ -141,5 +191,11 @@ public class ChannelsHolder {
 		return perms;
 	}
 
+	public String getMutePermission() {
+		return "townychat.mod.mute";
+	}
 
+	public String getUnmutePermission() {
+		return "townychat.mod.unmute";
+	}
 }
