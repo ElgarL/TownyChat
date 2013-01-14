@@ -143,6 +143,7 @@ v0.36:
         aliases: [ch]
         description: Channel leaving and joining
         usage: /channel leave|join channel
+        
 	  leave:
         description: Leaves a channel
         usage: /leave channel
