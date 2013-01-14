@@ -135,3 +135,37 @@ v0.34:
 	- Make sure craftIRC is loaded first (if using)
 v0.35:
 	- Fix chat spy.
+v0.36:
+	- Added new channel handling support (thanks to mcunha/andrepl).
+	  Adds new commands...
+	  
+	  channel:
+        aliases: [ch]
+        description: Channel leaving and joining
+        usage: /channel leave|join channel
+	  leave:
+        description: Leaves a channel
+        usage: /leave channel
+        permission: Requires a permissions per channel to use - towny.chat.leave.{channelname}
+        
+	  join:
+        description: Joins a channel
+        usage: /join channel
+        permission: Requires a permissions per channel to use - towny.chat.join.{channelname}
+        
+	  chmute:
+        aliases: [mute]
+        description: Mutes a player in a channel
+        usage: /chmute channel player
+        permission: townychat.mod.mute
+        
+	  mutelist:
+        description: Displays mute list for a channel
+        usage: /mutelist channel
+        
+	  chunmute:
+        aliases: [unmute]
+        description: Unmutes a player in a channel
+        usage: /chunmute channel player
+        permission: townychat.mod.unmute
+        
