@@ -170,3 +170,5 @@ v0.36:
         usage: /chunmute channel player
         permission: townychat.mod.unmute
         
+v0.37:
+	- Remove mute alias on 'chmute' So TownyChat does not block Essentials mute.

@@ -29,7 +29,7 @@ commands:
         description: Joins a channel
         usage: /<command> channel
     chmute:
-        aliases: [mute]
+        aliases: []
         description: Mutes a player in a channel
         usage: /<command> channel player
         permission: townychat.mod.mute
