@@ -53,15 +53,9 @@ public class Profiles {
 	public void Save(){
 		File profile = new File(profilesPath + FileMgmt.fileSeparator()
 				+ username + ".pl");
-		if (!profile.exists()) {
-			try {
-				profile.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				TownyMessaging
-						.sendErrorMsg(ExceptionUtils.getFullStackTrace(e));
-				return;
-			}
+		if (ignored.size()==0){
+			if (profile.exists()) profile.delete();
+			return;
 		}
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(profile, false));
@@ -82,14 +76,7 @@ public class Profiles {
 		File profile = new File(profilesPath + FileMgmt.fileSeparator()
 				+ username + ".pl");
 		if (!profile.exists()) {
-			try {
-				profile.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				TownyMessaging
-						.sendErrorMsg(ExceptionUtils.getFullStackTrace(e));
-				return;
-			}
+			return;
 		}
 		try {
 			FileInputStream fstream = new FileInputStream(profile);
