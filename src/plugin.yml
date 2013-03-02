@@ -14,6 +14,18 @@ softdepend: [Towny, CraftIRC]
 # +------------------------------------------------------+ #
 ############################################################
 commands:
+    ignoreplayer:
+        aliases: [ignore, ip]
+        usage: /<command> playername
+        description: ignore message from player
+    ignoreme:
+        aliases: [whoignore, ime]
+        usage: /<command> playername
+        description: player is ignor you or not
+    deignoreplayer:
+        aliases: [dignore, dip]
+        usage: /<command> playername
+        description: deignore message from player
     townychat:
         aliases: []
         usage: /townychat reload
@@ -56,4 +68,7 @@ permissions:
         default: op
     townychat.mod.unmute:
         description: Allows mods access to the unmute command to remove a previous mute.
+        default: op
+    townychat.ingnore:
+        description: Allows send message without ignore.
         default: op
