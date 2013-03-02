@@ -19,6 +19,7 @@ import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
 import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.ProfileManager;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -41,6 +42,7 @@ public class TownyChatPlayerListener implements Listener  {
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		String name = player.getName();
+		ProfileManager.PlayerJoin(name);
 		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
 			// If the channel is auto join, they will be added
 			// If the channel is not auto join, they will marked as absent
@@ -57,6 +59,7 @@ public class TownyChatPlayerListener implements Listener  {
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new onPlayerJoinTask(plugin, player, channel), 5);
 			}
 		}
+		
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
@@ -67,6 +70,7 @@ public class TownyChatPlayerListener implements Listener  {
 			// If the channel is not auto join, they will marked as absent
 			channel.forgetPlayer(name);
 		}
+		ProfileManager.PlayerQuit(name);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -82,6 +86,14 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 		String split[] = event.getMessage().split("\\ ");
 		String command = split[0].trim().toLowerCase().replace("/", "");
+		if (command.equals("pm") || command.equals("msg")){
+			if (ProfileManager.getPlayerProfile(split[1].trim()).isIgnored(player.getName()))
+				if (!player.hasPermission("townychat.ingnore")){
+					TownyMessaging.sendMsg(player, "You message is ignored by "+split[1]);
+					event.setCancelled(true);
+					return;
+				}
+		}
 		String message = "";
 
 		if (split.length > 1)

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -13,6 +15,7 @@ import org.dynmap.DynmapAPI;
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
+import com.palmergames.bukkit.TownyChat.ProfileManager;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
@@ -121,6 +124,16 @@ public class StandardChannel extends Channel {
 		 *  Set all the listeners for Bukkit to send this message to.
 		 */
         event.getRecipients().clear();
+        String NameLower = player.getName().toLowerCase();
+        Vector<Player> rec = new Vector<Player>(recipients);
+        
+        for(int ip=0;ip<rec.size();ip++){
+        	Player playerRec=rec.get(ip);
+        	if(ProfileManager.getPlayerProfile(playerRec.getName()).isIgnored(NameLower))
+       			if(!player.hasPermission("townychat.ingnore")){
+       				recipients.remove(playerRec);
+        	}
+        }
         event.getRecipients().addAll(recipients);
         
         if (isHooked()) {

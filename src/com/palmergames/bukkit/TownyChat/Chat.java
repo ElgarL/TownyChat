@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.TownyChat;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.bukkit.permissions.Permission;
@@ -11,6 +12,9 @@ import org.dynmap.DynmapAPI;
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
+import com.palmergames.bukkit.TownyChat.Command.DeignoreplayerCommand;
+import com.palmergames.bukkit.TownyChat.Command.IgnoreplayerCommand;
+import com.palmergames.bukkit.TownyChat.Command.IgnorepmeCommand;
 import com.palmergames.bukkit.TownyChat.Command.JoinCommand;
 import com.palmergames.bukkit.TownyChat.Command.LeaveCommand;
 import com.palmergames.bukkit.TownyChat.Command.MuteCommand;
@@ -43,7 +47,7 @@ public class Chat extends JavaPlugin {
 	private Towny towny = null;
 	private CraftIRC craftIRC = null;
 	private DynmapAPI dynMap = null;
-	
+	private boolean dirIsChecked=false;
 	private CraftIRCHandler irc = null;
 	private HeroicDeathForwarder heroicDeathListener = null;
 
@@ -54,9 +58,9 @@ public class Chat extends JavaPlugin {
 		pm = getServer().getPluginManager();
 		configuration = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
-
+		
 		checkPlugins();
-
+		Profiles.profilesPath=getProfilsPath();
 		/*
 		 * This executes the task with a 1 tick delay avoiding the bukkit
 		 * depends bug.
@@ -80,6 +84,9 @@ public class Chat extends JavaPlugin {
 		getCommand("chmute").setExecutor(new MuteCommand(this));
 		getCommand("chunmute").setExecutor(new UnmuteCommand(this));
 		getCommand("mutelist").setExecutor(new MuteListCommand(this));
+		getCommand("ignoreplayer").setExecutor(new IgnoreplayerCommand(this));
+		getCommand("ignoreme").setExecutor(new IgnorepmeCommand(this));
+		getCommand("deignoreplayer").setExecutor(new DeignoreplayerCommand(this));
 	}
 	
 	private boolean load() {
@@ -105,6 +112,7 @@ public class Chat extends JavaPlugin {
 		
 		configuration = null;
 		channels = null;
+		ProfileManager.DisableMod();
 	}
 	
 	/**
@@ -191,6 +199,14 @@ public class Chat extends JavaPlugin {
 		return getRootPath() + FileMgmt.fileSeparator() + "settings";
 	}
 	
+	public String getProfilsPath(){
+		if (!dirIsChecked){
+			File f=new File(getRootPath() +FileMgmt.fileSeparator()+"profiles");
+			if (!f.exists()) f.mkdirs();
+			dirIsChecked=true;
+		}
+		return getRootPath() +FileMgmt.fileSeparator()+"profiles";
+	}
 	/**
 	 * @return the channels
 	 */
