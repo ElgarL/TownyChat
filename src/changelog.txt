@@ -172,3 +172,6 @@ v0.36:
         
 v0.37:
 	- Remove mute alias on 'chmute' So TownyChat does not block Essentials mute.
+	
+v0.38:
+	- Fire chat Async so it matches all other chat.

@@ -72,7 +72,7 @@ public class TownyChatPlayerListener implements Listener  {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		// Test if this player is registered with Towny.
 		try {
@@ -137,7 +137,18 @@ public class TownyChatPlayerListener implements Listener  {
 				event.setMessage(message);
 				
 				directedChat.put(player, command);
-				player.chat(message);
+				
+				final String msg = message;
+				
+				// Fire this Async so we match other incoming chat.
+				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+
+						player.chat(msg);
+						
+					}});
 			}
 			
 			event.setCancelled(true);
