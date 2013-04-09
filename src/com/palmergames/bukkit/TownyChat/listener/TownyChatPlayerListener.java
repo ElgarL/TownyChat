@@ -69,7 +69,7 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		
 		final Player player = event.getPlayer();
@@ -155,7 +155,7 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		
 		Player player = event.getPlayer();
