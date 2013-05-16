@@ -175,3 +175,5 @@ v0.37:
 	
 v0.38:
 	- Fire chat Async so it matches all other chat.
+v0.39:
+	- Ignore cancelled commands and chat.
