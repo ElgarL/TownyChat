@@ -177,3 +177,5 @@ v0.38:
 	- Fire chat Async so it matches all other chat.
 v0.39:
 	- Ignore cancelled commands and chat.
+v0.40:
+	- Allow global chat to pass through un-changed if there are no channels to talk in (requires setting modify_chat: false).
