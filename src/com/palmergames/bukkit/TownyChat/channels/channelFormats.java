@@ -14,7 +14,7 @@ public class channelFormats {
 		this.name = name.toLowerCase();
 	}
 
-	private String name, GLOBAL, TOWN, NATION, DEFAULT;
+	private String name, GLOBAL, TOWN, NATION, COALITION, DEFAULT;
 
 	/**
 	 * @return a clone of this channelFormats
@@ -26,6 +26,7 @@ public class channelFormats {
 		clone.setGLOBAL(this.getGLOBAL());
 		clone.setTOWN(this.getTOWN());
 		clone.setNATION(this.getNATION());
+		clone.setCOALITION(this.getCOALITION());
 		clone.setDEFAULT(this.getDEFAULT());
 		
 		return clone;
@@ -40,7 +41,7 @@ public class channelFormats {
 
 	/**
 	 * @param name
-	 *            the name to set
+	 *						the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -55,7 +56,7 @@ public class channelFormats {
 
 	/**
 	 * @param GLOBAL
-	 *            the gLOBAL to set
+	 *						the gLOBAL to set
 	 */
 	public void setGLOBAL(String GLOBAL) {
 		this.GLOBAL = GLOBAL;
@@ -70,7 +71,7 @@ public class channelFormats {
 
 	/**
 	 * @param TOWN
-	 *            the TOWN to set
+	 *						the TOWN to set
 	 */
 	public void setTOWN(String TOWN) {
 		this.TOWN = TOWN;
@@ -85,10 +86,26 @@ public class channelFormats {
 
 	/**
 	 * @param NATION
-	 *            the nATION to set
+	 *						the NATION to set
 	 */
 	public void setNATION(String NATION) {
 		this.NATION = NATION;
+	}
+	
+	/**
+	 * @return the COALITION
+	 */
+	public String getCOALITION() {
+		return this.COALITION;
+	}
+
+	/**
+
+	 * @param COALITION
+	 *						the COALITION to set
+	 */
+	public void setCOALITION(String COALITION) {
+		this.COALITION = COALITION;
 	}
 
 	/**
@@ -100,7 +117,7 @@ public class channelFormats {
 
 	/**
 	 * @param DEFAULT
-	 *            the dEFAULT to set
+	 *						the dEFAULT to set
 	 */
 	public void setDEFAULT(String DEFAULT) {
 		this.DEFAULT = DEFAULT;

@@ -251,6 +251,9 @@ public class ConfigurationHandler {
 						if (element.equalsIgnoreCase("nation"))
 							group.setNATION(subNodes.get(element).toString());
 
+						if (element.equalsIgnoreCase("coalition"))
+							group.setCOALITION(subNodes.get(element).toString());
+
 						if (element.equalsIgnoreCase("default"))
 							group.setDEFAULT(subNodes.get(element).toString());
 					}
@@ -276,6 +279,9 @@ public class ConfigurationHandler {
 	
 								if (element.equalsIgnoreCase("nation"))
 									group.setNATION(world.get(element).toString());
+
+								if (element.equalsIgnoreCase("coalition"))
+									group.setCOALITION(world.get(element).toString());
 	
 								if (element.equalsIgnoreCase("default"))
 									group.setDEFAULT(world.get(element).toString());
@@ -336,6 +342,7 @@ public class ConfigurationHandler {
 		String global = "{channelTag} {worldname}{townytagoverride}{townycolor}{permprefix}{group} {townyprefix}{modplayername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
 		String town = "{channelTag} {townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
 		String nation = "{channelTag}{towntagoverride}{townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
+		String coalition = "{channelTag}{townytagoverride}{townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
 		String default_ = "{channelTag} {permprefix}{playername}{permsuffix}&f:{msgcolour} {msg}";
 		
 		String tag_world = "&f[&f%s&f] ";
@@ -356,6 +363,7 @@ public class ConfigurationHandler {
 		newConfig = newConfig.replace("[globalformat]", (defaults)? global : ChatSettings.getFormatGroup("channel_formats").getGLOBAL());
 		newConfig = newConfig.replace("[townformat]", (defaults)? town : ChatSettings.getFormatGroup("channel_formats").getTOWN());
 		newConfig = newConfig.replace("[nationformat]", (defaults)? nation : ChatSettings.getFormatGroup("channel_formats").getNATION());
+		newConfig = newConfig.replace("[coalitionformat]", (defaults)? coalition : ChatSettings.getFormatGroup("channel_formats").getCOALITION());
 		newConfig = newConfig.replace("[defaultformat]", (defaults)? default_ : ChatSettings.getFormatGroup("channel_formats").getDEFAULT());
 
 		newConfig = newConfig.replace("[tag_world]", (defaults)? tag_world : ChatSettings.getWorldTag());
@@ -374,12 +382,13 @@ public class ConfigurationHandler {
 			if (!key.equalsIgnoreCase("channel_formats")) {
 				channelFormats world = ChatSettings.getFormatGroup(key);
 				
-				newConfig += "    '" + key + "':" + System.getProperty("line.separator");
+				newConfig += "		'" + key + "':" + System.getProperty("line.separator");
 				
-				newConfig += "      global: '" + ((defaults)? global : world.getGLOBAL()) + "'" + System.getProperty("line.separator");
-				newConfig += "      town: '" + ((defaults)? town : world.getTOWN()) + "'" + System.getProperty("line.separator");
-				newConfig += "      nation: '" + ((defaults)? nation : world.getNATION()) + "'" + System.getProperty("line.separator");
-				newConfig += "      default: '" + ((defaults)? default_ : world.getDEFAULT()) + "'" + System.getProperty("line.separator");
+				newConfig += "			global: '" + ((defaults)? global : world.getGLOBAL()) + "'" + System.getProperty("line.separator");
+				newConfig += "			town: '" + ((defaults)? town : world.getTOWN()) + "'" + System.getProperty("line.separator");
+				newConfig += "			nation: '" + ((defaults)? nation : world.getNATION()) + "'" + System.getProperty("line.separator");
+				newConfig += "			coalition: '" + ((defaults)? coalition : world.getCOALITION()) + "'" + System.getProperty("line.separator");
+				newConfig += "			default: '" + ((defaults)? default_ : world.getDEFAULT()) + "'" + System.getProperty("line.separator");
 			}
 			
 		}

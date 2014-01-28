@@ -60,6 +60,8 @@
     town: '[townformat]'
     # NATION channel types.
     nation: '[nationformat]'
+    # COALITION channel types.
+    coalition: '[coalitionformat]'
     # DEFAULT channel types.
     default: '[defaultformat]'
     
