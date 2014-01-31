@@ -46,14 +46,14 @@ public class StandardChannel extends Channel {
 		Resident resident = null;
 		Town town = null;
 		Nation nation = null;
-		List<Nation> coalition = null;
+		List<Nation> coalition = new ArrayList<Nation>();
 		String Format = "";
 		
 		try {
 			resident = TownyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			nation = resident.getTown().getNation();
-			coalition = nation.getAllies();
+			coalition.addAll(nation.getAllies());
 			coalition.add(nation);
 
 		} catch (NotRegisteredException e1) {
@@ -95,7 +95,7 @@ public class StandardChannel extends Channel {
 			break;
 		
 		case COALITION:
-			if (coalition == null) {
+			if (coalition.isEmpty()) {
 				event.setCancelled(true);
 				return;
 			}
