@@ -273,23 +273,25 @@ public class TownyChatPlayerListener implements Listener  {
 	 * @return
 	 */
 	private boolean isSpam(Player player) {
-		
-		long timeNow = System.currentTimeMillis();
-		long spam = timeNow;
-		
-		if (SpamTime.containsKey(player)) {
-			spam = SpamTime.get(player);
-			SpamTime.remove(player);
-		} else {
-			// No record found so ensure we don't trigger for spam
-			spam -= ((ChatSettings.getSpam_time() + 1)*1000);
-		}
-		
-		SpamTime.put(player, timeNow);
-		
-		if (timeNow - spam < (ChatSettings.getSpam_time()*1000)) {
-			TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
-			return true;
+		Double spamtime = ChatSettings.getSpam_time();
+		if (spamtime > (Double) 0.0) {
+			long timeNow = System.currentTimeMillis();
+			long spam = timeNow;
+
+			if (SpamTime.containsKey(player)) {
+				spam = SpamTime.get(player);
+				SpamTime.remove(player);
+			} else {
+				// No record found so ensure we don't trigger for spam
+				spam -= ((spamtime + 1)*1000);
+			}
+
+			SpamTime.put(player, timeNow);
+
+			if (timeNow - spam < (spamtime*1000)) {
+				TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
+				return true;
+			}
 		}
 		return false;
 	}
