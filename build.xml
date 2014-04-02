@@ -2,6 +2,7 @@
 <project name="TownyChat" default="jar" basedir=".">
 	<property name="build" value="bin" />
 	<property file="build.properties" />
+	<property environment="env"/>
 
 	<target name="clean">
 		<delete dir="${build}" />
