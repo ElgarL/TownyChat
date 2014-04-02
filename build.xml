@@ -9,6 +9,7 @@
 
 	<target name="init" depends="clean">
 		<mkdir dir="${build}" />
+		<mkdir dir="${env.LIB}" />
 	</target>
 
 	<target name="download" depends="init">
