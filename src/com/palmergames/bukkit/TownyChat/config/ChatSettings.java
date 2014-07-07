@@ -29,7 +29,7 @@ public class ChatSettings extends tag_formats {
 
 	/**
 	 * @param formatGroups
-	 *            the formatGroups to set
+	 *						the formatGroups to set
 	 */
 	public static void setFormatGroups(Map<String, channelFormats> formatGroups) {
 		ChatSettings.formatGroups = formatGroups;
@@ -79,7 +79,7 @@ public class ChatSettings extends tag_formats {
 
 	/**
 	 * @param d
-	 *            the spam_time to set
+	 *						the spam_time to set
 	 */
 	public static void setSpam_time(Double d) {
 		ChatSettings.spam_time = d;
@@ -94,7 +94,7 @@ public class ChatSettings extends tag_formats {
 
 	/**
 	 * @param modify_chat
-	 *            the modify_chat to set
+	 *						the modify_chat to set
 	 */
 	public static void setModify_chat(boolean modify_chat) {
 		ChatSettings.modify_chat = modify_chat;
@@ -109,7 +109,7 @@ public class ChatSettings extends tag_formats {
 
 	/**
 	 * @param per_world
-	 *            the per_world to set
+	 *						the per_world to set
 	 */
 	public static void setPer_world(boolean per_world) {
 		ChatSettings.per_world = per_world;
@@ -124,7 +124,7 @@ public class ChatSettings extends tag_formats {
 
 	/**
 	 * @param HeroicDeathToIRC
-	 *            the HeroicDeathToIRC to set
+	 *						the HeroicDeathToIRC to set
 	 */
 	public static void setHeroicDeathToIRC(boolean HeroicDeathToIRC) {
 		ChatSettings.heroicDeathToIRC = HeroicDeathToIRC;
@@ -139,7 +139,7 @@ public class ChatSettings extends tag_formats {
 
 	/**
 	 * @param heroicDeathTags
-	 *            the heroicDeathTags to set
+	 *						the heroicDeathTags to set
 	 */
 	public static void setheroicDeathTags(String heroicDeathTags) {
 		ChatSettings.heroicDeathTags = heroicDeathTags;

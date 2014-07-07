@@ -21,8 +21,8 @@
 # range is in blocks (if set to a limit).
 #
 #     -1 = no limits
-#	  0 = same world only
-#	  any positive value = limited range in the same world.
+#    0 = same world only
+#    any positive value = limited range in the same world.
 
 # Text colouring
 # --------------
@@ -49,12 +49,21 @@ Channels:
         permission: 'towny.chat.town'
         craftIRCTag: 'admin'
         range: '-1'
-         
+        
     nation:
         commands: [nc]
         type: NATION
         channeltag: '&f[&6NC&f]'
         messagecolour: '&e'
+        permission: 'towny.chat.nation'
+        craftIRCTag: 'admin'
+        range: '-1'
+        
+    coalition:
+        commands: [cc]
+        type: COALITION
+        channeltag: '&f[&9CC&f]'
+        messagecolour: '&d'
         permission: 'towny.chat.nation'
         craftIRCTag: 'admin'
         range: '-1'
