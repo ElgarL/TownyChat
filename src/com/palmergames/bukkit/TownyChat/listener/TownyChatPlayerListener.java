@@ -84,16 +84,13 @@ public class TownyChatPlayerListener implements Listener  {
 		String command = split[0].trim().toLowerCase().replace("/", "");
 		String message = "";
 
-		if (split.length > 1)
-			message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
-
 		// Check if they used a channel command or alias
 		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
 		if (channel != null) {
 			/*
 			 *  If there is no message toggle the chat mode.
 			 */
-			if (message.isEmpty()) {
+			if (split.length == 1) {
 				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
 					// Find what the next channel is if any
 					Channel nextChannel = null;
@@ -124,6 +121,11 @@ public class TownyChatPlayerListener implements Listener  {
 					TownyMessaging.sendMsg(player, "[TownyChat] You are now talking in " + Colors.White + channel.getName());
 				}
 			} else {
+				// Don't allow  passing a command through a chat message
+				if (split.length > 1)
+					split[1] = split[1].trim().replace("/", "./");
+				message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+
 				// Notify player he is muted
 				if (channel.isMuted(player.getName())) {
 					TownyMessaging.sendErrorMsg(player, "You are currently muted in " + channel.getName() + "!");
@@ -273,23 +275,25 @@ public class TownyChatPlayerListener implements Listener  {
 	 * @return
 	 */
 	private boolean isSpam(Player player) {
-		
-		long timeNow = System.currentTimeMillis();
-		long spam = timeNow;
-		
-		if (SpamTime.containsKey(player)) {
-			spam = SpamTime.get(player);
-			SpamTime.remove(player);
-		} else {
-			// No record found so ensure we don't trigger for spam
-			spam -= ((ChatSettings.getSpam_time() + 1)*1000);
-		}
-		
-		SpamTime.put(player, timeNow);
-		
-		if (timeNow - spam < (ChatSettings.getSpam_time()*1000)) {
-			TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
-			return true;
+		Double spamtime = ChatSettings.getSpam_time();
+		if (spamtime > (Double) 0.0) {
+			long timeNow = System.currentTimeMillis();
+			long spam = timeNow;
+
+			if (SpamTime.containsKey(player)) {
+				spam = SpamTime.get(player);
+				SpamTime.remove(player);
+			} else {
+				// No record found so ensure we don't trigger for spam
+				spam -= ((spamtime + 1)*1000);
+			}
+
+			SpamTime.put(player, timeNow);
+
+			if (timeNow - spam < (spamtime*1000)) {
+				TownyMessaging.sendErrorMsg(player, "Unable to talk...You are spamming!");
+				return true;
+			}
 		}
 		return false;
 	}
