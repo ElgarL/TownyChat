@@ -179,3 +179,10 @@ v0.39:
 	- Ignore cancelled commands and chat.
 v0.40:
 	- Allow global chat to pass through un-changed if there are no channels to talk in (requires setting modify_chat: false).
+v0.41:
+    - Adapt to Bukkit API Change.	
+v0.42:
+    - Re-add message for when players chat but no one can hear them. Affects mostly localchat but can also been seen when players are the only one in a channel.
+v0.43:
+	- add a new chatconfig.yml option:
+		- modify_chat.alone_message: (default: false) - If true any player who speaks in a channel in which he cannot be heard, either by being along in the channel or out-of-range of another player in his chat channel, that player will see a message saying they cannot be heard.     

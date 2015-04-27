@@ -84,5 +84,8 @@
     # If true the chat formats will be read from below to allow per world formatting.
     # These can then be altered individually.
     per_world: '[modify_per_world]'
-    
+    # If true any player who speaks in a channel in which he cannot be heard, 
+    # either by being along in the channel or out-of-range of another player in his chat channel,
+    # that player will see a message saying they cannot be heard.
+    alone_message: '[modify_alone_message]'
   worlds:

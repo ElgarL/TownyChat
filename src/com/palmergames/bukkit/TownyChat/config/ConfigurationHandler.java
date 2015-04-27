@@ -197,6 +197,9 @@ public class ConfigurationHandler {
 
 						if (element.equalsIgnoreCase("per_world"))
 							ChatSettings.setPer_world(Boolean.valueOf(subNodes.get(element).toString()));
+						
+						if (element.equalsIgnoreCase("alone_message"))
+							ChatSettings.setUsingAloneMessage(Boolean.valueOf(subNodes.get(element).toString()));
 					}
 
 				}
@@ -369,6 +372,7 @@ public class ConfigurationHandler {
 		
 		newConfig = newConfig.replace("[modify_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isModify_chat()));
 		newConfig = newConfig.replace("[modify_per_world]", (defaults)? "false" : Boolean.toString(ChatSettings.isPer_world()));
+		newConfig = newConfig.replace("[modify_alone_message]", (defaults)? "false" : Boolean.toString(ChatSettings.isUsingAloneMessage()));
 		
 		for (String key : ChatSettings.getFormatGroups().keySet()) {
 			if (!key.equalsIgnoreCase("channel_formats")) {

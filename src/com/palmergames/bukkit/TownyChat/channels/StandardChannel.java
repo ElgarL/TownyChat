@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +23,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
 public class StandardChannel extends Channel {
@@ -92,17 +90,17 @@ public class StandardChannel extends Channel {
 			
 		case DEFAULT:
 			Format = ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
-			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(Arrays.asList(BukkitTools.getOnlinePlayers()))));
+			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(event.getRecipients())));
 			break;
 			
 		case GLOBAL:
 			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
-			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(Arrays.asList(BukkitTools.getOnlinePlayers()))));
+			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(event.getRecipients())));
 			break;
 			
 		case PRIVATE:
 			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
-			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(Arrays.asList(BukkitTools.getOnlinePlayers()))));
+			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(event.getRecipients())));
 			break;
 		}
 		
@@ -257,8 +255,8 @@ public class StandardChannel extends Channel {
         	}
         }
         
-        //if (recipients.size() <= 1)
-        //	sender.sendMessage(TownySettings.parseSingleLineString("&cYou feel so lonely."));
+        if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage())) 
+        	sender.sendMessage("No one in range can hear you or you are alone in this channel.");
         
         return recipients;
 	}
@@ -271,10 +269,9 @@ public class StandardChannel extends Channel {
 	 */
 	private Set<Player> checkSpying(Set<Player> recipients) {
 
-		List<Player> allOnline = new ArrayList<Player>(Arrays.asList(BukkitTools.getOnlinePlayers()));
-		
+				
 		// Compile the list of recipients with spy perms
-        for (Player test : allOnline) {
+		for (Player test : plugin.getServer().getOnlinePlayers()) {
         	
         	if ((plugin.getTowny().hasPlayerMode(test, "spy")) && !(recipients.contains(test))) {
         		recipients.add(test);

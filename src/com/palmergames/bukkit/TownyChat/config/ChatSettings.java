@@ -15,6 +15,7 @@ public class ChatSettings extends tag_formats {
 	private static Double spam_time;
 	private static boolean modify_chat;
 	private static boolean per_world;
+	private static boolean alone_message;
 	private static boolean heroicDeathToIRC = true;
 	private static String heroicDeathTags ="admin";
 
@@ -98,6 +99,20 @@ public class ChatSettings extends tag_formats {
 	 */
 	public static void setModify_chat(boolean modify_chat) {
 		ChatSettings.modify_chat = modify_chat;
+	}
+
+	/**
+	 * @return the alone_message
+	 */
+	public static boolean isUsingAloneMessage() {
+		return alone_message;
+	}
+	
+	/**
+	 * @param  alone_message
+	 */
+	public static boolean setUsingAloneMessage(boolean alone_message) {
+		return ChatSettings.alone_message = alone_message;
 	}
 
 	/**
