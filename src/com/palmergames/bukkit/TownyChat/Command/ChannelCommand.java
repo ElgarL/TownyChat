@@ -76,15 +76,17 @@ public class ChannelCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, ChatTools.formatTitle("Channels"));
 		TownyMessaging.sendMsg(sender, Colors.Gold + "Channel" + Colors.Gray + " - " + Colors.LightBlue + "(Status)");
 		for (Map.Entry<String, Channel> channel : chanList.entrySet()) {
-			if (channel.getValue().isPresent(player.getName())) {
-				TownyMessaging.sendMsg(sender, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + "In");
-			} else {
-				if (!plugin.getTowny().isPermissions()
-					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getValue().getPermission()))
-														|| (channel.getValue().getPermission().isEmpty())))) {
-					TownyMessaging.sendMsg(sender, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + "Out");
+			if (player.hasPermission(channel.getValue().getPermission()))
+				if (channel.getValue().isPresent(player.getName())) {
+					TownyMessaging.sendMsg(sender, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + "In");
+				} else {
+					/*if (!plugin.getTowny().isPermissions()
+						|| ( (plugin.getTowny().isPermissions()) 
+						&& (TownyUniverse.getPermissionSource().has(player, channel.getValue().getPermission()))
+						|| (channel.getValue().getPermission().isEmpty()))) {*/
+						TownyMessaging.sendMsg(sender, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + "Out");
+					//}
 				}
-			}
 		}
 		
 		return true;
