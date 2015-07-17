@@ -88,4 +88,6 @@
     # either by being along in the channel or out-of-range of another player in his chat channel,
     # that player will see a message saying they cannot be heard.
     alone_message: '[modify_alone_message]'
+    # This allows you to set your alone messaeg.
+    alone_message_string: '[modify_alone_message_string]'
   worlds:

@@ -200,6 +200,9 @@ public class ConfigurationHandler {
 						
 						if (element.equalsIgnoreCase("alone_message"))
 							ChatSettings.setUsingAloneMessage(Boolean.valueOf(subNodes.get(element).toString()));
+						
+						if (element.equalsIgnoreCase("alone_message_string"))
+							ChatSettings.setUsingAloneMessageString(String.valueOf(subNodes.get(element).toString()));
 					}
 
 				}
@@ -373,6 +376,7 @@ public class ConfigurationHandler {
 		newConfig = newConfig.replace("[modify_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isModify_chat()));
 		newConfig = newConfig.replace("[modify_per_world]", (defaults)? "false" : Boolean.toString(ChatSettings.isPer_world()));
 		newConfig = newConfig.replace("[modify_alone_message]", (defaults)? "false" : Boolean.toString(ChatSettings.isUsingAloneMessage()));
+		newConfig = newConfig.replace("[modify_alone_message_string]", (defaults)? "No one in range can hear you or you are alone in this channel." : (ChatSettings.getUsingAloneMessageString()));
 		
 		for (String key : ChatSettings.getFormatGroups().keySet()) {
 			if (!key.equalsIgnoreCase("channel_formats")) {

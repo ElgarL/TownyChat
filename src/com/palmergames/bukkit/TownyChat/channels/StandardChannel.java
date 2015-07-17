@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -255,9 +256,9 @@ public class StandardChannel extends Channel {
         	}
         }
         
-        if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage())) 
-        	sender.sendMessage("No one in range can hear you or you are alone in this channel.");
-        
+        if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage()))
+        	sender.sendMessage(ChatSettings.getUsingAloneMessageString());        	
+
         return recipients;
 	}
 	

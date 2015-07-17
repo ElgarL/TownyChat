@@ -16,6 +16,7 @@ public class ChatSettings extends tag_formats {
 	private static boolean modify_chat;
 	private static boolean per_world;
 	private static boolean alone_message;
+	private static String alone_message_string;
 	private static boolean heroicDeathToIRC = true;
 	private static String heroicDeathTags ="admin";
 
@@ -113,6 +114,22 @@ public class ChatSettings extends tag_formats {
 	 */
 	public static boolean setUsingAloneMessage(boolean alone_message) {
 		return ChatSettings.alone_message = alone_message;
+	}
+
+	/**
+	 * @param  alone_message_string
+	 * @return 
+	 */
+	public static String setUsingAloneMessageString(String alone_message_string) {
+		return ChatSettings.alone_message_string = alone_message_string;
+	}
+	
+	/**
+	 * @param  alone_message_string
+	 * @return 
+	 */
+	public static String getUsingAloneMessageString() {
+		return ChatSettings.alone_message_string;
 	}
 
 	/**

@@ -188,3 +188,5 @@ v0.43:
 		- modify_chat.alone_message: (default: false) - If true any player who speaks in a channel in which he cannot be heard, either by being along in the channel or out-of-range of another player in his chat channel, that player will see a message saying they cannot be heard.     
 v0.44:
     - add a /ch list command to list what channels a player is currently listening to. Courtesy of Yaiyan.
+v0.45:
+    - Add chatconfig.yml option for modifying the 'no one can hear you' message. 
