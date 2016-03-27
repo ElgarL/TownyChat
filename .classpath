@@ -12,6 +12,6 @@
 	<classpathentry kind="lib" path="../lib/dynmap-api.jar"/>
 	<classpathentry kind="lib" path="../lib/HeroicDeath.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Towny"/>
-	<classpathentry kind="lib" path="C:/Users/Rogan/git/lib/bukkit.jar"/>
+	<classpathentry kind="lib" path="../lib/bukkit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
