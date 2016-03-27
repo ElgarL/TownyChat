@@ -51,6 +51,7 @@ public class MuteCommand implements CommandExecutor {
 			return true;
 		}
 
+		@SuppressWarnings("deprecation")
 		Player muteePlayer = plugin.getServer().getPlayer(mutee);
 		if (muteePlayer == null) {
 			TownyMessaging.sendErrorMsg(sender, "[TownyChat] There are no online players with name " + Colors.White + mutee);
