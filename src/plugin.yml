@@ -57,3 +57,6 @@ permissions:
     townychat.mod.unmute:
         description: Allows mods access to the unmute command to remove a previous mute.
         default: op
+    townychat.chat.color:
+        description: Allows players to use colors to format chat messages.
+        default: op
