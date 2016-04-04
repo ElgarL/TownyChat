@@ -1,6 +1,6 @@
 name: TownyChat
 main: com.palmergames.bukkit.TownyChat.Chat
-version: 0.46
+version: 0.45
 author: ElgarL, Shade, phrstbrn
 website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
@@ -56,4 +56,7 @@ permissions:
         default: op
     townychat.mod.unmute:
         description: Allows mods access to the unmute command to remove a previous mute.
+        default: op
+    townychat.chat.color:
+        description: Allows players to use colors to format chat messages.
         default: op

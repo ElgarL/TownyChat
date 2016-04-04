@@ -190,5 +190,3 @@ v0.44:
     - add a /ch list command to list what channels a player is currently listening to. Courtesy of Yaiyan.
 v0.45:
     - Add chatconfig.yml option for modifying the 'no one can hear you' message. 
-v0.46:
-    - Add ability to use colour code (&) in the chat line.

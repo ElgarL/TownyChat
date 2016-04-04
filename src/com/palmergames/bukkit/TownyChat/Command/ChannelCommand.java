@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ChatTools;
 

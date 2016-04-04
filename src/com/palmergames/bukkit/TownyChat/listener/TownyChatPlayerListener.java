@@ -2,6 +2,7 @@ package com.palmergames.bukkit.TownyChat.listener;
 
 import java.util.WeakHashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -159,6 +160,9 @@ public class TownyChatPlayerListener implements Listener  {
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		
 		Player player = event.getPlayer();
+		
+		if(player.hasPermission("townychat.chat.color"))
+			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
 		
 		// Check if essentials has this player muted.
 		if (!isMuted(player)) {
