@@ -175,7 +175,7 @@ public class TownyChatFormatter {
 		});
 
 		// Replace colours last ({msg} is replaced last as it can't be regex parsed).
-		replacer.registerFormatReplacement("&{1}[0-9A-Fa-f]{1}", new TownyChatReplacerCallable() {
+		replacer.registerFormatReplacement("&{1}[0-9A-Fa-fLlOoNnKkMmRr]{1}", new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
 				return "\u00A7" + match.charAt(1);

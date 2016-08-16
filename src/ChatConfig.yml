@@ -41,6 +41,11 @@
   # Purple = &5, Gold = &6, LightGray = &7, Gray = &8
   # DarkPurple = &9, LightGreen = &a, LightBlue = &b
   # Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+  
+  # Text altering
+  # -------------
+  # Bold = &l, Italics = &o, Underlined = &n, 
+  # Magic = &k, Strike = &m, Reset = &r
  
   # Spam_time set the minimum time between messages to be flagged as spam
   spam_time: [spam_time]

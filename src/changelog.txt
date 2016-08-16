@@ -192,3 +192,5 @@ v0.45:
     - Add chatconfig.yml option for modifying the 'no one can hear you' message. 
 v0.46:
     - Add ability to use colour codes (&) in chat line. Requires townychat.chat.color which is not given by default.
+v0.47:
+    - Add ability to use Bold (&l), Italics (&o), Underline (&n), Magic (&k), Strike (&m) and Reset (&r) in the channel_format lines/tag_formats/directly in the chat line.
