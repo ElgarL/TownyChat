@@ -194,3 +194,5 @@ v0.46:
     - Add ability to use colour codes (&) in chat line. Requires townychat.chat.color which is not given by default.
 v0.47:
     - Add ability to use Bold (&l), Italics (&o), Underline (&n), Magic (&k), Strike (&m) and Reset (&r) in the channel_format lines/tag_formats/directly in the chat line.
+v0.48:
+    - Add new chatconfig tags {permuserprefix}, {permusersuffix}, used to show only user prefix and suffixes. Requires Towny 0.91.4.8 or newer to function properly!

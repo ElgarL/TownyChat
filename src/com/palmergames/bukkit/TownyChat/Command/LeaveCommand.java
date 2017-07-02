@@ -25,7 +25,7 @@ public class LeaveCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,	String[] args) {
 		// If not our command
 		if ((!label.equalsIgnoreCase("leave") || args.length != 1) && 
-			(!label.equalsIgnoreCase("ch") || args.length != 2 || !args[0].equalsIgnoreCase("leave"))) {
+			(!label.equalsIgnoreCase("channel") || args.length != 2 || !args[0].equalsIgnoreCase("leave"))) {
 			TownyMessaging.sendErrorMsg(sender, "[TownyChat] Error: Invalid command!");
 			return false;
 		}

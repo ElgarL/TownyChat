@@ -218,7 +218,7 @@ public abstract class Channel {
 	 * Set name of permissions node to leave a the channel 
 	 */
 	public void setLeavePermission(String permission) {
-		leavePermission = permission;;
+		leavePermission = permission;
 	}
 
 	public boolean hasMuteList() {
