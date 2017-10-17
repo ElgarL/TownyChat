@@ -25,8 +25,10 @@
  
   # {townycolor} - Towny name colour for king/mayor/resident
   # {group} - Players group name pulled from your permissions plugin
-  # {permuserprefix} - Permission user prefix.
+  # {permuserprefix} - Permission user prefix.  
   # {permusersuffix} - Permission user suffix.
+  # {permgroupprefix} - Permission group prefix.
+  # {permgroupsuffix} - Permission group suffix.
   # {permprefix} - Permission group and user prefix.
   # {permsuffix} - Permission group and user suffix.
  
@@ -95,6 +97,6 @@
     # either by being along in the channel or out-of-range of another player in his chat channel,
     # that player will see a message saying they cannot be heard.
     alone_message: '[modify_alone_message]'
-    # This allows you to set your alone messaeg.
+    # This allows you to set your alone message.
     alone_message_string: '[modify_alone_message_string]'
   worlds:

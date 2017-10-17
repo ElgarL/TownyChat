@@ -166,6 +166,19 @@ public class TownyChatFormatter {
 			}
 		});
 
+		replacer.registerFormatReplacement(Pattern.quote("{permgroupprefix}"), new TownyChatReplacerCallable() {
+			@Override
+			public String call(String match, LocalTownyChatEvent event) throws Exception {
+				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "groupprefix");
+			}
+		});
+		replacer.registerFormatReplacement(Pattern.quote("{permgroupsuffix}"), new TownyChatReplacerCallable() {
+			@Override
+			public String call(String match, LocalTownyChatEvent event) throws Exception {
+				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "groupsuffix");
+			}
+		});
+
 		
 		replacer.registerFormatReplacement(Pattern.quote("{playername}"), new TownyChatReplacerCallable() {
 			@Override
