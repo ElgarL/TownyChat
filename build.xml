@@ -15,12 +15,12 @@
 
 	<target name="download" depends="init">
 
-		<get src="http://palmergames.com/libs/bukkit.jar" dest="${env.LIB}/bukkit.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Towny.jar" dest="${env.LIB}/Towny.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/CraftIRC.jar" dest="${env.LIB}/CraftIRC.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/dynmap-api.jar" dest="${env.LIB}/dynmap-api.jar" skipexisting="true" />
-		<get src="http://palmergames.com/libs/HeroicDeath.jar" dest="${env.LIB}/HeroicDeath.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/bukkit.jar" dest="${env.LIB}/bukkit.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Towny.jar" dest="${env.LIB}/Towny.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/Essentials.jar" dest="${env.LIB}/Essentials.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/CraftIRC.jar" dest="${env.LIB}/CraftIRC.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/dynmap-api.jar" dest="${env.LIB}/dynmap-api.jar" skipexisting="true" />
+		<get src="http://palmergames.com/file-repo/libs/HeroicDeath.jar" dest="${env.LIB}/HeroicDeath.jar" skipexisting="true" />
 
 	</target>
 
