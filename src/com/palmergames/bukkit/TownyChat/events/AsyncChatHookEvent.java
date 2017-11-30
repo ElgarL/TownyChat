@@ -11,6 +11,21 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 
 /*
  * Allows other plugins to hook into a chat message being accepted into any of the channels
+ * 
+ * In order to use this event, you will have to add the hooked: true flag to the channel you wish you hook in the channels.yml
+ * 
+ * ex:
+ * 
+ *Channels:
+ *  general:
+ *      commands: [g]
+ *      type: GLOBAL
+ *      hooked: true
+ *      channeltag: '&f[g]'
+ *      messagecolour: '&f'
+ *      permission: 'towny.chat.general'
+ *      craftIRCTag: 'admin'
+ *      range: '-1'
  */
 public class AsyncChatHookEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
