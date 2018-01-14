@@ -1,16 +1,16 @@
 package com.palmergames.bukkit.TownyChat;
 
-import java.util.regex.Pattern;
-
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
+import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
-import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
+
+import java.util.regex.Pattern;
 
 public class TownyChatFormatter {
 	private static StringReplaceManager<LocalTownyChatEvent> replacer = new StringReplaceManager<LocalTownyChatEvent>();
@@ -254,14 +254,24 @@ public class TownyChatFormatter {
 					nTag = nation.getName();
 
 				// Output depending on what tags are present
-				if ((!tTag.isEmpty()) && (!nTag.isEmpty()))
-					return String.format(ChatSettings.getBothTags(), nTag, tTag);
+				if ((!tTag.isEmpty()) && (!nTag.isEmpty())) {
+					if (ChatSettings.getBothTags().contains("%t") || ChatSettings.getBothTags().contains("%n")) {
+						// Then it contains %s & %s
+						// Small suttle change so that an issue is solved, it is documented in the config.
+						// But only after addition of this. (v0.50)
+						return ChatSettings.getBothTags().replace("%t", tTag).replace("%n", nTag);
+					} else {
+						return String.format(ChatSettings.getBothTags(), nTag, tTag);
+					}
+				}
 
-				if (!nTag.isEmpty())
+				if (!nTag.isEmpty()) {
 					return String.format(ChatSettings.getNationTag(), nTag);
+				}
 
-				if (!tTag.isEmpty())
+				if (!tTag.isEmpty()) {
 					return String.format(ChatSettings.getTownTag(), tTag);
+				}
 
 			}
 		} catch (NotRegisteredException e) {
