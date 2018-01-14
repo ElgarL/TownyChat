@@ -77,6 +77,7 @@
       town: '[tag_town]'
       nation: '[tag_nation]'
       # First %s is the nation tag, second is the town tag.
+      # As of v0.50 , you can use %t & %n instead of %s and %s, this allows you to set the town first nation second or ignore the town/nation.
       both: '[tag_both]'
       
     # Chat colours
