@@ -201,3 +201,17 @@ v0.49:
 v0.50:
     - Chatconfig change: whereas before the tag_formats.both had to be set at [%s, %s], it can now be set to [%t, %n].
       - Doing so would show the Town tag before the Nation tag, opposite behaviour as before.
+v0.51:
+    - New Permission node: townychat.chat.format.*
+      - default: op
+      - Provides the ability to use bold, italics, etc in chat.
+      - Child nodes: 
+        - townychat.chat.format.bold
+        - townychat.chat.format.italic
+        - townychat.chat.format.magic
+        - townychat.chat.format.undeline
+        - townychat.chat.format.strike
+    - New Permission node: townychat.chat.format.reset
+      - default: everyone
+      - Provides the ability to reset chat formatting to default using &r.
+     

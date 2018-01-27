@@ -161,6 +161,38 @@ public class TownyChatPlayerListener implements Listener  {
 		
 		Player player = event.getPlayer();
 		
+		if (event.getMessage().contains("&L") || event.getMessage().contains("&l") ||
+			event.getMessage().contains("&O") || event.getMessage().contains("&o") ||
+			event.getMessage().contains("&N") || event.getMessage().contains("&n") ||
+			event.getMessage().contains("&K") || event.getMessage().contains("&k") ||
+			event.getMessage().contains("&M") || event.getMessage().contains("&m") ||
+			event.getMessage().contains("&R") || event.getMessage().contains("&r") ) {			
+			if (!player.hasPermission("townychat.chat.format.bold")) {			
+				event.setMessage(event.getMessage().replaceAll("&L", ""));
+				event.setMessage(event.getMessage().replaceAll("&l", ""));
+			}
+			if (!player.hasPermission("townychat.chat.format.italic")) {			
+				event.setMessage(event.getMessage().replaceAll("&O", ""));
+				event.setMessage(event.getMessage().replaceAll("&o", ""));
+			}
+			if (!player.hasPermission("townychat.chat.format.magic")) {			
+				event.setMessage(event.getMessage().replaceAll("&K", ""));
+				event.setMessage(event.getMessage().replaceAll("&k", ""));
+			}
+			if (!player.hasPermission("townychat.chat.format.underlined")) {			
+				event.setMessage(event.getMessage().replaceAll("&N", ""));
+				event.setMessage(event.getMessage().replaceAll("&n", ""));
+			}
+			if (!player.hasPermission("townychat.chat.format.strike")) {			
+				event.setMessage(event.getMessage().replaceAll("&M", ""));
+				event.setMessage(event.getMessage().replaceAll("&m", ""));
+			}
+			if (!player.hasPermission("townychat.chat.format.reset")) {			
+				event.setMessage(event.getMessage().replaceAll("&R", ""));
+				event.setMessage(event.getMessage().replaceAll("&r", ""));
+			}
+		}
+		
 		if(player.hasPermission("townychat.chat.color"))
 			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
 		
