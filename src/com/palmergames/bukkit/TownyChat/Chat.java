@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.TownyChat;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.bukkit.permissions.Permission;
@@ -18,11 +20,14 @@ import com.palmergames.bukkit.TownyChat.Command.MuteListCommand;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.Command.UnmuteCommand;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
+import com.palmergames.bukkit.TownyChat.config.ChatConfigNodes;
+import com.palmergames.bukkit.TownyChat.config.CommentedConfiguration;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 
 /**
@@ -35,9 +40,12 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class Chat extends JavaPlugin {
 
+	private String version = "2.0";
+	
 	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;
 	private ConfigurationHandler configuration;
+	private static CommentedConfiguration chatConfig, newChatConfig;
 
 	protected PluginManager pm;
 	private Towny towny = null;
@@ -50,6 +58,8 @@ public class Chat extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		
+		version = this.getDescription().getVersion();
 
 		pm = getServer().getPluginManager();
 		configuration = new ConfigurationHandler(this);
@@ -57,6 +67,12 @@ public class Chat extends JavaPlugin {
 
 		checkPlugins();
 
+		try {
+			loadNewConfig(getTowny().getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "ChatConfig2.yml", this.getDescription().getVersion());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/*
 		 * This executes the task with a 1 tick delay avoiding the bukkit
 		 * depends bug.
@@ -85,6 +101,22 @@ public class Chat extends JavaPlugin {
 	private boolean load() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
 		return configuration.loadChannels(getChannelsPath(), "Channels.yml");
+	}
+	
+	public static void loadNewConfig(String filepath, String version) throws IOException {
+
+		File file = FileMgmt.CheckYMLExists(new File(filepath));
+		if (file != null) {
+
+			// read the config.yml into memory
+			chatConfig = new CommentedConfiguration(file);			
+			if (!chatConfig.load())
+				System.out.print("Failed to load ChatConfig!");
+
+			setDefaults(version, file);
+
+			chatConfig.save();
+		}
 	}
 
 	@Override
@@ -219,5 +251,72 @@ public class Chat extends JavaPlugin {
 
 	public HeroicDeathForwarder getHeroicDeath() {
 		return heroicDeathListener;
+	}
+	
+	/**
+	 * Builds a new config reading old config data.
+	 */
+	private static void setDefaults(String version, File file) {
+
+		newChatConfig = new CommentedConfiguration(file);
+		newChatConfig.load();
+
+		for (ChatConfigNodes root : ChatConfigNodes.values()) {
+			if (root.getComments().length > 0)
+				addComment(root.getRoot(), root.getComments());
+
+			if (root.getRoot() == ChatConfigNodes.VERSION.getRoot()) {
+				setNewProperty(root.getRoot(), version);
+			} else if (root.getRoot() == ChatConfigNodes.LAST_RUN_VERSION.getRoot())
+				setNewProperty(root.getRoot(), getLastRunVersion(version));
+			else {
+				System.out.println("**** setDefaults() ***");
+				System.out.println("* Loading: " + root.getRoot());
+				if (chatConfig.get(root.getRoot().toLowerCase()) != null) {
+					System.out.println("* Found: " + chatConfig.get(root.getRoot().toLowerCase()));
+				} else { 
+					System.out.println("* Setting Default: " + root.getDefault());
+				}
+				setNewProperty(root.getRoot(), (chatConfig.get(root.getRoot().toLowerCase()) != null) ? chatConfig.get(root.getRoot().toLowerCase()) : root.getDefault());
+			}
+		
+		}
+
+		chatConfig = newChatConfig;
+		newChatConfig = null;
+	}
+	
+	public static void addComment(String root, String... comments) {
+
+		newChatConfig.addComment(root.toLowerCase(), comments);
+	}
+	
+	private static void setNewProperty(String root, Object value) {
+
+		if (value == null) {
+			// System.out.print("value is null for " + root.toLowerCase());
+			value = "";
+		}
+		newChatConfig.set(root.toLowerCase(), value.toString());
+	}
+	
+	public static String getLastRunVersion(String currentVersion) {
+
+		return getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
+	}
+	
+	public static String getString(String root, String def) {
+
+		String data = chatConfig.getString(root.toLowerCase(), def);
+		if (data == null) {
+			sendError(root.toLowerCase() + " from ChatConfig.yml");
+			return "";
+		}
+		return data;
+	}
+	
+	private static void sendError(String msg) {
+
+		System.out.println("[TownyChat] Error could not read " + msg);
 	}
 }

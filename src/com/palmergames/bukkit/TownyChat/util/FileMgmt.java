@@ -132,6 +132,18 @@ public class FileMgmt {
 		return false;
 
 	}
+	
+	public static File CheckYMLExists(File file) {
+
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return file;
+	}
 
 	/**
 	 * Writes the contents of a string to a file.
@@ -166,5 +178,50 @@ public class FileMgmt {
 
 	public static String fileSeparator() {
 		return System.getProperty("file.separator");
+	}
+	
+	/**
+	 * Pass a file and it will return it's contents as a string.
+	 * 
+	 * @param file File to read.
+	 * @return Contents of file. String will be empty in case of any errors.
+	 */
+	public static String convertFileToString(File file) {
+
+		if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
+			Writer writer = new StringWriter();
+			InputStream is = null;
+
+			char[] buffer = new char[1024];
+			try {
+				is = new FileInputStream(file);
+				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				int n;
+				while ((n = reader.read(buffer)) != -1) {
+					System.out.println("**** The outputs of FileMgmt's convertFileToString's 'while' **");
+					System.out.println("* n = " + n);
+					System.out.println("* reader.read(buffer) = " + reader.read(buffer));
+					System.out.println("*");
+					
+					writer.write(buffer, 0, n);					
+				}
+				reader.close();
+			} catch (IOException e) {
+				System.out.println("Exception ");
+			} finally {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException ignore) {
+					}
+				}
+			}
+			System.out.println("**** The final return of FileMgmt's convertFileToString before it is parsed into an array by the **");
+			System.out.println("* writer.toString(): " + writer.toString());
+			System.out.println("*");
+			return writer.toString();
+		} else {
+			return "";
+		}
 	}
 }
