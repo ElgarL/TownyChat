@@ -261,8 +261,7 @@ public class CommentedConfiguration extends YamlConfiguration {
         yamlOptions.setWidth(10000);
         yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        
-        String header = buildHeader();
+
         String dump = yaml.dump(getValues(false));
         
 
@@ -270,7 +269,7 @@ public class CommentedConfiguration extends YamlConfiguration {
             dump = "";
         }
 
-        return header + dump;
+        return dump;
     }
 
 }
