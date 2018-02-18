@@ -11,7 +11,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
 
 import com.earth2me.essentials.User;
-import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
@@ -28,9 +28,9 @@ import com.palmergames.bukkit.util.Colors;
 
 public class StandardChannel extends Channel {
 
-	private Chat plugin;
+	private TownyChat plugin;
 	
-	public StandardChannel(Chat instance, String name) {
+	public StandardChannel(TownyChat instance, String name) {
 		super(name);
 		this.plugin = instance;
 	}

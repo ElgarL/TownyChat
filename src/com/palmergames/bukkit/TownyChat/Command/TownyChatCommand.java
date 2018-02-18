@@ -4,7 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.towny.TownyMessaging;
 
 /**
@@ -13,12 +13,11 @@ import com.palmergames.bukkit.towny.TownyMessaging;
  */
 public class TownyChatCommand implements CommandExecutor {
 
-	private Chat plugin;
+	private TownyChat plugin;
 	/**
 	 * 
 	 */
-	public TownyChatCommand(Chat instance) {
-		// TODO Auto-generated constructor stub
+	public TownyChatCommand(TownyChat instance) {
 		this.plugin = instance;
 	}
 

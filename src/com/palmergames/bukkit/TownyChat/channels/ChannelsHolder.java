@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.palmergames.bukkit.TownyChat.TownyChat;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 /**
@@ -16,14 +16,14 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
  */
 public class ChannelsHolder {
 	
-	private Chat plugin;
+	private TownyChat plugin;
 	private Channel defaultChan = null;
 	
 	/** Constructor
 	 * 
 	 * @param plugin
 	 */
-	public ChannelsHolder(Chat plugin) {
+	public ChannelsHolder(TownyChat plugin) {
 		super();
 		this.plugin = plugin;
 	}
