@@ -161,9 +161,6 @@ public class FileMgmt {
 
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 
-			// BufferedWriter out = new BufferedWriter(new
-			// FileWriter(FileName));
-
 			source.replaceAll("\n", System.getProperty("line.separator"));
 
 			out.write(source);
@@ -198,11 +195,6 @@ public class FileMgmt {
 				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
-					System.out.println("**** The outputs of FileMgmt's convertFileToString's 'while' **");
-					System.out.println("* n = " + n);
-					System.out.println("* reader.read(buffer) = " + reader.read(buffer));
-					System.out.println("*");
-					
 					writer.write(buffer, 0, n);					
 				}
 				reader.close();
@@ -216,9 +208,6 @@ public class FileMgmt {
 					}
 				}
 			}
-			System.out.println("**** The final return of FileMgmt's convertFileToString before it is parsed into an array by the **");
-			System.out.println("* writer.toString(): " + writer.toString());
-			System.out.println("*");
 			return writer.toString();
 		} else {
 			return "";

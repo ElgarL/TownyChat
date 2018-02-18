@@ -1,13 +1,25 @@
 package com.palmergames.bukkit.TownyChat.config;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.YamlConstructor;
+import org.bukkit.configuration.file.YamlRepresenter;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+
 import java.util.HashMap;
 
 /**
@@ -18,6 +30,10 @@ public class CommentedConfiguration extends YamlConfiguration {
 	private HashMap<String, String> comments;
 	private File file;
 
+    private final DumperOptions yamlOptions = new DumperOptions();
+    private final Representer yamlRepresenter = new YamlRepresenter();
+    private final Yaml yaml = new Yaml(new YamlConstructor(), yamlRepresenter, yamlOptions);
+	
 	public CommentedConfiguration(File file) {
 
 		super();
@@ -49,7 +65,12 @@ public class CommentedConfiguration extends YamlConfiguration {
 
 		// Save the config just like normal
 		try {
-			super.save(file);
+			/*
+			 * Doing some saving of our own. We have found that the implementation of YAMLComfiguration used by Bukkit will attempt to 
+			 * cap strings at 80 characters long, forming new lines in some of our longer strings (channel_formats.)
+			 */
+			this.save(file);
+			
 		} catch (Exception e) {
 			saved = false;
 		}
@@ -72,8 +93,6 @@ public class CommentedConfiguration extends YamlConfiguration {
 
 			// Loop through the config lines
 			for (String line : yamlContents) {
-				System.out.println("**** A line of yamlContents: **");
-				System.out.println("* Initial line: " + line);
 				// If the line is a node (and not something like a list value)
 				if (line.contains(": ") || (line.length() > 1 && line.charAt(line.length() - 1) == ':')) {
 
@@ -217,4 +236,41 @@ public class CommentedConfiguration extends YamlConfiguration {
 		}
 		comments.put(path, commentstring.toString());
 	}
+	
+	
+	public void save(File file) throws IOException {
+        Validate.notNull(file, "File cannot be null");
+
+        Files.createParentDirs(file);
+
+        String data = this.saveToString();
+
+        Writer writer = new OutputStreamWriter(new FileOutputStream(file), Charsets.UTF_8);
+
+        try {
+            writer.write(data);
+        } finally {
+            writer.close();
+        }
+    }
+	
+	@Override
+    public String saveToString() {
+        yamlOptions.setIndent(options().indent());        
+        yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        yamlOptions.setWidth(10000);
+        yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        
+        String header = buildHeader();
+        String dump = yaml.dump(getValues(false));
+        
+
+        if (dump.equals(BLANK_CONFIG)) {
+            dump = "";
+        }
+
+        return header + dump;
+    }
+
 }

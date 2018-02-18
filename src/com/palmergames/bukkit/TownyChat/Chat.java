@@ -39,8 +39,6 @@ import com.palmergames.bukkit.towny.Towny;
  */
 
 public class Chat extends JavaPlugin {
-
-	private String version = "2.0";
 	
 	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;
@@ -59,8 +57,6 @@ public class Chat extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-		version = this.getDescription().getVersion();
-
 		pm = getServer().getPluginManager();
 		configuration = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
@@ -270,13 +266,6 @@ public class Chat extends JavaPlugin {
 			} else if (root.getRoot() == ChatConfigNodes.LAST_RUN_VERSION.getRoot())
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			else {
-				System.out.println("**** setDefaults() ***");
-				System.out.println("* Loading: " + root.getRoot());
-				if (chatConfig.get(root.getRoot().toLowerCase()) != null) {
-					System.out.println("* Found: " + chatConfig.get(root.getRoot().toLowerCase()));
-				} else { 
-					System.out.println("* Setting Default: " + root.getDefault());
-				}
 				setNewProperty(root.getRoot(), (chatConfig.get(root.getRoot().toLowerCase()) != null) ? chatConfig.get(root.getRoot().toLowerCase()) : root.getDefault());
 			}
 		
