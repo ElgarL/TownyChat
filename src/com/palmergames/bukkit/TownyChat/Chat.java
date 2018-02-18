@@ -42,7 +42,7 @@ public class Chat extends JavaPlugin {
 	
 	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;
-	private ConfigurationHandler configuration;
+	private ConfigurationHandler channelsConfig;
 	private static CommentedConfiguration chatConfig, newChatConfig;
 
 	protected PluginManager pm;
@@ -58,7 +58,7 @@ public class Chat extends JavaPlugin {
 	public void onEnable() {
 		
 		pm = getServer().getPluginManager();
-		configuration = new ConfigurationHandler(this);
+		channelsConfig = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
 
 		checkPlugins();
@@ -66,7 +66,6 @@ public class Chat extends JavaPlugin {
 		try {
 			loadNewConfig(getTowny().getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "ChatConfig2.yml", this.getDescription().getVersion());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		/*
@@ -96,7 +95,7 @@ public class Chat extends JavaPlugin {
 	
 	private boolean load() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
-		return configuration.loadChannels(getChannelsPath(), "Channels.yml");
+		return channelsConfig.loadChannels(getChannelsPath(), "Channels.yml");
 	}
 	
 	public static void loadNewConfig(String filepath, String version) throws IOException {
@@ -131,7 +130,7 @@ public class Chat extends JavaPlugin {
 		towny = null;
 		pm = null;
 		
-		configuration = null;
+		channelsConfig = null;
 		channels = null;
 	}
 	
@@ -230,7 +229,7 @@ public class Chat extends JavaPlugin {
 	 * @return the data
 	 */
 	public ConfigurationHandler getConfigurationHandler() {
-		return configuration;
+		return channelsConfig;
 	}
 
 	public Towny getTowny() {
@@ -250,7 +249,7 @@ public class Chat extends JavaPlugin {
 	}
 	
 	/**
-	 * Builds a new config reading old config data.
+	 * Builds a new chatconfig reading old chatconfig data.
 	 */
 	private static void setDefaults(String version, File file) {
 
@@ -267,10 +266,8 @@ public class Chat extends JavaPlugin {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			else {
 				setNewProperty(root.getRoot(), (chatConfig.get(root.getRoot().toLowerCase()) != null) ? chatConfig.get(root.getRoot().toLowerCase()) : root.getDefault());
-			}
-		
+			}		
 		}
-
 		chatConfig = newChatConfig;
 		newChatConfig = null;
 	}
@@ -283,7 +280,6 @@ public class Chat extends JavaPlugin {
 	private static void setNewProperty(String root, Object value) {
 
 		if (value == null) {
-			// System.out.print("value is null for " + root.toLowerCase());
 			value = "";
 		}
 		newChatConfig.set(root.toLowerCase(), value.toString());
