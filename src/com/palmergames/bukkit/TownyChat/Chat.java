@@ -66,7 +66,6 @@ public class Chat extends JavaPlugin {
 		try {
 			loadNewConfig(getTowny().getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "ChatConfig2.yml", this.getDescription().getVersion());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		/*

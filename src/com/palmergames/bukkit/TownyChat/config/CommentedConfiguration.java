@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
@@ -261,8 +262,7 @@ public class CommentedConfiguration extends YamlConfiguration {
         yamlOptions.setWidth(10000);
         yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        
-        String header = buildHeader();
+
         String dump = yaml.dump(getValues(false));
         
 
@@ -270,7 +270,7 @@ public class CommentedConfiguration extends YamlConfiguration {
             dump = "";
         }
 
-        return header + dump;
+        return dump;
     }
 
 }
