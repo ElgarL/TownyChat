@@ -1,19 +1,17 @@
 package com.palmergames.bukkit.TownyChat.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.entity.Player;
-
 import com.palmergames.bukkit.TownyChat.channels.channelFormats;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ChatSettings extends tag_formats {
@@ -83,22 +81,18 @@ public class ChatSettings extends tag_formats {
 	private static void setWorldDefaults() {
 
 		if (!chatConfig.contains(ChatConfigNodes.WORLDS.getRoot())) {
-			List<Map<String, Object>> worlds = new ArrayList<Map<String, Object>>();
-			Map<String, String> format = new HashMap<String, String>();
-			
 			for (TownyWorld world : TownyUniverse.getDataSource().getWorlds()) {
-				format.put("  " + world, "");
-				format.put("      global: '", (chatConfig.isSet(ChatConfigNodes.WORLDS.getDefault()) ? (chatConfig.contains(ChatConfigNodes.CHANNEL_FORMATS_GLOBAL.getDefault()) + "'" + System.getProperty("line.separator")) : (chatConfig.contains(ChatConfigNodes.WORLDS.getDefault()) + "'" + System.getProperty("line.separator"))));
-				format.put("      town: '", (chatConfig.isSet(ChatConfigNodes.WORLDS.getDefault()) ? (chatConfig.contains(ChatConfigNodes.CHANNEL_FORMATS_GLOBAL.getDefault()) + "'" + System.getProperty("line.separator")) : (chatConfig.contains(ChatConfigNodes.WORLDS.getDefault()) + "'" + System.getProperty("line.separator"))));
-				format.put("      nation: '", (chatConfig.isSet(ChatConfigNodes.WORLDS.getDefault()) ? (chatConfig.contains(ChatConfigNodes.CHANNEL_FORMATS_GLOBAL.getDefault()) + "'" + System.getProperty("line.separator")) : (chatConfig.contains(ChatConfigNodes.WORLDS.getDefault()) + "'" + System.getProperty("line.separator"))));
-				format.put("      default: '", (chatConfig.isSet(ChatConfigNodes.WORLDS.getDefault()) ? (chatConfig.contains(ChatConfigNodes.CHANNEL_FORMATS_GLOBAL.getDefault()) + "'" + System.getProperty("line.separator")) : (chatConfig.contains(ChatConfigNodes.WORLDS.getDefault()) + "'" + System.getProperty("line.separator"))));
-				worlds.add(new HashMap<String, Object>(format));
+				newChatConfig.createSection("worlds." + world);
+				ConfigurationSection worldsection = newChatConfig.getConfigurationSection("worlds." + world);
+				worldsection.set("global", "Object");
+				worldsection.set("town", "Object");
+				worldsection.set("nation", "Object");
+				worldsection.set("default", "Object");
 			}
-			newChatConfig.set(ChatConfigNodes.WORLDS.getRoot(), worlds);				
 		} else {
 			newChatConfig.set(ChatConfigNodes.WORLDS.getRoot(), chatConfig.get(ChatConfigNodes.WORLDS.getRoot()));
 		}
-		
+
 	}
 
 	public static void addComment(String root, String... comments) {
@@ -232,7 +226,6 @@ public class ChatSettings extends tag_formats {
 	}
 	
 	/**
-	 * @param  alone_message_string
 	 * @return 
 	 */
 	public static String getUsingAloneMessageString() {
