@@ -153,7 +153,7 @@ public enum ChatConfigNodes {
     MODIFY_CHAT_PER_WORLD(
     		"modify_chat.per_world",
     		"false",
-    	    "# This is used for when you don't have another plugin to format chat.",
+    	    "# If true the chat formats will be read from below to allow per world formatting.",
     	    "# These can then be altered individually."),
     MODIFY_CHAT_ALONE_MESSAGE(
     		"modify_chat.alone_message",

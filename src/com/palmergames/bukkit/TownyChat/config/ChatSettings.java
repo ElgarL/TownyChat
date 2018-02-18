@@ -5,6 +5,7 @@ import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -63,6 +64,7 @@ public class ChatSettings extends tag_formats {
 				addComment(root.getRoot(), root.getComments());
 			if (root.getRoot() == ChatConfigNodes.WORLDS.getRoot()) {
 				// Per-worlds section.
+//				setNewProperty(root.getRoot(), root.getDefault());
 				setWorldDefaults();
 				
 			} else if (root.getRoot() == ChatConfigNodes.VERSION.getRoot()) {
@@ -79,20 +81,25 @@ public class ChatSettings extends tag_formats {
 	}
 	
 	private static void setWorldDefaults() {
-
-		if (!chatConfig.contains(ChatConfigNodes.WORLDS.getRoot())) {
+		if (perWorld()) {
 			for (TownyWorld world : TownyUniverse.getDataSource().getWorlds()) {
-				newChatConfig.createSection("worlds." + world);
-				ConfigurationSection worldsection = newChatConfig.getConfigurationSection("worlds." + world);
-				worldsection.set("global", "Object");
-				worldsection.set("town", "Object");
-				worldsection.set("nation", "Object");
-				worldsection.set("default", "Object");
+				if (!chatConfig.contains("worlds." + world )
+						|| !chatConfig.contains("worlds." + world + ".global") 
+						|| !chatConfig.contains("worlds." + world + ".town") 
+						|| !chatConfig.contains("worlds." + world + ".nation")
+						|| !chatConfig.contains("worlds." + world + ".default")) {
+					newChatConfig.createSection("worlds." + world);
+					ConfigurationSection worldsection = newChatConfig.getConfigurationSection("worlds." + world);
+					worldsection.set("global", (chatConfig.get("worlds." + world + ".global")!= null) ? chatConfig.get("worlds." + world + ".global") : ChatConfigNodes.CHANNEL_FORMATS_GLOBAL.getDefault());
+					worldsection.set("town", (chatConfig.get("worlds." + world + ".town")!= null) ? chatConfig.get("worlds." + world + ".town") : ChatConfigNodes.CHANNEL_FORMATS_TOWN.getDefault());
+					worldsection.set("nation", (chatConfig.get("worlds." + world + ".nation")!= null) ? chatConfig.get("worlds." + world + ".nation") : ChatConfigNodes.CHANNEL_FORMATS_NATION.getDefault());
+					worldsection.set("default", (chatConfig.get("worlds." + world + ".default")!= null) ? chatConfig.get("worlds." + world + ".default") : ChatConfigNodes.CHANNEL_FORMATS_DEFAULT.getDefault());
+				}
 			}
 		} else {
-			newChatConfig.set(ChatConfigNodes.WORLDS.getRoot(), chatConfig.get(ChatConfigNodes.WORLDS.getRoot()));
+			if (chatConfig.contains(ChatConfigNodes.WORLDS.getRoot()))
+				newChatConfig.set(ChatConfigNodes.WORLDS.getRoot(), chatConfig.get(ChatConfigNodes.WORLDS.getRoot()));
 		}
-
 	}
 
 	public static void addComment(String root, String... comments) {
@@ -121,6 +128,16 @@ public class ChatSettings extends tag_formats {
 	
 	private static void sendError(String msg) {
 		System.out.println("[TownyChat] Error could not read " + msg);
+	}
+	
+	private static boolean perWorld() {
+
+		return getBoolean(ChatConfigNodes.MODIFY_CHAT_PER_WORLD);
+	}
+
+	private static boolean getBoolean(ChatConfigNodes node) {
+		
+		return Boolean.parseBoolean(chatConfig.getString(node.getRoot().toLowerCase(), node.getDefault()));
 	}
 
 	/**
