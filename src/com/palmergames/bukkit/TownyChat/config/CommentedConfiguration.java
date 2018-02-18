@@ -183,10 +183,6 @@ public class CommentedConfiguration extends YamlConfiguration {
 					}
 				}
 				// Add the (modified) line to the total config String
-				//System.out.println("Printing newContents: " + newContents);
-				System.out.println("* Printing line: " + line);
-				System.out.println("* Node: " + node);
-				System.out.println("*");
 				newContents += line + ((!node) ? System.getProperty("line.separator") : "");
 
 			}
