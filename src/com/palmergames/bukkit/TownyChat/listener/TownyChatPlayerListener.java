@@ -2,6 +2,7 @@ package com.palmergames.bukkit.TownyChat.listener;
 
 import java.util.WeakHashMap;
 
+import com.palmergames.bukkit.TownyChat.TownyChat;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,10 +17,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
-import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -29,12 +28,12 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
 public class TownyChatPlayerListener implements Listener  {
-	private Chat plugin;
+	private TownyChat plugin;
 	
 	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
 	private WeakHashMap<Player, String> directedChat = new WeakHashMap<Player, String>();
 
-	public TownyChatPlayerListener(Chat instance) {
+	public TownyChatPlayerListener(TownyChat instance) {
 		this.plugin = instance;
 	}
 
@@ -237,7 +236,7 @@ public class TownyChatPlayerListener implements Listener  {
 						return;
 					}
 					/*
-					 *  Channel Chat mode set
+					 *  Channel TownyChat mode set
 					 *  Process the chat
 					 */
 					channel.chatProcess(event);

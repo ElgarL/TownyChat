@@ -1,5 +1,5 @@
 name: TownyChat
-main: com.palmergames.bukkit.TownyChat.Chat
+main: com.palmergames.bukkit.TownyChat.TownyChat
 version: 0.52
 author: ElgarL, Shade, phrstbrn
 website: http://towny.palmergames.com/towny/townychat/
@@ -19,28 +19,9 @@ commands:
         usage: /townychat reload
         permission: townychat.reload
     channel:
-        aliases: [ch]
+        aliases: [ch, join, leave, mutelist, chmute, chunmute]
         description: Channel leaving and joining
         usage: /<command> join|leave|list channel
-    leave:
-        description: Leaves a channel
-        usage: /<command> channel
-    join:
-        description: Joins a channel
-        usage: /<command> channel
-    chmute:
-        aliases: []
-        description: Mutes a player in a channel
-        usage: /<command> channel player
-        permission: townychat.mod.mute
-    mutelist:
-        description: Displays mute list for a channel
-        usage: /<command> channel
-    chunmute:
-        aliases: [unmute]
-        description: Unmutes a player in a channel
-        usage: /<command> channel player
-        permission: townychat.mod.unmute
             
 ############################################################
 # +------------------------------------------------------+ #

@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat.tasks;
 
-import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.towny.Towny;
 
 /*
@@ -11,10 +11,10 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class onLoadedTask implements Runnable {
 	
-	Chat plugin;
+	TownyChat plugin;
 	Towny towny;
 	
-	public onLoadedTask(Chat plugin) {
+	public onLoadedTask(TownyChat plugin) {
         super();
         this.plugin = plugin;
         this.towny = plugin.getTowny();

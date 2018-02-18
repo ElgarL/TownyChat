@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
 import com.palmergames.bukkit.TownyChat.channels.channelFormats;
@@ -15,13 +15,13 @@ import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 
 public class ConfigurationHandler {
 	
-	private Chat plugin;
+	private TownyChat plugin;
 	
 	/** Constructor
 	 * 
 	 * @param plugin
 	 */
-	public ConfigurationHandler(Chat plugin) {
+	public ConfigurationHandler(TownyChat plugin) {
 		super();
 		this.plugin = plugin;
 	}
