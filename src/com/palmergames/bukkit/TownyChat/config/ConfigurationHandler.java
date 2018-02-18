@@ -1,8 +1,5 @@
 package com.palmergames.bukkit.TownyChat.config;
 
-import java.io.File;
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -167,7 +164,7 @@ public class ConfigurationHandler {
 		String filename = filepath + FileMgmt.fileSeparator() + defaultRes;
 
 		// Pass the plugin reference so it can load the defaults if needed.
-		Map<String, Object> file = FileMgmt.getFile(filename, defaultRes, plugin);
+		Map<String, Object> file = FileMgmt.getFile(filename);
 		
 		if (file != null) {
 
@@ -176,7 +173,7 @@ public class ConfigurationHandler {
 				if (Key.equalsIgnoreCase("spam_time"))
 					ChatSettings.setSpam_time( Double.parseDouble((file.get(Key)).toString()) );
 				
-				if (Key.equalsIgnoreCase("HeroicDeathToIRC")) {
+				if (Key.equalsIgnoreCase("heroicdeathtoirc")) {
 					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
 					
 					for (String element : subNodes.keySet()) {
@@ -294,8 +291,8 @@ public class ConfigurationHandler {
 
 			}
 			
-			if (ChatSettings.populateWorldFormats())
-				saveConfig(filename);
+//			if (ChatSettings.populateWorldFormats())
+//				saveConfig(filename);
 
 			return true;
 
@@ -304,96 +301,96 @@ public class ConfigurationHandler {
 		return false;
 	}
 	
-	private void saveConfig(String filepath) {
-
-		File file = new File(filepath);
-
-		if (file.exists() && file.isFile()) {
-			
-			String newConfig;
-			try {
-				newConfig = FileMgmt.convertStreamToString("/ChatConfig.yml");
-				newConfig = setConfigs(newConfig, false);
-				
-				FileMgmt.stringToFile(newConfig, filepath);
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-
-		} else {
-			// Big error. No file found.
-		}
-
-	}
+//	private void saveConfig(String filepath) {
+//
+//		File file = new File(filepath);
+//
+//		if (file.exists() && file.isFile()) {
+//			
+//			String newConfig;
+//			try {
+//				newConfig = FileMgmt.convertStreamToString("/ChatConfig.yml");
+//				newConfig = setConfigs(newConfig, false);
+//				
+//				FileMgmt.stringToFile(newConfig, filepath);
+//				
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			
+//
+//		} else {
+//			// Big error. No file found.
+//		}
+//
+//	}
 	
-	/**
-	 * Build the new Config file to save.
-	 * 
-	 * @param newConfig
-	 * @param defaults apply defaults or data from settings.
-	 * @return the config in a string
-	 */
-	public String setConfigs(String newConfig, boolean defaults) {
-		
-		String global = "{channelTag} {worldname}{townytagoverride}{townycolor}{permprefix}{group} {townyprefix}{modplayername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
-		String town = "{channelTag} {townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
-		String nation = "{channelTag}{towntagoverride}{townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
-		String default_ = "{channelTag} {permprefix}{playername}{permsuffix}&f:{msgcolour} {msg}";
-		
-		String tag_world = "&f[&f%s&f] ";
-		String tag_town = "&f[&3%s&f] ";
-		String tag_nation = "&f[&e%s&f] ";
-		String tag_both = "&f[&6%s&f|&3%s&f] ";
-		
-		String king = "&6";
-		String mayor = "&b";
-		String resident = "&f";
-		
-		
-		newConfig = newConfig.replace("[spam_time]", (defaults)? "0.5" : Double.toString(ChatSettings.getSpam_time()));
-		
-		newConfig = newConfig.replace("[hd_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isHeroicDeathToIRC()));
-		newConfig = newConfig.replace("[hd_tags]", (defaults)? "admin" : ChatSettings.getHeroicDeathTags());
-		
-		newConfig = newConfig.replace("[globalformat]", (defaults)? global : ChatSettings.getFormatGroup("channel_formats").getGLOBAL());
-		newConfig = newConfig.replace("[townformat]", (defaults)? town : ChatSettings.getFormatGroup("channel_formats").getTOWN());
-		newConfig = newConfig.replace("[nationformat]", (defaults)? nation : ChatSettings.getFormatGroup("channel_formats").getNATION());
-		newConfig = newConfig.replace("[defaultformat]", (defaults)? default_ : ChatSettings.getFormatGroup("channel_formats").getDEFAULT());
-
-		newConfig = newConfig.replace("[tag_world]", (defaults)? tag_world : ChatSettings.getWorldTag());
-		newConfig = newConfig.replace("[tag_town]", (defaults)? tag_town : ChatSettings.getTownTag());
-		newConfig = newConfig.replace("[tag_nation]", (defaults)? tag_nation : ChatSettings.getNationTag());
-		newConfig = newConfig.replace("[tag_both]", (defaults)? tag_both : ChatSettings.getBothTags());
-		
-		newConfig = newConfig.replace("[colour_king]", (defaults)? king : ChatSettings.getKingColour());
-		newConfig = newConfig.replace("[colour_mayor]", (defaults)? mayor : ChatSettings.getMayorColour());
-		newConfig = newConfig.replace("[colour_resident]", (defaults)? resident : ChatSettings.getResidentColour());
-		
-		newConfig = newConfig.replace("[modify_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isModify_chat()));
-		newConfig = newConfig.replace("[modify_per_world]", (defaults)? "false" : Boolean.toString(ChatSettings.isPer_world()));
-		newConfig = newConfig.replace("[modify_alone_message]", (defaults)? "false" : Boolean.toString(ChatSettings.isUsingAloneMessage()));
-		newConfig = newConfig.replace("[modify_alone_message_string]", (defaults)? "No one in range can hear you or you are alone in this channel." : (ChatSettings.getUsingAloneMessageString()));
-		
-		for (String key : ChatSettings.getFormatGroups().keySet()) {
-			if (!key.equalsIgnoreCase("channel_formats")) {
-				channelFormats world = ChatSettings.getFormatGroup(key);
-				
-				newConfig += "    '" + key + "':" + System.getProperty("line.separator");
-				
-				newConfig += "      global: '" + ((defaults)? global : world.getGLOBAL()) + "'" + System.getProperty("line.separator");
-				newConfig += "      town: '" + ((defaults)? town : world.getTOWN()) + "'" + System.getProperty("line.separator");
-				newConfig += "      nation: '" + ((defaults)? nation : world.getNATION()) + "'" + System.getProperty("line.separator");
-				newConfig += "      default: '" + ((defaults)? default_ : world.getDEFAULT()) + "'" + System.getProperty("line.separator");
-			}
-			
-		}
-		
-		
-		return newConfig;
-	}
+//	/**
+//	 * Build the new Config file to save.
+//	 * 
+//	 * @param newConfig
+//	 * @param defaults apply defaults or data from settings.
+//	 * @return the config in a string
+//	 */
+//	public String setConfigs(String newConfig, boolean defaults) {
+//		
+//		String global = "{channelTag} {worldname}{townytagoverride}{townycolor}{permprefix}{group} {townyprefix}{modplayername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
+//		String town = "{channelTag} {townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
+//		String nation = "{channelTag}{towntagoverride}{townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}";
+//		String default_ = "{channelTag} {permprefix}{playername}{permsuffix}&f:{msgcolour} {msg}";
+//		
+//		String tag_world = "&f[&f%s&f] ";
+//		String tag_town = "&f[&3%s&f] ";
+//		String tag_nation = "&f[&e%s&f] ";
+//		String tag_both = "&f[&6%s&f|&3%s&f] ";
+//		
+//		String king = "&6";
+//		String mayor = "&b";
+//		String resident = "&f";
+//		
+//		
+//		newConfig = newConfig.replace("[spam_time]", (defaults)? "0.5" : Double.toString(ChatSettings.getSpam_time()));
+//		
+//		newConfig = newConfig.replace("[hd_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isHeroicDeathToIRC()));
+//		newConfig = newConfig.replace("[hd_tags]", (defaults)? "admin" : ChatSettings.getHeroicDeathTags());
+//		
+//		newConfig = newConfig.replace("[globalformat]", (defaults)? global : ChatSettings.getFormatGroup("channel_formats").getGLOBAL());
+//		newConfig = newConfig.replace("[townformat]", (defaults)? town : ChatSettings.getFormatGroup("channel_formats").getTOWN());
+//		newConfig = newConfig.replace("[nationformat]", (defaults)? nation : ChatSettings.getFormatGroup("channel_formats").getNATION());
+//		newConfig = newConfig.replace("[defaultformat]", (defaults)? default_ : ChatSettings.getFormatGroup("channel_formats").getDEFAULT());
+//
+//		newConfig = newConfig.replace("[tag_world]", (defaults)? tag_world : ChatSettings.getWorldTag());
+//		newConfig = newConfig.replace("[tag_town]", (defaults)? tag_town : ChatSettings.getTownTag());
+//		newConfig = newConfig.replace("[tag_nation]", (defaults)? tag_nation : ChatSettings.getNationTag());
+//		newConfig = newConfig.replace("[tag_both]", (defaults)? tag_both : ChatSettings.getBothTags());
+//		
+//		newConfig = newConfig.replace("[colour_king]", (defaults)? king : ChatSettings.getKingColour());
+//		newConfig = newConfig.replace("[colour_mayor]", (defaults)? mayor : ChatSettings.getMayorColour());
+//		newConfig = newConfig.replace("[colour_resident]", (defaults)? resident : ChatSettings.getResidentColour());
+//		
+//		newConfig = newConfig.replace("[modify_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isModify_chat()));
+//		newConfig = newConfig.replace("[modify_per_world]", (defaults)? "false" : Boolean.toString(ChatSettings.isPer_world()));
+//		newConfig = newConfig.replace("[modify_alone_message]", (defaults)? "false" : Boolean.toString(ChatSettings.isUsingAloneMessage()));
+//		newConfig = newConfig.replace("[modify_alone_message_string]", (defaults)? "No one in range can hear you or you are alone in this channel." : (ChatSettings.getUsingAloneMessageString()));
+//		
+//		for (String key : ChatSettings.getFormatGroups().keySet()) {
+//			if (!key.equalsIgnoreCase("channel_formats")) {
+//				channelFormats world = ChatSettings.getFormatGroup(key);
+//				
+//				newConfig += "    '" + key + "':" + System.getProperty("line.separator");
+//				
+//				newConfig += "      global: '" + ((defaults)? global : world.getGLOBAL()) + "'" + System.getProperty("line.separator");
+//				newConfig += "      town: '" + ((defaults)? town : world.getTOWN()) + "'" + System.getProperty("line.separator");
+//				newConfig += "      nation: '" + ((defaults)? nation : world.getNATION()) + "'" + System.getProperty("line.separator");
+//				newConfig += "      default: '" + ((defaults)? default_ : world.getDEFAULT()) + "'" + System.getProperty("line.separator");
+//			}
+//			
+//		}
+//		
+//		
+//		return newConfig;
+//	}
 	
 }

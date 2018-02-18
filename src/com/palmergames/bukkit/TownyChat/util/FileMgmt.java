@@ -32,6 +32,37 @@ public class FileMgmt {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getFile(String filepath) {
+
+		try {
+			File f = new File(filepath);
+			
+			Yaml yamlChannels = new Yaml(new SafeConstructor());
+			Object channelsRootDataNode;
+
+			FileInputStream fileInputStream = new FileInputStream(f);
+			try {
+				channelsRootDataNode = yamlChannels.load(new UnicodeReader(fileInputStream));
+				if (channelsRootDataNode == null) {
+					throw new NullPointerException();
+				}
+			} catch (Exception ex) {
+				throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + f.getPath(), ex);
+			} finally {
+				fileInputStream.close();
+			}
+
+			if (channelsRootDataNode instanceof Map)
+				return (Map<String, Object>) channelsRootDataNode;
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getFile(String filepath, String resource, Chat plugin) {
 
 		try {
@@ -41,8 +72,6 @@ public class FileMgmt {
 				try {
 					String resString = convertStreamToString("/" + resource);
 					// If we have a plugin reference pass to load default.
-					if (plugin != null)
-						resString = plugin.getConfigurationHandler().setConfigs(resString, true);
 					
 					FileMgmt.stringToFile(resString, filepath);
 
