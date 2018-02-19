@@ -5,11 +5,13 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -112,17 +114,17 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		Map<String, Channel> chanList = plugin.getChannelsHandler().getAllChannels();
 
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle("Channels"));
-		TownyMessaging.sendMessage(player, Colors.Gold + "Channel" + Colors.Gray + " - " + Colors.LightBlue + "(Status)");
+		TownyMessaging.sendMessage(player, Colors.Gold + "Channel" + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("tc_channel_list_status"));
 		for (Map.Entry<String, Channel> channel : chanList.entrySet()) {
 			if (player.hasPermission(channel.getValue().getPermission()))
 				if (channel.getValue().isPresent(player.getName())) {
-					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + "In");
+					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("tc_channel_list_in"));
 				} else {
 					/*if (!plugin.getTowny().isPermissions()
 						|| ( (plugin.getTowny().isPermissions())
 						&& (TownyUniverse.getPermissionSource().has(player, channel.getValue().getPermission()))
 						|| (channel.getValue().getPermission().isEmpty()))) {*/
-					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + "Out");
+					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + TownySettings.getLangString("tc_channel_list_out"));
 					//}
 				}
 		}
@@ -140,7 +142,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		if ((mutePerm == null && unmutePerm == null) ||
 				(mutePerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, mutePerm))) ||
 				(unmutePerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, unmutePerm)))) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] You don't have permissions to see mute list");
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_you_dont_have_perm_mute_list"));
 			return;
 		}
 
@@ -162,7 +164,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] There is no channel called " + Colors.White + split[0]);
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channle_called"), split[0]));
 			return;
 		}
 
@@ -185,13 +187,11 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (count == 0) {
-			TownyMessaging.sendMessage(player, "[TownyChat] There are no muted players in " + Colors.White + chan.getName());
+			TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_err_no_muted_players_in_channel"), chan.getName()));
 			return;
 		}
 
-		String msg = "[TownyChat] " + Colors.White + count + Colors.Green + " players muted in " + Colors.White + chan.getName() + Colors.Green + ": " + Colors.White + players;
-
-		TownyMessaging.sendMessage(player, msg);
+		TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_players_muted_in_channel"), count, chan.getName(), players));
 	}
 
 	public static void parseChannelMute(Player player, String[] split, boolean mute) {
@@ -206,7 +206,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		@SuppressWarnings("deprecation")
 		Player muteePlayer = Bukkit.getPlayer(split[1]);
 		if (muteePlayer == null) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] There are no online players with name " + Colors.White + split[1]);
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_online_players_with_name"), split[1]));
 			return;
 		}
 		Channel chan = plugin.getChannelsHandler().getChannel(split[0]);
@@ -227,37 +227,37 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] There is no channel called " + Colors.White + split[0]);
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called"), split[0]));
 			return;
 		}
 
 		if (mute) {
 			String mutePerm = plugin.getChannelsHandler().getMutePermission();
 			if ((mutePerm == null) || (mutePerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, mutePerm)))) {
-				TownyMessaging.sendErrorMsg(player, "[TownyChat] You don't have mute permissions");
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_you_dont_have_mute_perms"));
 				return;
 			}
 
 			split[1] = muteePlayer.getName();
 
 			if (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().isTownyAdmin(muteePlayer)) {
-				TownyMessaging.sendErrorMsg(player, "[TownyChat] You can't mute a Towny administrator.");
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_you_cant_mute_admin"));
 				return;
 			}
 
 			String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
 			if ((mutePerm != null && (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(muteePlayer, mutePerm))) ||
 					(unmutePerm != null && (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(muteePlayer, unmutePerm)))) {
-				TownyMessaging.sendErrorMsg(player, "[TownyChat] You can't mute a chat moderator.");
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_you_cant_mute_chat_mod"));
 				return;
 			}
 
 			if (!chan.mute(split[1])) {
-				TownyMessaging.sendMsg(player, "[TownyChat] Player is already muted in " + Colors.White + chan.getName());
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_already_muted_in"), chan.getName()));
 				return;
 			}
 
-			TownyMessaging.sendMsg(player, "[TownyChat] " + Colors.White + split[1] + Colors.Green + " is now muted in " + Colors.White + chan.getName());
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_is_now_muted_in"), split[1], chan.getName()));
 		} else if (!mute) {
 			String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
 			if ((unmutePerm == null) || (unmutePerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, unmutePerm)))) {
