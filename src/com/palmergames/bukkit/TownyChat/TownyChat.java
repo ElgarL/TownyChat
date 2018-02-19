@@ -1,16 +1,10 @@
 package com.palmergames.bukkit.TownyChat;
 
-import java.util.HashMap;
-
-import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
-import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.dynmap.DynmapAPI;
-
 import com.ensifera.animosity.craftirc.CraftIRC;
+import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
+import com.palmergames.bukkit.TownyChat.Command.commandobjects.ChannelJoinAliasCommand;
+import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
@@ -19,6 +13,19 @@ import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.dynmap.DynmapAPI;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * TownyChat plugin to manage all Towny chat
@@ -74,6 +81,7 @@ public class TownyChat extends JavaPlugin {
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
 		getCommand("channel").setExecutor(new ChannelCommand(this));
+		registerObjectCommands();
 	}
 	
 	private void loadConfigs() {
@@ -217,5 +225,28 @@ public class TownyChat extends JavaPlugin {
 		return heroicDeathListener;
 	}
 
+	private void registerObjectCommands() {
+		List<Command> commands = new ArrayList<Command>();
+		for (Channel channel : channels.getAllChannels().values()) { // All channels
+			for (String cmd : channel.getCommands()) { // All Commands of All Channels
+				commands.add(new ChannelJoinAliasCommand(cmd, channel, this));
+			}
+		}
+		try {
+			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
+			bukkitCommandMap.setAccessible(true);
+			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+
+			commandMap.registerAll("towny", commands);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public TownyChatPlayerListener getTownyPlayerListener() {
+		return TownyPlayerListener;
+	}
 }
