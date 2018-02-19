@@ -30,7 +30,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 	static {
 
-		channel_help.add(ChatTools.formatTitle("/Channel"));
+		channel_help.add(ChatTools.formatTitle("/channel"));
 		//TODO: Add lang strings for description!
 		channel_help.add(ChatTools.formatCommand("", "/channel", "join [Channel]", ""));
 		channel_help.add(ChatTools.formatCommand("", "/channel", "leave [Channel]", ""));

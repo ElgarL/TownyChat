@@ -78,7 +78,7 @@ public class TownyChat extends JavaPlugin {
 	
 	private void loadConfigs() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
-		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + FileMgmt.fileSeparator() + "chatconfig.yml", this.getDescription().getVersion()))
+		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + FileMgmt.fileSeparator() + "ChatConfig.yml", this.getDescription().getVersion()))
 			chatConfigError = true;
 		if (!channelsConfig.loadChannels(getChannelsPath(), "Channels.yml"))
 			channelsConfigError = true;

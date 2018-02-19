@@ -1,51 +1,63 @@
 package com.palmergames.bukkit.TownyChat.Command;
 
+import com.palmergames.bukkit.TownyChat.TownyChat;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.command.BaseCommand;
+import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ElgarL
- *
  */
-public class TownyChatCommand implements CommandExecutor {
+public class TownyChatCommand extends BaseCommand implements CommandExecutor {
 
 	private TownyChat plugin;
-	/**
-	 * 
-	 */
+	private static final List<String> townychat_help = new ArrayList<String>();
+
+	static {
+
+		townychat_help.add(ChatTools.formatTitle("/townychat"));
+		//TODO: Add lang strings for description!
+		townychat_help.add(ChatTools.formatCommand("", "/townychat", "reload", ""));
+	}
+
 	public TownyChatCommand(TownyChat instance) {
 		this.plugin = instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,	String[] args) {
-		
-		if (label.equalsIgnoreCase("townychat")) {
-			
-			if (args.length != 1) {
-				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("tc_err_invalid_command"));
-				return false;
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+		if (cmd.getName().equalsIgnoreCase("townychat")) {
+			parseTownyChatCommand(sender, args);
+			return true;
+		}
+		return false;
+	}
+
+	private void parseTownyChatCommand(CommandSender sender, String[] split) {
+		if (split.length == 0) { // So they just type /channel , We should probably send them to the help menu..
+			for (String line : townychat_help) {
+				sender.sendMessage(line);
 			}
-			
-			if (args[0].equalsIgnoreCase("reload")) {
-				plugin.reload();
-				TownyMessaging.sendMsg(sender, TownySettings.getLangString("tc_settings_reloaded"));
-				return true;
+		} else if (split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
+			for (String line : townychat_help) {
+				sender.sendMessage(line);
 			}
-			
-			
+		} else if (split[0].equalsIgnoreCase("reload")) {
+			plugin.reload();
+			TownyMessaging.sendMsg(sender, TownySettings.getLangString("tc_settings_reloaded"));
+		} else {
+			TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("tc_err_unrecognized_command_format"));
 		}
 
-		TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("tc_err_unrecognized_command_format"));
-		return false;
 	}
 
 }
