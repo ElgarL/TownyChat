@@ -33,7 +33,7 @@ public class TownyChatPlayerListener implements Listener  {
 	private TownyChat plugin;
 	
 	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
-	private WeakHashMap<Player, String> directedChat = new WeakHashMap<Player, String>();
+	public WeakHashMap<Player, String> directedChat = new WeakHashMap<Player, String>();
 
 	public TownyChatPlayerListener(TownyChat instance) {
 		this.plugin = instance;
@@ -68,92 +68,6 @@ public class TownyChatPlayerListener implements Listener  {
 			// If the channel is auto join, they will be added
 			// If the channel is not auto join, they will marked as absent
 			channel.forgetPlayer(name);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		
-		final Player player = event.getPlayer();
-
-		// Test if this player is registered with Towny.
-		try {
-			TownyUniverse.getDataSource().getResident(player.getName());
-		} catch (NotRegisteredException e) {
-			return;
-		}
-		String split[] = event.getMessage().split("\\ ");
-		String command = split[0].trim().toLowerCase().replace("/", "");
-		String message = "";
-
-		if (split.length > 1)
-			message = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
-
-		// Check if they used a channel command or alias
-		Channel channel = plugin.getChannelsHandler().getChannel(player, command);
-		if (channel != null) {
-			/*
-			 *  If there is no message toggle the chat mode.
-			 */
-			if (message.isEmpty()) {
-				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
-					// Find what the next channel is if any
-					Channel nextChannel = null;
-					if (plugin.getChannelsHandler().getDefaultChannel() != null && plugin.getChannelsHandler().getDefaultChannel().isPresent(player.getName())) {
-						nextChannel = plugin.getChannelsHandler().getDefaultChannel();
-						if (!nextChannel.getName().equalsIgnoreCase(channel.getName())) {
-							TownyUtil.removeAndSetPlayerMode(plugin.getTowny(), player, channel.getName(), nextChannel.getName(), true);
-						} else {
-							// They're talking on default channel and want to leave but can't because they'll be put default again
-							// Their only option out is to leave the channel if they have permission to do so.
-							TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_you_are_already_talking_in_default_channel_help"));
-						}
-					} else {
-						plugin.getTowny().removePlayerMode(player);
-					}
-					
-					if (nextChannel == null) {
-						nextChannel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
-					}
-					
-					// If the new channel is not us, announce it
-					if (nextChannel != null && !channel.getName().equalsIgnoreCase(nextChannel.getName())) {
-						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_you_are_now_talking_in_channel"), channel.getName()));
-					}
-				}
-				else {
-					plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
-					TownyMessaging.sendMsg(player,  String.format(TownySettings.getLangString("tc_you_are_now_talking_in_channel"), channel.getName()));
-				}
-			} else {
-				// Notify player he is muted
-				if (channel.isMuted(player.getName())) {
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
-					event.setCancelled(true);
-					return;
-				}
-				
-				/*
-				 * Flag this as directed chat and trigger a player chat event
-				 */
-				event.setMessage(message);
-				
-				directedChat.put(player, command);
-				
-				final String msg = message;
-				
-				// Fire this Async so we match other incoming chat.
-				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-
-					@Override
-					public void run() {
-
-						player.chat(msg);
-						
-					}});
-			}
-			
-			event.setCancelled(true);
 		}
 	}
 	
