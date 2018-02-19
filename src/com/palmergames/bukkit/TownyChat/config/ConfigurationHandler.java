@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
+
 import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
@@ -41,7 +44,15 @@ public class ConfigurationHandler {
 
 		String filename = filepath + FileMgmt.fileSeparator() + defaultRes;
 
-		Map<String, Object> file = FileMgmt.getFile(filename, defaultRes, null);
+		Map<String, Object> file;
+		try {
+			file = FileMgmt.getFile(filename, defaultRes, null);
+		} catch (Exception e) {
+			Bukkit.getLogger().severe("[TownyChat] Failed to load Channels.yml!");
+			Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
+			Bukkit.getLogger().severe("[TownyChat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
+			return false;
+		}
 		if (file != null) {
 
 			for (String rootNode : file.keySet()) {

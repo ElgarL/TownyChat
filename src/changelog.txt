@@ -215,6 +215,7 @@ v0.51:
       - default: everyone
       - Provides the ability to reset chat formatting to default using &r.
 v0.52:
+    - This Build Requires Towny version 0.92.0.10 or newer!
     - Commented configuration now in effect on the ChatConfig.yml
       - This means that new config nodes will be automatically added (just like in Towny.)
       - pre-0.52 chatconfig files will load but will be slightly out of order. 
@@ -225,3 +226,5 @@ v0.52:
         - compare the two chatconfigs and when your new chatconfig.yml is configured save it and use '/townychat reload'.
       - The worlds section of the chatconfig will not auto-generate until the modify_chat.enable setting is set to true.
         - If you do not see a worlds section and want to use per-world chat, set the modify_chat.enable setting to true and use '/townychat reload'.
+    - All strings have been made translate-able. Failure to use Towny Version 0.92.0.10 or newer will mean you see no messages.
+    - Improved error seen when channels.yml or chatconfig.yml will not load.

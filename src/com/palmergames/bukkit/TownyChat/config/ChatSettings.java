@@ -6,6 +6,7 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -32,22 +33,26 @@ public class ChatSettings extends tag_formats {
 	 * 
 	 * @param filepath - Location of chatconfig.yml.
 	 * @param version - TownyChat version from plugin.yml.
+	 * @return 
 	 * @throws IOException
 	 */
-	public static void loadNewConfig(String filepath, String version) throws IOException {
+	public static boolean loadCommentedConfig(String filepath, String version) {
 
 		File file = FileMgmt.CheckYMLExists(new File(filepath));
 		if (file != null) {
 
 			// read the config.yml into memory
 			ChatSettings.chatConfig = new CommentedConfiguration(file);			
-			if (!chatConfig.load())
-				System.out.print("Failed to load ChatConfig!");
-
+			if (!chatConfig.load()) {
+				Bukkit.getLogger().severe("[TownyChat] Failed to load ChatConfig!");
+				Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
+				Bukkit.getLogger().severe("[TownyChat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
+				return false;
+			}
 			setDefaults(version, file);
-
-			chatConfig.save();
+			chatConfig.save();			
 		}
+		return true;
 	}
 	
 	/**

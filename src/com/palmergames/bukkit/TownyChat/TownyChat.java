@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.TownyChat;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
@@ -42,6 +41,9 @@ public class TownyChat extends JavaPlugin {
 	
 	private CraftIRCHandler irc = null;
 	private HeroicDeathForwarder heroicDeathListener = null;
+	
+	boolean chatConfigError = false;
+	boolean channelsConfigError = false;
 
 
 	@Override
@@ -50,20 +52,16 @@ public class TownyChat extends JavaPlugin {
 		pm = getServer().getPluginManager();
 		channelsConfig = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
-
-		checkPlugins();
-
-		try {
-			ChatSettings.loadNewConfig(getTowny().getDataFolder().getPath() + FileMgmt.fileSeparator() + "settings" + FileMgmt.fileSeparator() + "chatconfig.yml", this.getDescription().getVersion());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		checkPlugins();		
+		loadConfigs();
+		
 		/*
 		 * This executes the task with a 1 tick delay avoiding the bukkit
 		 * depends bug.
 		 */
 		if ((towny == null) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)
-			|| (!load())) {
+			|| (channelsConfigError) || (chatConfigError)) {
 			/*
 			 * We either failed to find Towny or the Scheduler failed to
 			 * register the task.
@@ -78,13 +76,13 @@ public class TownyChat extends JavaPlugin {
 		getCommand("channel").setExecutor(new ChannelCommand(this));
 	}
 	
-	private boolean load() {
+	private void loadConfigs() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
-		return channelsConfig.loadChannels(getChannelsPath(), "Channels.yml");
+		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + FileMgmt.fileSeparator() + "chatconfig.yml", this.getDescription().getVersion()))
+			chatConfigError = true;
+		if (!channelsConfig.loadChannels(getChannelsPath(), "Channels.yml"))
+			channelsConfigError = true;
 	}
-	
-
-
 	@Override
 	public void onDisable() {
 		unregisterPermissions();

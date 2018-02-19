@@ -164,7 +164,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channle_called"), split[0]));
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called_channel"), split[0]));
 			return;
 		}
 
@@ -191,7 +191,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_players_muted_in_channel"), count, chan.getName(), players));
+		TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_players_muted_in_channel_players"), count, chan.getName(), players));
 	}
 
 	public static void parseChannelMute(Player player, String[] split, boolean mute) {
@@ -227,7 +227,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called"), split[0]));
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called_channel"), split[0]));
 			return;
 		}
 
@@ -253,15 +253,15 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (!chan.mute(split[1])) {
-				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_already_muted_in"), chan.getName()));
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_already_muted_in_channel"), chan.getName()));
 				return;
 			}
 
-			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_is_now_muted_in"), split[1], chan.getName()));
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_is_now_muted_in_channel"), split[1], chan.getName()));
 		} else if (!mute) {
 			String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
 			if ((unmutePerm == null) || (unmutePerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, unmutePerm)))) {
-				TownyMessaging.sendErrorMsg(player, "[TownyChat] You don't have unmute permissions");
+				TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_you_dont_have_unmute_perm"));
 				return;
 			}
 
@@ -269,11 +269,11 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 
 			if (!chan.unmute(split[1])) {
-				TownyMessaging.sendMsg(player, "[TownyChat] Player is not muted in " + Colors.White + chan.getName());
+				TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_is_not_muted_in_channel"), chan.getName()));
 				return;
 			}
 
-			TownyMessaging.sendMsg(player, "[TownyChat] " + Colors.White + split[1] + Colors.Green + " is now unmuted in " + Colors.White + chan.getName());
+			TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_player_is_now_unmuted_in_channel"), split[1], chan.getName()));
 			return;
 		}
 	}
@@ -303,7 +303,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called"), split[0]));
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called_channel"), split[0]));
 			return;
 		}
 
@@ -315,18 +315,18 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		if (leavePerm == null ||
 				(leavePerm != null && (!plugin.getTowny().isPermissions() ||
 						(plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, leavePerm))))) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] You cannot leave " + Colors.White + chan.getName());
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_leave_channel"), chan.getName()));
 			return;
 		}
 
 		// If we fail you weren't in there to start with
 		if (!chan.leave(player.getName())) {
-			TownyMessaging.sendMessage(player, "[TownyChat] You already left " + Colors.White + chan.getName());
+			TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_you_already_left_channel"), chan.getName()));
 			return;
 		}
 
 		// Announce it
-		TownyMessaging.sendMessage(player, "[TownyChat] You left " + Colors.White + chan.getName());
+		TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_you_left_channel"), chan.getName()));
 
 		// Find what the next channel is if any
 		Channel nextChannel = null;
@@ -342,7 +342,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 		// If the new channel is not us, announce it
 		if (nextChannel != null && !chan.getName().equalsIgnoreCase(nextChannel.getName())) {
-			TownyMessaging.sendMessage(player, "[TownyChat] You are now talking in " + Colors.White + nextChannel.getName());
+			TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_you_are_now_talking_in_channel"),nextChannel.getName()));
 		}
 	}
 
@@ -372,7 +372,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called"), split[0]));
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called_channel"), split[0]));
 			return;
 		}
 		// You can join if:
@@ -382,15 +382,15 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		//     - player has channel permission
 		String joinPerm = chan.getPermission();
 		if ((joinPerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, joinPerm)))) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] You cannot join " + Colors.White + chan.getName());
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), chan.getName()));
 			return;
 		}
 
 		if (!chan.join(player.getName())) {
-			TownyMessaging.sendMessage(player, "[TownyChat] You are already in " + Colors.White + chan.getName());
+			TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_you_are_already_in_channel"), chan.getName()));
 			return;
 		}
 
-		TownyMessaging.sendMessage(player, "[TownyChat] You joined " + Colors.White + chan.getName());
+		TownyMessaging.sendMessage(player, String.format(TownySettings.getLangString("tc_you_joined_channel"), chan.getName()));
 	}
 }

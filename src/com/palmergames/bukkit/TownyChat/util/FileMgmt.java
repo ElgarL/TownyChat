@@ -101,7 +101,6 @@ public class FileMgmt {
 				return (Map<String, Object>) channelsRootDataNode;
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

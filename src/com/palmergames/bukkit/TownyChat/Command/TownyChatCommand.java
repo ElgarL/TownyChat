@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 
 /**
  * @author ElgarL
@@ -30,20 +31,20 @@ public class TownyChatCommand implements CommandExecutor {
 		if (label.equalsIgnoreCase("townychat")) {
 			
 			if (args.length != 1) {
-				TownyMessaging.sendErrorMsg(sender, "[TownyChat] Error: Invalid command!");
+				TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("tc_err_invalid_command"));
 				return false;
 			}
 			
 			if (args[0].equalsIgnoreCase("reload")) {
 				plugin.reload();
-				TownyMessaging.sendMsg(sender, "[TownyChat] Settings reloaded!");
+				TownyMessaging.sendMsg(sender, TownySettings.getLangString("tc_settings_reloaded"));
 				return true;
 			}
 			
 			
 		}
 
-		TownyMessaging.sendErrorMsg(sender, "[TownyChat] Error: unrecognised command format!");
+		TownyMessaging.sendErrorMsg(sender, TownySettings.getLangString("tc_err_unrecognized_command_format"));
 		return false;
 	}
 
