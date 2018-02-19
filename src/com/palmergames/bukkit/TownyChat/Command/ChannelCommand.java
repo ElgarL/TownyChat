@@ -303,7 +303,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] There is no channel called " + Colors.White + split[0]);
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called"), split[0]));
 			return;
 		}
 
@@ -372,7 +372,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (chan == null) {
-			TownyMessaging.sendErrorMsg(player, "[TownyChat] There is no channel called " + Colors.White + split[0]);
+			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_channel_called"), split[0]));
 			return;
 		}
 		// You can join if:
