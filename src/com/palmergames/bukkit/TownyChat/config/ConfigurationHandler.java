@@ -48,9 +48,9 @@ public class ConfigurationHandler {
 		try {
 			file = FileMgmt.getFile(filename, defaultRes, null);
 		} catch (Exception e) {
-			Bukkit.getLogger().severe("[Chat] Failed to load Channels.yml!");
-			Bukkit.getLogger().severe("[Chat] Please check that the file passes a YAML Parser test:");
-			Bukkit.getLogger().severe("[Chat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
+			Bukkit.getLogger().severe("[TownyChat] Failed to load Channels.yml!");
+			Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
+			Bukkit.getLogger().severe("[TownyChat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
 			return false;
 		}
 		if (file != null) {
