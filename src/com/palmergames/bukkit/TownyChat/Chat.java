@@ -144,7 +144,7 @@ public class Chat extends JavaPlugin {
 			test = pm.getPlugin("HeroicDeath");
 			if (test != null) {
 				heroicDeathListener = new HeroicDeathForwarder(irc);
-				getLogger().info("[Chat] Found and attempting to relay Heroic Death messages to craftIRC.");
+				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
 			}
 		}
 		

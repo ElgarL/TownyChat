@@ -44,9 +44,9 @@ public class ChatSettings extends tag_formats {
 			// read the config.yml into memory
 			ChatSettings.chatConfig = new CommentedConfiguration(file);			
 			if (!chatConfig.load()) {
-				Bukkit.getLogger().severe("[Chat] Failed to load ChatConfig!");
-				Bukkit.getLogger().severe("[Chat] Please check that the file passes a YAML Parser test:");
-				Bukkit.getLogger().severe("[Chat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
+				Bukkit.getLogger().severe("[TownyChat] Failed to load ChatConfig!");
+				Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
+				Bukkit.getLogger().severe("[TownyChat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
 				return false;
 			}
 			setDefaults(version, file);
@@ -132,7 +132,7 @@ public class ChatSettings extends tag_formats {
 	}
 	
 	private static void sendError(String msg) {
-		System.out.println("[Chat] Error could not read " + msg);
+		System.out.println("[TownyChat] Error could not read " + msg);
 	}
 	
 	private static boolean perWorld() {
