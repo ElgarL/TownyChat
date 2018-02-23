@@ -52,10 +52,10 @@ import com.palmergames.bukkit.towny.Towny;
 public class CraftIRCHandler extends BasePoint implements CommandEndPoint   {
 
 	Towny towny;
-	TownyChat plugin;
+	Chat plugin;
 	CraftIRC irc;
 
-	public CraftIRCHandler(TownyChat plugin, CraftIRC irc, String tag) {
+	public CraftIRCHandler(Chat plugin, CraftIRC irc, String tag) {
 
 		this.irc = irc;
 		this.plugin = plugin;

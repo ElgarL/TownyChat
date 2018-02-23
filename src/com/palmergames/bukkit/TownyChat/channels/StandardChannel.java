@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.palmergames.bukkit.TownyChat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
 
 import com.earth2me.essentials.User;
-import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
@@ -28,9 +28,9 @@ import com.palmergames.bukkit.util.Colors;
 
 public class StandardChannel extends Channel {
 
-	private TownyChat plugin;
+	private Chat plugin;
 	
-	public StandardChannel(TownyChat instance, String name) {
+	public StandardChannel(Chat instance, String name) {
 		super(name);
 		this.plugin = instance;
 	}

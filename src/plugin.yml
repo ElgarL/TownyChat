@@ -1,5 +1,5 @@
-name: TownyChat
-main: com.palmergames.bukkit.TownyChat.TownyChat
+name: Chat
+main: com.palmergames.bukkit.Chat.Chat
 version: 0.52
 author: ElgarL, Shade, phrstbrn
 website: http://towny.palmergames.com/towny/townychat/
@@ -10,7 +10,7 @@ softdepend: [Towny, CraftIRC]
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                 TownyChat commands                   | #
+# |                 Chat commands                   | #
 # +------------------------------------------------------+ #
 ############################################################
 commands:

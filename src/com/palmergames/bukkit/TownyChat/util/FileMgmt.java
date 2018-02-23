@@ -13,7 +13,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
+import com.palmergames.bukkit.TownyChat.Chat;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
@@ -61,7 +61,7 @@ public class FileMgmt {
 		return null;
 	}
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getFile(String filepath, String resource, TownyChat plugin) {
+	public static Map<String, Object> getFile(String filepath, String resource, Chat plugin) {
 
 		try {
 			File f = new File(filepath);

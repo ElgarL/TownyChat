@@ -28,14 +28,14 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * TownyChat plugin to manage all Towny chat
+ * Chat plugin to manage all Towny chat
  * 
  * Website: http://code.google.com/a/eclipselabs.org/p/towny/
  * 
  * @author ElgarL
  */
 
-public class TownyChat extends JavaPlugin {
+public class Chat extends JavaPlugin {
 
 	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;
@@ -74,7 +74,7 @@ public class TownyChat extends JavaPlugin {
 			 * register the task.
 			 */
 			getLogger().severe("Could not schedule onLoadedTask.");
-			getLogger().severe("disabling TownyChat");
+			getLogger().severe("disabling Chat");
 			pm.disablePlugin(this);
 			return;
 		}
@@ -144,7 +144,7 @@ public class TownyChat extends JavaPlugin {
 			test = pm.getPlugin("HeroicDeath");
 			if (test != null) {
 				heroicDeathListener = new HeroicDeathForwarder(irc);
-				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
+				getLogger().info("[Chat] Found and attempting to relay Heroic Death messages to craftIRC.");
 			}
 		}
 		

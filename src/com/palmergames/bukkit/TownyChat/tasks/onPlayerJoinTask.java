@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat.tasks;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
+import com.palmergames.bukkit.TownyChat.Chat;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.TownyChat.channels.Channel;
@@ -14,12 +14,12 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class onPlayerJoinTask implements Runnable {
 	
-	TownyChat plugin;
+	Chat plugin;
 	Towny towny;
 	Player player;
 	String mode;
 	
-	public onPlayerJoinTask(TownyChat plugin, Player player, Channel defaultChannel) {
+	public onPlayerJoinTask(Chat plugin, Player player, Channel defaultChannel) {
         super();
         this.plugin = plugin;
         this.towny = plugin.getTowny();

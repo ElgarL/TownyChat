@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.palmergames.bukkit.TownyChat.Chat;
 import org.bukkit.Bukkit;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
 import com.palmergames.bukkit.TownyChat.channels.channelFormats;
@@ -18,13 +18,13 @@ import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 
 public class ConfigurationHandler {
 	
-	private TownyChat plugin;
+	private Chat plugin;
 	
 	/** Constructor
 	 * 
 	 * @param plugin
 	 */
-	public ConfigurationHandler(TownyChat plugin) {
+	public ConfigurationHandler(Chat plugin) {
 		super();
 		this.plugin = plugin;
 	}
@@ -48,9 +48,9 @@ public class ConfigurationHandler {
 		try {
 			file = FileMgmt.getFile(filename, defaultRes, null);
 		} catch (Exception e) {
-			Bukkit.getLogger().severe("[TownyChat] Failed to load Channels.yml!");
-			Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
-			Bukkit.getLogger().severe("[TownyChat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
+			Bukkit.getLogger().severe("[Chat] Failed to load Channels.yml!");
+			Bukkit.getLogger().severe("[Chat] Please check that the file passes a YAML Parser test:");
+			Bukkit.getLogger().severe("[Chat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
 			return false;
 		}
 		if (file != null) {
