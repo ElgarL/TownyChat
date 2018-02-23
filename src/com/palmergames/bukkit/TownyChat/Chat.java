@@ -28,14 +28,14 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * TownyChat plugin to manage all Towny chat
+ * Chat plugin to manage all Towny chat
  * 
  * Website: http://code.google.com/a/eclipselabs.org/p/towny/
  * 
  * @author ElgarL
  */
 
-public class TownyChat extends JavaPlugin {
+public class Chat extends JavaPlugin {
 
 	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;

@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat.Command;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
+import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.BaseCommand;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class TownyChatCommand extends BaseCommand implements CommandExecutor {
 
-	private TownyChat plugin;
+	private Chat plugin;
 	private static final List<String> townychat_help = new ArrayList<String>();
 
 	static {
@@ -27,7 +27,7 @@ public class TownyChatCommand extends BaseCommand implements CommandExecutor {
 		townychat_help.add(ChatTools.formatCommand("", "/townychat", "reload", ""));
 	}
 
-	public TownyChatCommand(TownyChat instance) {
+	public TownyChatCommand(Chat instance) {
 		this.plugin = instance;
 	}
 

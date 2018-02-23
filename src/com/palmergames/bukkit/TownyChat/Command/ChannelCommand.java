@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat.Command;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
+import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
-	private static TownyChat plugin;
+	private static Chat plugin;
 	private static final List<String> channel_help = new ArrayList<String>();
 
 	static {
@@ -41,7 +41,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public ChannelCommand(TownyChat instance) {
+	public ChannelCommand(Chat instance) {
 		plugin = instance;
 	}
 

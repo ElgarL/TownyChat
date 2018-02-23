@@ -51,7 +51,7 @@ public class AsyncChatHookEvent extends Event {
 	}
 
 	/*
-	 * Informs TownyChat if the event was changed or not
+	 * Informs Chat if the event was changed or not
 	 */
 	public void setChanged(boolean changed) {
 		this.changed = changed;

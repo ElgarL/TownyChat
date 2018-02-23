@@ -32,7 +32,7 @@ public class ChatSettings extends tag_formats {
 	/**
 	 * 
 	 * @param filepath - Location of chatconfig.yml.
-	 * @param version - TownyChat version from plugin.yml.
+	 * @param version - Chat version from plugin.yml.
 	 * @return 
 	 * @throws IOException
 	 */

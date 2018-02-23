@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.TownyChat.Command.commandobjects;
 
-import com.palmergames.bukkit.TownyChat.TownyChat;
+import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 
 public class ChannelJoinAliasCommand extends BukkitCommand {
 	public Channel channel;
-	public TownyChat plugin;
+	public Chat plugin;
 
-	public ChannelJoinAliasCommand(String name, Channel channel, TownyChat plugin) {
+	public ChannelJoinAliasCommand(String name, Channel channel, Chat plugin) {
 		super(name);
 		this.channel = channel;
 		this.plugin = plugin;
