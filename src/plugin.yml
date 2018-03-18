@@ -1,10 +1,10 @@
-name: Chat
+name: TownyChat
 main: com.palmergames.bukkit.TownyChat.Chat
 version: 0.52
-author: ElgarL, Shade, phrstbrn
+authors: [ElgarL, Shade, phrstbrn, LlmDl]
 website: http://towny.palmergames.com/towny/townychat/
 description: >
-    TownyChat plugin which hooks Towny.
+    TownyChat plugin which hooks into Towny.
 
 softdepend: [Towny, CraftIRC]
 
