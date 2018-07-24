@@ -228,3 +228,5 @@ v0.52:
         - If you do not see a worlds section and want to use per-world chat, set the modify_chat.enable setting to true and use '/townychat reload'.
     - All strings have been made translate-able. Failure to use Towny Version 0.92.0.10 or newer will mean you see no messages.
     - Improved error seen when channels.yml or chatconfig.yml will not load.
+v0.53:
+    - Fix botched-up Chat name in plugin.yml
