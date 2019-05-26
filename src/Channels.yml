@@ -38,6 +38,7 @@ Channels:
         channeltag: '&f[g]'
         messagecolour: '&f'
         permission: 'towny.chat.general'
+        default: true
         craftIRCTag: 'admin'
         range: '-1'
         

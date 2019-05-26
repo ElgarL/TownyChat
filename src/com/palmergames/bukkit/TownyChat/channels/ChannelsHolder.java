@@ -1,14 +1,14 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author ElgarL
@@ -37,7 +37,7 @@ public class ChannelsHolder {
 	}
 	
 	// Container for all channels
-	private Map<String,Channel> channels = new HashMap<String,Channel>();
+	private Map<String,Channel> channels = new LinkedHashMap<>();
 
 	/**
 	 * @return the channels

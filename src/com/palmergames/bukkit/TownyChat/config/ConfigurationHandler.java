@@ -1,18 +1,17 @@
 package com.palmergames.bukkit.TownyChat.config;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import com.palmergames.bukkit.TownyChat.Chat;
-import org.bukkit.Bukkit;
-
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
 import com.palmergames.bukkit.TownyChat.channels.channelFormats;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
+import org.bukkit.Bukkit;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -150,6 +149,11 @@ public class ConfigurationHandler {
 							plugin.getChannelsHandler().addChannel(channel);
 							
 							//System.out.print("Channel: " + channel.getName() + " : Type : " + channel.getType().name());
+						}
+						if (plugin.getChannelsHandler().getDefaultChannel() == null) {
+							// If there is no default channel set it to the first one that was parsed (the top one in the config)
+							// This is because not everyone knows that you need to add a default: true into the channels.yml to make it the default channel!
+							plugin.getChannelsHandler().setDefaultChannel(plugin.getChannelsHandler().getAllChannels().entrySet().iterator().next().getValue());
 						}
 						return true;
 						
