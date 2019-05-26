@@ -232,3 +232,4 @@ v0.53:
     - Fix botched-up Chat name in plugin.yml
 v0.54:
     - Fixed channels not using correct names, also fixed the default channel. Courtesy of Articdive.
+    - Fixed being able to join channels you don't have permission for. Courtesy of Articdive.
