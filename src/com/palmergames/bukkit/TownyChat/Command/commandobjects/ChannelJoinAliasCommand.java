@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
@@ -25,14 +26,14 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender commandSender, String s, String[] split) {
+	public boolean execute(CommandSender commandSender, String label, String[] args) {
 		if (commandSender instanceof Player) { // So a player has ran some /g command or something
 			if (channel.getCommands().contains(this.getName())) { // Should in theory always be true.
 				final Player player = (Player) commandSender;
 				final Channel defaultChannel = plugin.getChannelsHandler().getDefaultChannel();
 				String message = "";
-				if (split.length > 0) {
-					message = StringMgmt.join(split, " ");
+				if (args.length > 0) {
+					message = StringMgmt.join(args, " ");
 				}
 				if (message.isEmpty()) {
 					if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
@@ -83,13 +84,27 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
 						return true;
 					}
+					// You can speak in a channel if:
+					// - Towny doesn't recognize your permissions plugin
+					// - channel has no permission set [by default they don't] OR
+					//   - channel has permission set AND:
+					//     - player has channel permission
+					String joinPerm = channel.getPermission();
+					if ((joinPerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, joinPerm)))) {
+						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
+						return true;
+					}
 
 					plugin.getTownyPlayerListener().directedChat.put(player, this.getName());
 
 					final String msg = message;
 
-					// Fire this Async so we match other incoming chat.
-					plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> player.chat(msg));
+					// https://www.spigotmc.org/threads/plugins-triggering-commands-async.31815/
+					if (!Bukkit.isPrimaryThread()) {
+						Bukkit.getScheduler().runTask(plugin, () -> player.chat(msg));
+					} else {
+						player.chat(msg);
+					}
 					return true;
 				}
 			}

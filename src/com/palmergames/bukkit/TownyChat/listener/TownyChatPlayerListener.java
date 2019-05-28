@@ -1,9 +1,17 @@
 package com.palmergames.bukkit.TownyChat.listener;
 
-import java.util.WeakHashMap;
-
 import com.palmergames.bukkit.TownyChat.Chat;
-
+import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
+import com.palmergames.bukkit.TownyChat.channels.Channel;
+import com.palmergames.bukkit.TownyChat.channels.channelTypes;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
+import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,23 +21,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.TownyChat.channels.Channel;
-import com.palmergames.bukkit.TownyChat.channels.channelTypes;
-import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
-import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import java.util.WeakHashMap;
 
 public class TownyChatPlayerListener implements Listener  {
 	private Chat plugin;
 	
-	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<Player, Long>();
-	public WeakHashMap<Player, String> directedChat = new WeakHashMap<Player, String>();
+	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<>();
+	public WeakHashMap<Player, String> directedChat = new WeakHashMap<>();
 
 	public TownyChatPlayerListener(Chat instance) {
 		this.plugin = instance;
@@ -130,7 +128,8 @@ public class TownyChatPlayerListener implements Listener  {
 						return;
 					}
 
-					plugin.getLogger().info("onPlayerChat: Processing directed message for " + channel.getName());
+					// TODO: Give this a toggle in the debug mode, it's highly annoying and spams logs, it's been disabled for now.
+//					plugin.getLogger().info("onPlayerChat: Processing directed message for " + channel.getName());
 					channel.chatProcess(event);
 					return;
 				}
