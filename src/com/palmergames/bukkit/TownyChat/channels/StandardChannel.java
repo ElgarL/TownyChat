@@ -1,17 +1,7 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.palmergames.bukkit.TownyChat.Chat;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.dynmap.DynmapAPI;
-
 import com.earth2me.essentials.User;
+import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
@@ -25,6 +15,15 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.util.Colors;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.dynmap.DynmapAPI;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class StandardChannel extends Channel {
 
@@ -75,7 +74,7 @@ public class StandardChannel extends Channel {
 				return;
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
-			recipients = new HashSet<Player>(findRecipients(player, TownyUniverse.getOnlinePlayers(town)));
+			recipients = new HashSet<>(findRecipients(player, TownyUniverse.getOnlinePlayers(town)));
 			recipients = checkSpying(recipients);
 			break;
 		
@@ -85,23 +84,23 @@ public class StandardChannel extends Channel {
 				return;
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getNATION();
-			recipients = new HashSet<Player>(findRecipients(player, TownyUniverse.getOnlinePlayers(nation)));
+			recipients = new HashSet<>(findRecipients(player, TownyUniverse.getOnlinePlayers(nation)));
 			recipients = checkSpying(recipients);
 			break;
 			
 		case DEFAULT:
 			Format = ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
-			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(event.getRecipients())));
+			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 			
 		case GLOBAL:
 			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
-			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(event.getRecipients())));
+			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 			
 		case PRIVATE:
 			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
-			recipients = new HashSet<Player>(findRecipients(player, new ArrayList<Player>(event.getRecipients())));
+			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 		}
 		
@@ -181,7 +180,7 @@ public class StandardChannel extends Channel {
 	 * -1 = no limit
 	 * 0 = same world
 	 * any positive value = distance in blocks
-	 * 
+	 *
 	 * @param player1
 	 * @param player2
 	 * @param range
@@ -206,15 +205,15 @@ public class StandardChannel extends Channel {
 	
 	/**
 	 * Compile a list of valid recipients for this message.
-	 * 
+	 *
 	 * @param sender
 	 * @param list
 	 * @return Set containing a list of players for this message.
 	 */
 	private Set<Player> findRecipients(Player sender, List<Player> list) {
 		
-		Set<Player> recipients = new HashSet<Player>();
-		Boolean bEssentials = plugin.getTowny().isEssentials();
+		Set<Player> recipients = new HashSet<>();
+		boolean bEssentials = plugin.getTowny().isEssentials();
 		String sendersName = sender.getName();
 		
 		// Compile the list of recipients
@@ -257,20 +256,20 @@ public class StandardChannel extends Channel {
         }
         
         if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage()))
-        	sender.sendMessage(ChatSettings.getUsingAloneMessageString());        	
+        	sender.sendMessage(ChatSettings.getUsingAloneMessageString());
 
         return recipients;
 	}
 	
 	/**
 	 * Add all spying players to the recipients list.
-	 * 
+	 *
 	 * @param recipients
 	 * @return new recipients including spying.
 	 */
 	private Set<Player> checkSpying(Set<Player> recipients) {
 
-				
+		
 		// Compile the list of recipients with spy perms
 		for (Player test : plugin.getServer().getOnlinePlayers()) {
         	

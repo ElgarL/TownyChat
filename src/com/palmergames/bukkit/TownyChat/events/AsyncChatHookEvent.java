@@ -1,13 +1,12 @@
 package com.palmergames.bukkit.TownyChat.events;
 
-import java.util.Set;
-
+import com.palmergames.bukkit.TownyChat.channels.Channel;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import com.palmergames.bukkit.TownyChat.channels.Channel;
+import java.util.Set;
 
 /*
  * Allows other plugins to hook into a chat message being accepted into any of the channels
@@ -29,11 +28,12 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
  */
 public class AsyncChatHookEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-	protected AsyncPlayerChatEvent event = null;
-	protected boolean changed = false;
-	protected Channel channel=null;
+	protected AsyncPlayerChatEvent event;
+	protected boolean changed;
+	protected Channel channel;
 
 	public AsyncChatHookEvent(AsyncPlayerChatEvent event, Channel channel) {
+		super(true);
 		this.event = event;
 		this.changed = false;
 		this.channel = channel;
@@ -98,7 +98,7 @@ public class AsyncChatHookEvent extends Event {
 	}
 	
 	public void setCancelled(boolean cancel) {
-		changed = (cancel == true);
+		changed = (cancel);
 		event.setCancelled(cancel);
 	}
 
