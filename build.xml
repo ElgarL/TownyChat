@@ -39,7 +39,6 @@
 	</target>
 
 	<target name="jar" depends="compile">
-		<replace file="./src/plugin.yml" token="{BUILD_VER}" value="${env.TOWNYCHAT_BUILD_VER}"/>
 		<!-- Build the jar file -->
 		<jar basedir="${build}" destfile="${env.LIB}/TownyChat.jar">
 			<fileset dir="./src" includes="changelog.txt" />
