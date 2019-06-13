@@ -32,8 +32,8 @@ public class AsyncChatHookEvent extends Event {
 	protected boolean changed;
 	protected Channel channel;
 
-	public AsyncChatHookEvent(AsyncPlayerChatEvent event, Channel channel) {
-		super(true);
+	public AsyncChatHookEvent(AsyncPlayerChatEvent event, Channel channel, boolean async) {
+		super(async);
 		this.event = event;
 		this.changed = false;
 		this.channel = channel;
