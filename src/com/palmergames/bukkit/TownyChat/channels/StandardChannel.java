@@ -122,7 +122,7 @@ public class StandardChannel extends Channel {
         event.getRecipients().addAll(recipients);
         
         if (isHooked()) {
-        	AsyncChatHookEvent hookEvent = new AsyncChatHookEvent(event, this);
+        	AsyncChatHookEvent hookEvent = new AsyncChatHookEvent(event, this, !Bukkit.getServer().isPrimaryThread());
             Bukkit.getServer().getPluginManager().callEvent(hookEvent);
             if (hookEvent.isCancelled()) {
             	event.setCancelled(true);
