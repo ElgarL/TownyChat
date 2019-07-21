@@ -70,7 +70,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 						//   - channel has permission set AND:
 						//     - player has channel permission
 						String joinPerm = channel.getPermission();
-						if ((joinPerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, joinPerm)))) {
+						if ((joinPerm != null && !TownyUniverse.getPermissionSource().has(player, joinPerm))) {
 							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
 							return true;
 						}
@@ -90,7 +90,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 					//   - channel has permission set AND:
 					//     - player has channel permission
 					String joinPerm = channel.getPermission();
-					if ((joinPerm != null && (plugin.getTowny().isPermissions() && !TownyUniverse.getPermissionSource().has(player, joinPerm)))) {
+					if ((joinPerm != null && !TownyUniverse.getPermissionSource().has(player, joinPerm))) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
 						return true;
 					}

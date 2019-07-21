@@ -220,9 +220,9 @@ public class StandardChannel extends Channel {
         for (Player test : list) {
         	
         	/*
-        	 * If Not using permissions, or the player has the correct permission node.
+        	 * If the player has the correct permission node.
         	 */
-        	if (!plugin.getTowny().isPermissions() || (plugin.getTowny().isPermissions() && TownyUniverse.getPermissionSource().has(test, getPermission()))) {
+        	if (TownyUniverse.getPermissionSource().has(test, getPermission())) {
         		
         		/*
         		 * If the player is within range for this channel

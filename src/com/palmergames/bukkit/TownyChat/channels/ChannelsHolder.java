@@ -80,11 +80,8 @@ public class ChannelsHolder {
 		
 		for (Channel channel: channels.values()) {
 			if (channel.getCommands().contains(command.toLowerCase())) {
-				if (!plugin.getTowny().isPermissions()
-					|| (plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission()))
-														|| (channel.getPermission().isEmpty()))))
-					return channel;
-				
+				if (TownyUniverse.getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) 
+					return channel;				
 			}
 		}
 		return null;
@@ -109,9 +106,7 @@ public class ChannelsHolder {
 		for (Channel channel: channels.values()) {
 			if (!channel.isPresent(name)) continue;
 			if (!channel.getType().equals(type)) continue;
-			if (!plugin.getTowny().isPermissions() || 
-				(plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission())) || 
-						                               (channel.getPermission().isEmpty())))) {
+			if (TownyUniverse.getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) {
 				if (channel.getRange() == -1) {
 					global = channel;
 				} else if (channel.getRange() == 0) {
@@ -149,9 +144,7 @@ public class ChannelsHolder {
 		
 		for (Channel channel: channels.values()) {
 			if (!channel.getType().equals(type)) continue;
-			if (!plugin.getTowny().isPermissions() || 
-					(plugin.getTowny().isPermissions() && ((TownyUniverse.getPermissionSource().has(player, channel.getPermission())) || 
-							                               (channel.getPermission().isEmpty())))) {
+			if (TownyUniverse.getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())){
 				if (channel.getRange() == -1) {
 					global = channel;
 				} else if (channel.getRange() == 0) {
