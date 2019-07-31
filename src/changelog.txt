@@ -233,4 +233,7 @@ v0.53:
 v0.54:
     - Fixed channels not using correct names, also fixed the default channel. Courtesy of Articdive.
     - Fixed being able to join channels you don't have permission for. Courtesy of Articdive.
+v0.55:
     - Fix Async chat in Async threads, courtesy of Articdive.
+v0.56:
+    - Upgrade TownyChat to use the new Towny API (0.94.0.2+).

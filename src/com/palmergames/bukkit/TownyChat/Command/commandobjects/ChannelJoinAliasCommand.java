@@ -6,7 +6,7 @@ import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -70,7 +70,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 						//   - channel has permission set AND:
 						//     - player has channel permission
 						String joinPerm = channel.getPermission();
-						if ((joinPerm != null && !TownyUniverse.getPermissionSource().has(player, joinPerm))) {
+						if ((joinPerm != null && !TownyUniverse.getInstance().getPermissionSource().has(player, joinPerm))) {
 							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
 							return true;
 						}
@@ -90,7 +90,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 					//   - channel has permission set AND:
 					//     - player has channel permission
 					String joinPerm = channel.getPermission();
-					if ((joinPerm != null && !TownyUniverse.getPermissionSource().has(player, joinPerm))) {
+					if ((joinPerm != null && !TownyUniverse.getInstance().getPermissionSource().has(player, joinPerm))) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
 						return true;
 					}

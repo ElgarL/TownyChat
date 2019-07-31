@@ -7,13 +7,14 @@ import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class StandardChannel extends Channel {
 		String Format = "";
 		
 		try {
-			resident = TownyUniverse.getDataSource().getResident(player.getName());
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			nation = resident.getTown().getNation();
 		} catch (NotRegisteredException e1) {
@@ -74,7 +75,7 @@ public class StandardChannel extends Channel {
 				return;
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
-			recipients = new HashSet<>(findRecipients(player, TownyUniverse.getOnlinePlayers(town)));
+			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayers(town)));
 			recipients = checkSpying(recipients);
 			break;
 		
@@ -84,7 +85,7 @@ public class StandardChannel extends Channel {
 				return;
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getNATION();
-			recipients = new HashSet<>(findRecipients(player, TownyUniverse.getOnlinePlayers(nation)));
+			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayers(nation)));
 			recipients = checkSpying(recipients);
 			break;
 			
@@ -222,7 +223,7 @@ public class StandardChannel extends Channel {
         	/*
         	 * If the player has the correct permission node.
         	 */
-        	if (TownyUniverse.getPermissionSource().has(test, getPermission())) {
+        	if (TownyUniverse.getInstance().getPermissionSource().has(test, getPermission())) {
         		
         		/*
         		 * If the player is within range for this channel

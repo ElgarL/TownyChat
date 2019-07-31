@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
 import com.palmergames.bukkit.TownyChat.Chat;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -16,6 +16,7 @@ import java.util.Set;
  */
 public class ChannelsHolder {
 	
+	@SuppressWarnings("unused")
 	private Chat plugin;
 	private Channel defaultChan = null;
 	
@@ -53,6 +54,7 @@ public class ChannelsHolder {
 		this.channels = channels;
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public void addChannel(Channel chan) {
 		if (isChannel(chan.getName()))
 			channels.remove(chan);
@@ -80,7 +82,7 @@ public class ChannelsHolder {
 		
 		for (Channel channel: channels.values()) {
 			if (channel.getCommands().contains(command.toLowerCase())) {
-				if (TownyUniverse.getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) 
+				if (TownyUniverse.getInstance().getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) 
 					return channel;				
 			}
 		}
@@ -106,7 +108,7 @@ public class ChannelsHolder {
 		for (Channel channel: channels.values()) {
 			if (!channel.isPresent(name)) continue;
 			if (!channel.getType().equals(type)) continue;
-			if (TownyUniverse.getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) {
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) {
 				if (channel.getRange() == -1) {
 					global = channel;
 				} else if (channel.getRange() == 0) {
@@ -144,7 +146,7 @@ public class ChannelsHolder {
 		
 		for (Channel channel: channels.values()) {
 			if (!channel.getType().equals(type)) continue;
-			if (TownyUniverse.getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())){
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())){
 				if (channel.getRange() == -1) {
 					global = channel;
 				} else if (channel.getRange() == 0) {

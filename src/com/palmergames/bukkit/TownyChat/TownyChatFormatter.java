@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyUniverse;
 
 import java.util.regex.Pattern;
 
@@ -137,45 +137,45 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{group}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPlayerGroup(event.getEvent().getPlayer());
+				return TownyUniverse.getInstance().getPermissionSource().getPlayerGroup(event.getEvent().getPlayer());
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{permprefix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "prefix");
+				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "prefix");
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{permsuffix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "suffix");
+				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "suffix");
 			}
 		});
 
 		replacer.registerFormatReplacement(Pattern.quote("{permuserprefix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "userprefix");
+				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "userprefix");
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{permusersuffix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "usersuffix");
+				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "usersuffix");
 			}
 		});
 
 		replacer.registerFormatReplacement(Pattern.quote("{permgroupprefix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "groupprefix");
+				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "groupprefix");
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{permgroupsuffix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getPermissionSource().getPrefixSuffix(event.getResident(), "groupsuffix");
+				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "groupsuffix");
 			}
 		});
 

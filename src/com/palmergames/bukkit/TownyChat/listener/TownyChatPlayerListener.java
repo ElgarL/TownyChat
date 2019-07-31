@@ -11,7 +11,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -177,7 +177,7 @@ public class TownyChatPlayerListener implements Listener  {
 		if (ChatSettings.isModify_chat()) {
 			try {
 				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
-				Resident resident = TownyUniverse.getDataSource().getResident(player.getName());
+				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 
 				LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 				event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
