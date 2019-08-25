@@ -239,4 +239,5 @@ v0.56:
     - Upgrade TownyChat to use the new Towny API (0.94.0.2+).
 v0.57:
     - TownyChat now utilizes the Maven build system.
+      - EssentialsX Replaces Essentials for API, Dynmap-API is updated for Dynmap v3.
     - Removed CraftIRC and HeroicDeath as dependencies.
