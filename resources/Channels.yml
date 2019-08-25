@@ -39,7 +39,6 @@ Channels:
         messagecolour: '&f'
         permission: 'towny.chat.general'
         default: true
-        craftIRCTag: 'admin'
         range: '-1'
         
     town:
@@ -48,7 +47,6 @@ Channels:
         channeltag: '&f[&3TC&f]'
         messagecolour: '&b'
         permission: 'towny.chat.town'
-        craftIRCTag: 'admin'
         range: '-1'
          
     nation:
@@ -57,7 +55,6 @@ Channels:
         channeltag: '&f[&6NC&f]'
         messagecolour: '&e'
         permission: 'towny.chat.nation'
-        craftIRCTag: 'admin'
         range: '-1'
         
     admin:
@@ -66,7 +63,6 @@ Channels:
         channeltag: '&f[&4ADMIN&f]'
         messagecolour: '&c'
         permission: 'towny.chat.admin'
-        craftIRCTag: 'admin'
         range: '-1'
         
     mod:
@@ -75,7 +71,6 @@ Channels:
         channeltag: '&f[&9MOD&f]'
         messagecolour: '&5'
         permission: 'towny.chat.mod'
-        craftIRCTag: 'admin'
         range: '-1'
         
     local:
@@ -84,5 +79,4 @@ Channels:
         channeltag: '&f[local]'
         messagecolour: '&f'
         permission: 'towny.chat.local'
-        craftIRCTag: 'admin'
         range: '100'
