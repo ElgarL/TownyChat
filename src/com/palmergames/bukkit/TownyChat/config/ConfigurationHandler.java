@@ -133,10 +133,6 @@ public class ConfigurationHandler {
 								if (key.equalsIgnoreCase("leavepermission"))
 									if (element instanceof String)
 										channel.setLeavePermission(element.toString());
-
-								if (key.equalsIgnoreCase("craftIRCTag"))
-									if (element instanceof String)
-										channel.setCraftIRCTag(element.toString());
 		
 								if (key.equalsIgnoreCase("range"))
 									channel.setRange(Double.valueOf(element.toString()));
@@ -187,18 +183,6 @@ public class ConfigurationHandler {
 
 				if (Key.equalsIgnoreCase("spam_time"))
 					ChatSettings.setSpam_time( Double.parseDouble((file.get(Key)).toString()) );
-				
-				if (Key.equalsIgnoreCase("heroicdeathtoirc")) {
-					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
-					
-					for (String element : subNodes.keySet()) {
-						if (element.equalsIgnoreCase("enabled"))
-							ChatSettings.setHeroicDeathToIRC(Boolean.valueOf(subNodes.get(element).toString()));
-
-						if (element.equalsIgnoreCase("craftIRCTags"))
-							ChatSettings.setheroicDeathTags(subNodes.get(element).toString());
-					}
-				}
 
 				if (Key.equalsIgnoreCase("modify_chat")) {
 					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
@@ -367,10 +351,7 @@ public class ConfigurationHandler {
 //		
 //		
 //		newConfig = newConfig.replace("[spam_time]", (defaults)? "0.5" : Double.toString(ChatSettings.getSpam_time()));
-//		
-//		newConfig = newConfig.replace("[hd_enable]", (defaults)? "true" : Boolean.toString(ChatSettings.isHeroicDeathToIRC()));
-//		newConfig = newConfig.replace("[hd_tags]", (defaults)? "admin" : ChatSettings.getHeroicDeathTags());
-//		
+//
 //		newConfig = newConfig.replace("[globalformat]", (defaults)? global : ChatSettings.getFormatGroup("channel_formats").getGLOBAL());
 //		newConfig = newConfig.replace("[townformat]", (defaults)? town : ChatSettings.getFormatGroup("channel_formats").getTOWN());
 //		newConfig = newConfig.replace("[nationformat]", (defaults)? nation : ChatSettings.getFormatGroup("channel_formats").getNATION());

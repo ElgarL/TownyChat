@@ -1,2 +1,14 @@
-/bin/
-.idea/
+# IDEA Specific
+/.idea
+*.iml
+
+# Eclipse Specific
+.classpath
+.project
+.externalToolBuilders
+
+# Holdovers from the ol' Ant system
+/bin
+
+# Prevent Maven Leakage
+/target

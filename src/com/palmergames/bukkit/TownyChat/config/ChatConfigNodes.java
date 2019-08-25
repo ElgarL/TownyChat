@@ -76,18 +76,6 @@ public enum ChatConfigNodes {
 			"0.5",
 			"",
 			"# Spam_time set the minimum time between messages to be flagged as spam"),
-	HEROIC_DEATH_TO_IRC("HeroicDeathToIRC", 
-			"",
-			"",
-			"# If using our updated HeroicDeath.jar and craftIRC 3.1 (dev), you can",
-			"#configure what IRC channels you want death messages relayed to."),
-	HEROIC_DEATH_TO_IRC_ENABLED(
-			"HeroicDeathToIRC.enabled",
-			"true"),
-	HEROIC_DEATH_TO_IRC_CRAFTIRCTAGS(
-			"HeroicDeathToIRC.craftIRCTags",
-			"admin",
-			"# comma delimited list of craftIRC channel tags 'admin,blah,blah'."),
 	CHANNEL_FORMATS(
 			"channel_formats",
 			"",

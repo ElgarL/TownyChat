@@ -1,7 +1,7 @@
 name: TownyChat
 main: com.palmergames.bukkit.TownyChat.Chat
-version: 0.56
-api-version: 1.13
+version: ${project.version}
+api-version: ${project.bukkitAPIVersion}
 authors: [ElgarL, Shade, phrstbrn, LlmDl]
 website: http://towny.palmergames.com/towny/townychat/
 description: >

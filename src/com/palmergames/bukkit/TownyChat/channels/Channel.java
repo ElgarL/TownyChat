@@ -12,7 +12,7 @@ public abstract class Channel {
 	private String name;
 	private List<String> commands;
 	private channelTypes type;
-	private String channelTag, messageColour, permission, leavePermission, craftIRCTag;
+	private String channelTag, messageColour, permission, leavePermission;
 	private double range;
 	private boolean hooked=false;
 	private boolean autojoin=true;
@@ -92,21 +92,6 @@ public abstract class Channel {
 	 */
 	public void setPermission(String permission) {
 		this.permission = permission;
-	}
-	/**
-	 * @return the permission
-	 */
-	public String getCraftIRCTag() {
-		if ((craftIRCTag == null) || (craftIRCTag.isEmpty()))
-			return "admin";
-			
-		return craftIRCTag;
-	}
-	/**
-	 * @param craftIRCTag the CraftIRC channel Tag to set
-	 */
-	public void setCraftIRCTag(String craftIRCTag) {
-		this.craftIRCTag = craftIRCTag;
 	}
 	/**
 	 * @return the range

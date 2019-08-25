@@ -23,7 +23,6 @@ import java.util.Set;
  *      channeltag: '&f[g]'
  *      messagecolour: '&f'
  *      permission: 'towny.chat.general'
- *      craftIRCTag: 'admin'
  *      range: '-1'
  */
 public class AsyncChatHookEvent extends Event {

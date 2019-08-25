@@ -237,3 +237,6 @@ v0.55:
     - Fix Async chat in Async threads, courtesy of Articdive.
 v0.56:
     - Upgrade TownyChat to use the new Towny API (0.94.0.2+).
+v0.57:
+    - TownyChat now utilizes the Maven build system.
+    - Removed CraftIRC and HeroicDeath as dependencies.
