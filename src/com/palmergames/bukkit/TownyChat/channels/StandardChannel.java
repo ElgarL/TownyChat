@@ -144,16 +144,12 @@ public class StandardChannel extends Channel {
          * Perform any last channel specific functions
          * like logging this chat and relaying to Dynmap.
          */
-        String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
-        
         switch (exec) {
 		
 		case TOWN:
-			//plugin.getLogger().info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + msg));
 			break;
 		
 		case NATION:
-			//plugin.getLogger().info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + msg));
 			break;
 			
 		case DEFAULT:
@@ -205,6 +201,7 @@ public class StandardChannel extends Channel {
 	 * @param list
 	 * @return Set containing a list of players for this message.
 	 */
+	@SuppressWarnings("deprecation")
 	private Set<Player> findRecipients(Player sender, List<Player> list) {
 		
 		Set<Player> recipients = new HashSet<>();
