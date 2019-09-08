@@ -2,7 +2,6 @@ package com.palmergames.bukkit.TownyChat.channels;
 
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
-import com.palmergames.bukkit.TownyChat.CraftIRCHandler;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
@@ -143,7 +142,7 @@ public class StandardChannel extends Channel {
 
         /*
          * Perform any last channel specific functions
-         * like logging this chat and relaying to IRC/Dynmap.
+         * like logging this chat and relaying to Dynmap.
          */
         String msg = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s", event.getMessage());
         
@@ -168,12 +167,7 @@ public class StandardChannel extends Channel {
 				dynMap.postPlayerMessageToWeb(player, event.getMessage());
 			break;
 		}
-        
-        // Relay to IRC
-        CraftIRCHandler ircHander = plugin.getIRC();
-        if (ircHander != null)
-        	ircHander.IRCSender(msg, getCraftIRCTag());
-		
+
 	}
 
 	/**

@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.TownyChat;
 
-import com.ensifera.animosity.craftirc.CraftIRC;
 import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.Command.commandobjects.ChannelJoinAliasCommand;
@@ -8,7 +7,6 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
-import com.palmergames.bukkit.TownyChat.listener.HeroicDeathForwarder;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
@@ -43,12 +41,8 @@ public class Chat extends JavaPlugin {
 	
 	protected PluginManager pm;
 	private Towny towny = null;
-	private CraftIRC craftIRC = null;
 	private DynmapAPI dynMap = null;
-	
-	private CraftIRCHandler irc = null;
-	private HeroicDeathForwarder heroicDeathListener = null;
-	
+
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
 
@@ -95,15 +89,8 @@ public class Chat extends JavaPlugin {
 	public void onDisable() {
 		unregisterPermissions();
 		// reset any handles
-		
-		if (craftIRC != null) {
-			craftIRC.unregisterEndPoint("towny");
-			craftIRC = null;
-		}
-		irc = null;
-		
+
 		dynMap = null;
-		heroicDeathListener= null;
 		towny = null;
 		pm = null;
 		
@@ -128,26 +115,7 @@ public class Chat extends JavaPlugin {
 		test = pm.getPlugin("Towny");
 		if (test != null && test instanceof Towny)
 			towny = (Towny) test;
-		/**
-		 * Hook craftIRC
-		 */
-		test = pm.getPlugin("CraftIRC");
-		if (test != null) {
-			craftIRC = (CraftIRC) test;
-			irc = new CraftIRCHandler(this, craftIRC, "towny");
-		}
-		
-		/**
-		 * If we found craftIRC check for HeroicDeath
-		 */
-		if (irc != null) {
-			test = pm.getPlugin("HeroicDeath");
-			if (test != null) {
-				heroicDeathListener = new HeroicDeathForwarder(irc);
-				getLogger().info("[TownyChat] Found and attempting to relay Heroic Death messages to craftIRC.");
-			}
-		}
-		
+
 		test = pm.getPlugin("dynmap");
 		if (test != null) {
 			dynMap = (DynmapAPI) test;
@@ -162,8 +130,6 @@ public class Chat extends JavaPlugin {
 	
 			if (TownyPlayerListener != null)
 				pm.registerEvents(TownyPlayerListener, this);
-			if (heroicDeathListener != null)
-				pm.registerEvents(heroicDeathListener, this);
 		}
 		
 	}
@@ -213,16 +179,9 @@ public class Chat extends JavaPlugin {
 		return towny;
 	}
 	
-	public CraftIRCHandler getIRC() {
-		return irc;
-	}
-	
+
 	public DynmapAPI getDynmap() {
 		return dynMap;
-	}
-
-	public HeroicDeathForwarder getHeroicDeath() {
-		return heroicDeathListener;
 	}
 
 	private void registerObjectCommands() {
