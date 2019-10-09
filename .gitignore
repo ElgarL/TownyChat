@@ -12,3 +12,4 @@
 
 # Prevent Maven Leakage
 /target
+/.settings/

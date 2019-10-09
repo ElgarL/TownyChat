@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit</groupId>
     <artifactId>TownyChat</artifactId>
     <packaging>jar</packaging>
-    <version>0.57-SNAPSHOT</version>
+    <version>0.57</version>
 
     <licenses>
         <license>
@@ -44,9 +44,6 @@
     </scm>
 
     <repositories>
-        <!--TODO: Add Repositories for...
-            - Towny (if not building from local sources)
-        -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -60,18 +57,17 @@
             <url>http://repo.mikeprimm.com</url>
         </repository>
         <repository>
-            <!--Temporary: Switch to GitHub Packages after beta grant-->
-            <id>articdive-repo</id>
-            <url>https://nexus.articdive.de/repository/maven-releases</url>
+            <id>github-Towny</id>
+		    <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.palmergames</groupId>
-            <artifactId>Towny</artifactId>
-            <version>0.94.0.5</version>
-            <scope>provided</scope>
+   	        <groupId>com.palmergames.bukkit.towny</groupId>
+	        <artifactId>Towny</artifactId>
+	        <version>LATEST</version>
+	        <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
