@@ -131,7 +131,10 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{townycolor}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().isMayor() ? (event.getResident().isKing() ? ChatSettings.getKingColour() : ChatSettings.getMayorColour()) : ChatSettings.getResidentColour();
+				if (!event.getResident().hasTown())
+					return ChatSettings.getNomadColour();
+				else 
+					return event.getResident().isMayor() ? (event.getResident().isKing() ? ChatSettings.getKingColour() : ChatSettings.getMayorColour()) : ChatSettings.getResidentColour();
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{group}"), new TownyChatReplacerCallable() {

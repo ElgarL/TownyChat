@@ -356,7 +356,7 @@ class tag_formats extends chat_colours{
 
 class chat_colours {
 
-	private static String KING, MAYOR, RESIDENT;
+	private static String KING, MAYOR, RESIDENT, NOMAD;
 
 	/**
 	 * @return KING the KING colour
@@ -399,6 +399,18 @@ class chat_colours {
 	public static void setResidentColour(String colour) {
 		chat_colours.RESIDENT = colour;
 	}
-	
-}
+
+	/**
+	 * @return NOMAD the NOMAD colour
+	 */
+	public static String getNomadColour() {
+		return NOMAD;
+	}
+
+	/**
+	 * @param colour the NOMAD colour tag to set
+	 */
+	public static void setNomadColour(String colour) {
+		chat_colours.NOMAD = colour;
+	}}
 

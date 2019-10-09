@@ -128,6 +128,9 @@ public enum ChatConfigNodes {
 	COLOUR_RESIDENT(
 			"colour.resident",
 			"&f"),
+	COLOUR_NOMAD(
+			"colour.nomad",
+			"&f"),
 	MODIFY_CHAT(
 			"modify_chat",
 			"",

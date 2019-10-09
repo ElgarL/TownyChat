@@ -242,3 +242,6 @@ v0.57:
   - EssentialsX Replaces Essentials for API, Dynmap-API is updated for Dynmap v3.
   - Removed CraftIRC and HeroicDeath as dependencies.
   - Remove ignorecancelled=true from AsyncPlayerChatEvent in order to make TC respect other plugins' cancelling of chat in some places. 
+  - New ChatConfig option: chat_colour.nomad
+    - Default: &f
+    - You can now set the {townycolour} for players without a town.
