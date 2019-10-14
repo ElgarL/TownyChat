@@ -245,4 +245,4 @@ v0.57:
   - New ChatConfig option: chat_colour.nomad
     - Default: &f
     - You can now set the {townycolour} for players without a town.
-  - Fix missing space following {title} and {townyprefix} (when it is calling for a resident's title.)
+  - Fix missing space following the title in {townyprefix} (when there is no mayor/king prefix present.)
