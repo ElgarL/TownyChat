@@ -94,7 +94,7 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{title}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasTitle() ? event.getResident().getTitle() : "";
+				return event.getResident().hasTitle() ? event.getResident().getTitle() + " " : "";
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{surname}"), new TownyChatReplacerCallable() {
@@ -118,7 +118,7 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{townyprefix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasTitle() ? event.getResident().getTitle() : TownyFormatter.getNamePrefix(event.getResident());
+				return event.getResident().hasTitle() ? event.getResident().getTitle() + " " : TownyFormatter.getNamePrefix(event.getResident());
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{townypostfix}"), new TownyChatReplacerCallable() {
