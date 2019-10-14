@@ -15,6 +15,9 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.util.Colors;
+
+import me.clip.placeholderapi.PlaceholderAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -103,14 +106,15 @@ public class StandardChannel extends Channel {
 			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 		}
-		
+
 		/*
 		 * Perform all replace functions on this format
 		 */
-		//if (ChatSettings.isModify_chat())
-			event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
-		//else
-		//	event.setFormat(event.getFormat().replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
+		if (Chat.usingPlaceholderAPI) {	    	
+            Format = PlaceholderAPI.setPlaceholders(player, Format);
+	    }		
+
+		event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
 		
 		LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 		event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));

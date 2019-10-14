@@ -246,3 +246,4 @@ v0.57:
     - Default: &f
     - You can now set the {townycolour} for players without a town.
   - Fix missing space following the title in {townyprefix} (when there is no mayor/king prefix present.)
+  - Add support for PlaceholderAPI's placeholders in the chatconfig.yml's Channel_format lines.

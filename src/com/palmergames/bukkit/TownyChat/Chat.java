@@ -42,7 +42,8 @@ public class Chat extends JavaPlugin {
 	protected PluginManager pm;
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
-
+	
+	public static boolean usingPlaceholderAPI = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
 
@@ -119,6 +120,11 @@ public class Chat extends JavaPlugin {
 		test = pm.getPlugin("dynmap");
 		if (test != null) {
 			dynMap = (DynmapAPI) test;
+		}
+		
+		test = pm.getPlugin("PlaceholderAPI");
+		if (test != null) {
+		    usingPlaceholderAPI = true;
 		}
 
 	}
