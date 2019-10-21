@@ -249,3 +249,5 @@ v0.57:
   - Add support for PlaceholderAPI's placeholders in the chatconfig.yml's Channel_format lines.
 v0.58:
   - Drop API version back to 1.13 because there's a 0.95.0.0 for 1.13 that has the new TownyAPI in it.
+v0.59:
+  - Fix {townycolor} not rendering properly for nomads.

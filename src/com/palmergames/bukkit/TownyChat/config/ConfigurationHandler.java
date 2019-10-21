@@ -215,6 +215,9 @@ public class ConfigurationHandler {
 
 						if (element.equalsIgnoreCase("resident"))
 							ChatSettings.setResidentColour(subNodes.get(element).toString());
+						
+						if (element.equalsIgnoreCase("nomad"))
+							ChatSettings.setNomadColour(subNodes.get(element).toString());
 					}
 
 				}
