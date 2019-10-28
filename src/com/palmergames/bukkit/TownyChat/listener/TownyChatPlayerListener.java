@@ -65,8 +65,8 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
+		if (event.isCancelled()) return;
 		
 		Player player = event.getPlayer();
 		

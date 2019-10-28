@@ -251,3 +251,5 @@ v0.58:
   - Drop API version back to 1.13 because there's a 0.95.0.0 for 1.13 that has the new TownyAPI in it.
 v0.59:
   - Fix {townycolor} not rendering properly for nomads.
+v0.60:
+  - A more-thorough fix for TC still not respecting the cancelling of chat.
