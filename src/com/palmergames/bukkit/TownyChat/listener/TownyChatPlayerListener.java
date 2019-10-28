@@ -65,6 +65,7 @@ public class TownyChatPlayerListener implements Listener  {
 		}
 	}
 	
+	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		if (event.isCancelled()) return;
 		
