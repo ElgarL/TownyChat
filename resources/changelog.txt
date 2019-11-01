@@ -253,3 +253,7 @@ v0.59:
   - Fix {townycolor} not rendering properly for nomads.
 v0.60:
   - A more-thorough fix for TC still not respecting the cancelling of chat.
+v0.61:
+  - New Config Option: display_modes_set_on_join
+    - Default: true
+    - If true players will see [Towny] Modes set: general when they log in.

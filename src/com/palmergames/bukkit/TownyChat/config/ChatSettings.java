@@ -22,6 +22,7 @@ public class ChatSettings extends tag_formats {
 	private static boolean modify_chat;
 	private static boolean per_world;
 	private static boolean alone_message;
+	private static boolean display_modes_set_on_join;
 	private static String alone_message_string;
 
 	private static Map<String, channelFormats> formatGroups = new HashMap<String, channelFormats>();
@@ -231,14 +232,14 @@ public class ChatSettings extends tag_formats {
 	}
 	
 	/**
-	 * @param  alone_message
+	 * @param alone_message
 	 */
 	public static boolean setUsingAloneMessage(boolean alone_message) {
 		return ChatSettings.alone_message = alone_message;
 	}
 
 	/**
-	 * @param  alone_message_string
+	 * @param alone_message_string
 	 * @return 
 	 */
 	public static String setUsingAloneMessageString(String alone_message_string) {
@@ -246,10 +247,24 @@ public class ChatSettings extends tag_formats {
 	}
 	
 	/**
-	 * @return 
+	 * @return the alone_message_string
 	 */
 	public static String getUsingAloneMessageString() {
 		return ChatSettings.alone_message_string;
+	}
+	
+	/**
+	 * @param display_modes_set_on_join
+	 */
+	public static boolean setDisplayModesSetOnJoin(boolean display_modes_set_on_join) {
+		return ChatSettings.display_modes_set_on_join = display_modes_set_on_join;
+	}
+	
+	/**
+	 * @return the display_modes_set_on_join setting
+	 */
+	public static boolean getDisplayeModesSetOnJoin() {
+		return display_modes_set_on_join;
 	}
 
 	/**

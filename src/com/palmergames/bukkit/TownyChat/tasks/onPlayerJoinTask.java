@@ -4,6 +4,7 @@ import com.palmergames.bukkit.TownyChat.Chat;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.TownyChat.channels.Channel;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.towny.Towny;
 
 /*
@@ -32,7 +33,7 @@ public class onPlayerJoinTask implements Runnable {
 		if (this.towny.isEnabled()) {
 			if (!this.towny.isError()) {
 				if (player != null) {
-					towny.setPlayerMode(player, new String[] { mode }, true);
+					towny.setPlayerMode(player, new String[] { mode }, ChatSettings.getDisplayeModesSetOnJoin());
 				}
 				return;
 			}

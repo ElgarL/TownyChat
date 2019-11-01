@@ -200,8 +200,10 @@ public class ConfigurationHandler {
 						if (element.equalsIgnoreCase("alone_message_string"))
 							ChatSettings.setUsingAloneMessageString(String.valueOf(subNodes.get(element).toString()));
 					}
-
 				}
+				
+				if (Key.equalsIgnoreCase("display_modes_set_on_join"))
+					ChatSettings.setDisplayModesSetOnJoin(Boolean.valueOf(file.get(Key).toString()));
 
 				if (Key.equalsIgnoreCase("colour")) {
 					Map<String, Object> subNodes = (Map<String, Object>) file.get(Key);
