@@ -257,6 +257,9 @@ public class ConfigurationHandler {
 
 						if (element.equalsIgnoreCase("nation"))
 							group.setNATION(subNodes.get(element).toString());
+						
+						if (element.equalsIgnoreCase("alliance"))
+							group.setALLIANCE(subNodes.get(element).toString());
 
 						if (element.equalsIgnoreCase("default"))
 							group.setDEFAULT(subNodes.get(element).toString());
@@ -283,6 +286,9 @@ public class ConfigurationHandler {
 	
 								if (element.equalsIgnoreCase("nation"))
 									group.setNATION(world.get(element).toString());
+								
+								if (element.equalsIgnoreCase("alliance"))
+									group.setALLIANCE(world.get(element).toString());
 	
 								if (element.equalsIgnoreCase("default"))
 									group.setDEFAULT(world.get(element).toString());

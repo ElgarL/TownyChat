@@ -93,6 +93,10 @@ public enum ChatConfigNodes {
 			"channel_formats.nation",
 			"{channelTag} {towntagoverride}{townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}",
 		    "# NATION channel types."),
+	CHANNEL_FORMATS_ALLIANCE(
+			"channel_formats.alliance",
+			"{channelTag} {towntagoverride}{townycolor}{permprefix}{townyprefix}{playername}{townypostfix}{permsuffix}&f:{msgcolour} {msg}",
+		    "# ALLIANCE channel types."),
 	CHANNEL_FORMATS_DEFAULT(
 			"channel_formats.default",
 			"{channelTag} {permprefix}{playername}{permsuffix}&f:{msgcolour} {msg}",

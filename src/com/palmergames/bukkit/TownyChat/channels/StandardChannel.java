@@ -91,6 +91,16 @@ public class StandardChannel extends Channel {
 			recipients = checkSpying(recipients);
 			break;
 			
+		case ALLIANCE:
+			if (nation == null) {
+				event.setCancelled(true);
+				return;
+			}
+			Format = ChatSettings.getRelevantFormatGroup(player).getALLIANCE();
+			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayersAlliance(nation)));
+			recipients = checkSpying(recipients);
+			break;
+			
 		case DEFAULT:
 			Format = ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
 			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
@@ -154,6 +164,9 @@ public class StandardChannel extends Channel {
 			break;
 		
 		case NATION:
+			break;
+		
+		case ALLIANCE:
 			break;
 			
 		case DEFAULT:

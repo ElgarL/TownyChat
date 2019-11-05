@@ -257,3 +257,20 @@ v0.61:
   - New Config Option: display_modes_set_on_join
     - Default: true
     - If true players will see [Towny] Modes set: general when they log in.
+v0.62:
+  - New Channel: AllianceChat
+    - Requires Towny 0.95.0.5 or newer.
+    - Will send messages to every online ally of your nation.
+    - Has its own channel_format in the chatconfig.yml.
+    - Your channels.yml will need to have an Alliance channel added.
+    - Default channels.yml is:
+    alliance:
+        commands: [ac]
+        type: ALLIANCE
+        channeltag: '&f[&2AC&f]'
+        messagecolour: '&a'
+        permission: 'towny.chat.alliance'
+        range: '-1'
+     
+    
+    

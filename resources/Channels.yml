@@ -56,7 +56,15 @@ Channels:
         messagecolour: '&e'
         permission: 'towny.chat.nation'
         range: '-1'
-        
+
+    alliance:
+        commands: [ac]
+        type: ALLIANCE
+        channeltag: '&f[&2AC&f]'
+        messagecolour: '&a'
+        permission: 'towny.chat.alliance'
+        range: '-1'
+
     admin:
         commands: [a,admin]
         type: DEFAULT

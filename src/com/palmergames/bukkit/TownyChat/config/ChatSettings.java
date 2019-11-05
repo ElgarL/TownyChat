@@ -91,12 +91,14 @@ public class ChatSettings extends tag_formats {
 						|| !chatConfig.contains("worlds." + world + ".global") 
 						|| !chatConfig.contains("worlds." + world + ".town") 
 						|| !chatConfig.contains("worlds." + world + ".nation")
+						|| !chatConfig.contains("worlds." + world + ".alliance")
 						|| !chatConfig.contains("worlds." + world + ".default")) {
 					newChatConfig.createSection("worlds." + world);
 					ConfigurationSection worldsection = newChatConfig.getConfigurationSection("worlds." + world);
 					worldsection.set("global", (chatConfig.get("worlds." + world + ".global")!= null) ? chatConfig.get("worlds." + world + ".global") : ChatConfigNodes.CHANNEL_FORMATS_GLOBAL.getDefault());
 					worldsection.set("town", (chatConfig.get("worlds." + world + ".town")!= null) ? chatConfig.get("worlds." + world + ".town") : ChatConfigNodes.CHANNEL_FORMATS_TOWN.getDefault());
 					worldsection.set("nation", (chatConfig.get("worlds." + world + ".nation")!= null) ? chatConfig.get("worlds." + world + ".nation") : ChatConfigNodes.CHANNEL_FORMATS_NATION.getDefault());
+					worldsection.set("alliance", (chatConfig.get("worlds." + world + ".alliance")!= null) ? chatConfig.get("worlds." + world + ".alliance") : ChatConfigNodes.CHANNEL_FORMATS_ALLIANCE.getDefault());
 					worldsection.set("default", (chatConfig.get("worlds." + world + ".default")!= null) ? chatConfig.get("worlds." + world + ".default") : ChatConfigNodes.CHANNEL_FORMATS_DEFAULT.getDefault());
 				}
 			}
