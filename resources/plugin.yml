@@ -54,3 +54,6 @@ permissions:
     townychat.chat.format.reset:
         description: Allows the use of &r to reset chat formatting.
         default: true
+    townychat.spam.bypass:
+        description: Keeps a player from getting stopped by spam checks.
+        default: op
