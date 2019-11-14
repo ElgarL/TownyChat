@@ -26,7 +26,6 @@ import java.util.WeakHashMap;
 public class TownyChatPlayerListener implements Listener  {
 	private Chat plugin;
 	
-	private WeakHashMap<Player, Long> SpamTime = new WeakHashMap<>();
 	public WeakHashMap<Player, String> directedChat = new WeakHashMap<>();
 
 	public TownyChatPlayerListener(Chat instance) {
@@ -109,11 +108,6 @@ public class TownyChatPlayerListener implements Listener  {
 		// Check if essentials has this player muted.
 		if (!isMuted(player)) {
 
-			if (isSpam(player)) {
-				event.setCancelled(true);
-				return;
-			}
-
 			/*
 			 * If this was directed chat send it via the relevant channel
 			 */
@@ -128,9 +122,10 @@ public class TownyChatPlayerListener implements Listener  {
 						event.setCancelled(true);
 						return;
 					}
-
-					// TODO: Give this a toggle in the debug mode, it's highly annoying and spams logs, it's been disabled for now.
-//					plugin.getLogger().info("onPlayerChat: Processing directed message for " + channel.getName());
+					if (channel.isSpam(player)) {
+						event.setCancelled(true);
+						return;
+					}
 					channel.chatProcess(event);
 					return;
 				}
@@ -144,6 +139,10 @@ public class TownyChatPlayerListener implements Listener  {
 					// Notify player he is muted
 					if (channel.isMuted(player.getName())) {
 						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
+						event.setCancelled(true);
+						return;
+					}
+					if (channel.isSpam(player)) {
 						event.setCancelled(true);
 						return;
 					}
@@ -166,7 +165,10 @@ public class TownyChatPlayerListener implements Listener  {
 					event.setCancelled(true);
 					return;
 				}
-
+				if (channel.isSpam(player)) {
+					event.setCancelled(true);
+					return;
+				}
 				channel.chatProcess(event);
 				return;
 			}
@@ -207,36 +209,6 @@ public class TownyChatPlayerListener implements Listener  {
 				// Get essentials failed
 			}
 			return false;
-		}
-		return false;
-	}
-	
-	
-	/**
-	 * Test if this player is spamming chat.
-	 * One message every 2 seconds limit
-	 * 
-	 * @param player
-	 * @return
-	 */
-	private boolean isSpam(Player player) {
-		
-		long timeNow = System.currentTimeMillis();
-		long spam = timeNow;
-		
-		if (SpamTime.containsKey(player)) {
-			spam = SpamTime.get(player);
-			SpamTime.remove(player);
-		} else {
-			// No record found so ensure we don't trigger for spam
-			spam -= ((ChatSettings.getSpam_time() + 1)*1000);
-		}
-		
-		SpamTime.put(player, timeNow);
-		
-		if (timeNow - spam < (ChatSettings.getSpam_time()*1000)) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_unable_to_talk_you_are_spamming"));
-			return true;
 		}
 		return false;
 	}

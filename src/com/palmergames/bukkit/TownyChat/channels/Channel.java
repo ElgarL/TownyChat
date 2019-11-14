@@ -2,10 +2,15 @@ package com.palmergames.bukkit.TownyChat.channels;
 
 import java.util.List;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 
 public abstract class Channel {
 	
@@ -16,6 +21,8 @@ public abstract class Channel {
 	private double range;
 	private boolean hooked=false;
 	private boolean autojoin=true;
+	private double spamtime;
+	private WeakHashMap<Player, Long> Spammers = new WeakHashMap<>();
 	protected ConcurrentMap<String, Integer> absentPlayers = null;  
 	protected ConcurrentMap<String, Integer> mutedPlayers = null;
 	
@@ -230,4 +237,42 @@ public abstract class Channel {
 	public boolean isAutoJoin() {
 		return autojoin;
 	}
+
+	public double getSpam_time() {
+		return spamtime;
+	}
+
+	public void setSpam_time(double spamtime) {
+		this.spamtime = spamtime;
+	}
+	
+	/**
+	 * Test if this player is spamming chat.
+	 * One message every 2 seconds limit
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean isSpam(Player player) {
+		
+		long timeNow = System.currentTimeMillis();
+		long spam = timeNow;
+		
+		if (Spammers.containsKey(player)) {
+			spam = Spammers.get(player);
+			Spammers.remove(player);
+		} else {
+			// No record found so ensure we don't trigger for spam
+			spam -= ((getSpam_time() + 1)*1000);
+		}
+		
+		Spammers.put(player, timeNow);
+		
+		if (timeNow - spam < (getSpam_time()*1000)) {
+			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_unable_to_talk_you_are_spamming"));
+			return true;
+		}
+		return false;
+	}
+	
 }

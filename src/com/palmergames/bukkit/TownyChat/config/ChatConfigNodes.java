@@ -71,11 +71,6 @@ public enum ChatConfigNodes {
 			"# -------------",
 			"# Bold = &l, Italics = &o, Underlined = &n,", 
 			"# Magic = &k, Strike = &m, Reset = &r"),
-	SPAM_TIME(
-			"spam_time",
-			"0.5",
-			"",
-			"# Spam_time set the minimum time between messages to be flagged as spam"),
 	CHANNEL_FORMATS(
 			"channel_formats",
 			"",

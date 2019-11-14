@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class ChatSettings extends tag_formats {
 
-	private static Double spam_time;
 	private static boolean modify_chat;
 	private static boolean per_world;
 	private static boolean alone_message;
@@ -194,21 +193,6 @@ public class ChatSettings extends tag_formats {
 		
 		return getFormatGroup("channel_formats");
 
-	}
-
-	/**
-	 * @return the spam_time
-	 */
-	public static Double getSpam_time() {
-		return spam_time;
-	}
-
-	/**
-	 * @param d
-	 *            the spam_time to set
-	 */
-	public static void setSpam_time(Double d) {
-		ChatSettings.spam_time = d;
 	}
 
 	/**

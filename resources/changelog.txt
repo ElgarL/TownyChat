@@ -271,6 +271,9 @@ v0.62:
         messagecolour: '&a'
         permission: 'towny.chat.alliance'
         range: '-1'
-     
-    
-    
+v0.63:
+  - Change: spam_time has been moved from the chatconfig.yml, to the channels.yml
+    - You do not have to set a spam_time for each channel, only the ones you want limited.
+    - setting spam_time: '0.5' in your general channel will make the global channel behave as normal.
+    - default channels.yml has spam_time: '0.5' set for general, town, nation and alliance channels; remaining channels have no spam_time set.
+    - in your chatconfig.yml you can remove the "spam_time: '0.5'" line before or after updating. 
