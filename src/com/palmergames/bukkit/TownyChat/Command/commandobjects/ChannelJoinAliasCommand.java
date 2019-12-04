@@ -42,7 +42,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 						if (defaultChannel != null && defaultChannel.isPresent(player.getName())) {
 							nextChannel = defaultChannel;
                             if (!nextChannel.getName().equalsIgnoreCase(channel.getName())) {
-                                TownyUtil.removeAndSetPlayerMode(plugin.getTowny(), player, channel.getName(), nextChannel.getName(), true);
+                                TownyUtil.removeAndSetPlayerMode(plugin.getTowny(), player, channel.getName(), nextChannel.getName(), false);
                             } else {
                                 // They're talking on default channel and want to leave but can't because they'll be put default again
                                 // Their only option out is to leave the channel if they have permission to do so.

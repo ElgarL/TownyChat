@@ -280,3 +280,5 @@ v0.63:
   - New Permission Node: townychat.spam.bypass
     - Defaults to ops.
     - Bypasses spam check.
+v0.64:
+  - Removed "[Towny] Modes set: " line seen when a player changes channels.
