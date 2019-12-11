@@ -75,7 +75,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 							return true;
 						}
 						
-						plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, true);
+						plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, false);
 						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_you_are_now_talking_in_channel"), channel.getName()));
 						return true;
 					}
