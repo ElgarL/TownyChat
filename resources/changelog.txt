@@ -282,3 +282,9 @@ v0.63:
     - Bypasses spam check.
 v0.64:
   - Removed "[Towny] Modes set: " line seen when a player changes channels.
+v0.65:
+  - Altered behaviour:
+    - Previously using the channel command for the channel you're already speaking in would move you to the next default channel, 
+      or if non was found, the next global channel.
+    - Ex: While being in townchat you use "/tc" you could find yourself in globalchat.
+    - Now you will be told you're already in the channel you just used the command to enter into.
