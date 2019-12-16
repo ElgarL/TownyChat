@@ -137,9 +137,9 @@ public enum ChatConfigNodes {
     MODIFY_CHAT_ENABLE(
     		"modify_chat.enable",
     		"true",
-    	    "# This is used for when you don't have another plugin to format chat.",
-    	    "# or you want some other plugin to handle open chat, but want Towny formatting.",
-    	    "# It will cause Towny to overwrite any other plugins alterations to the format."),
+    	    "# When true Towny will format all ChannelTypes,",
+    	    "# When false Towny will only format TOWN, NATION, ALLIANCE, DEFAULT types.",
+    	    "# When false Towny will not format GLOBAL types, leaving other chat plugins to do the work."),
     MODIFY_CHAT_PER_WORLD(
     		"modify_chat.per_world",
     		"false",

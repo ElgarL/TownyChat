@@ -288,3 +288,6 @@ v0.65:
       or if non was found, the next global channel.
     - Ex: While being in townchat you use "/tc" you could find yourself in globalchat.
     - Now you will be told you're already in the channel you just used the command to enter into.
+  - Fixed: GLOBAL channelTypes (default: general and local channels) are no longer formatted by TownyChat if modify_chat.enabled is false.
+    - DEFAULT, TOWN, NATION & ALLIANCE types are still formatted by Towny when modify_chat.enable is false.
+    - Closes: https://github.com/TownyAdvanced/Towny/issues/3568 

@@ -124,10 +124,15 @@ public class StandardChannel extends Channel {
             Format = PlaceholderAPI.setPlaceholders(player, Format);
 	    }		
 
-		event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
-		
-		LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-		event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+		/*
+		 * Only modify GLOBAL channelType chat (general and local chat channels) if isModifyChat() is true.
+		 */
+		if (!(exec.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
+			event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", getMessageColour()));
+			
+			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
+			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+		}
 		
 		/*
 		 *  Set all the listeners for Bukkit to send this message to.
