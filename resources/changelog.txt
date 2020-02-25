@@ -291,3 +291,5 @@ v0.65:
   - Fixed: GLOBAL channelTypes (default: general and local channels) are no longer formatted by TownyChat if modify_chat.enabled is false.
     - DEFAULT, TOWN, NATION & ALLIANCE types are still formatted by Towny when modify_chat.enable is false.
     - Closes: https://github.com/TownyAdvanced/Towny/issues/3568 
+v0.66:
+  - Fix for removed TownyFormatter methods, required for Towny 0.95.2.18 and newer.
