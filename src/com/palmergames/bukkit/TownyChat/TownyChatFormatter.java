@@ -4,6 +4,7 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
 import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -106,25 +107,25 @@ public class TownyChatFormatter {
 		replacer.registerFormatReplacement(Pattern.quote("{townynameprefix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyFormatter.getNamePrefix(event.getResident());
+				return getNamePrefix(event.getResident());
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{townynamepostfix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyFormatter.getNamePostfix(event.getResident());
+				return getNamePostfix(event.getResident());
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{townyprefix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasTitle() ? event.getResident().getTitle() + " " : TownyFormatter.getNamePrefix(event.getResident());
+				return event.getResident().hasTitle() ? event.getResident().getTitle() + " " : getNamePrefix(event.getResident());
 			}
 		});
 		replacer.registerFormatReplacement(Pattern.quote("{townypostfix}"), new TownyChatReplacerCallable() {
 			@Override
 			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasSurname() ? event.getResident().getSurname() : TownyFormatter.getNamePostfix(event.getResident());
+				return event.getResident().hasSurname() ? event.getResident().getSurname() : getNamePostfix(event.getResident());
 			}
 		});
 		
@@ -310,6 +311,28 @@ public class TownyChatFormatter {
 
 		} catch (NotRegisteredException e) {
 		}
+		return "";
+	}
+
+	public static String getNamePrefix(Resident resident) {
+
+		if (resident == null)
+			return "";
+		if (resident.isKing())
+			return TownySettings.getKingPrefix(resident);
+		else if (resident.isMayor())
+			return TownySettings.getMayorPrefix(resident);
+		return "";
+	}
+
+	public static String getNamePostfix(Resident resident) {
+
+		if (resident == null)
+			return "";
+		if (resident.isKing())
+			return TownySettings.getKingPostfix(resident);
+		else if (resident.isMayor())
+			return TownySettings.getMayorPostfix(resident);
 		return "";
 	}
 }
