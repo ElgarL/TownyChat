@@ -1,6 +1,10 @@
 package com.palmergames.bukkit.TownyChat.tasks;
 
 import com.palmergames.bukkit.TownyChat.Chat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.TownyChat.channels.Channel;
@@ -33,7 +37,11 @@ public class onPlayerJoinTask implements Runnable {
 		if (this.towny.isEnabled()) {
 			if (!this.towny.isError()) {
 				if (player != null) {
-					towny.setPlayerMode(player, new String[] { mode }, ChatSettings.getDisplayeModesSetOnJoin());
+					List<String> modes = new ArrayList<>();
+					modes.add(mode);
+					if (!towny.getPlayerMode(player).isEmpty())					 
+						modes.addAll(towny.getPlayerMode(player));
+					towny.setPlayerMode(player, modes.toArray(new String[0]), ChatSettings.getDisplayeModesSetOnJoin());
 				}
 				return;
 			}
