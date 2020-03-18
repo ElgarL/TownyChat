@@ -295,3 +295,5 @@ v0.66:
   - Fix for removed TownyFormatter methods, required for Towny 0.95.2.18 and newer.
 v0.67:
   - Fix for TownyChat overwriting towny_default_modes player modes on login.
+v0.68:
+  - Updated comments to reflect change with toggling chats, courtesy of GenSecrets with PR #25.
