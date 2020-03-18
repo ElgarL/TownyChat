@@ -203,7 +203,6 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 		// Split[0] = Channelname
 		// Split[1} = Player to be muted
-		@SuppressWarnings("deprecation")
 		Player muteePlayer = Bukkit.getPlayer(split[1]);
 		if (muteePlayer == null) {
 			TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_no_online_players_with_name"), split[1]));
