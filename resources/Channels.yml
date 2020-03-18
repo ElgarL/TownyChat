@@ -2,10 +2,10 @@
 # The formating for them remains in the Towny Config and world files
 # so they can still be used on a per world basis.
 
-# Channels are toggleable using any of the commands listed
-# eg. /tc (would put you in town chat)
-#          doing it again would take you out
-#          So long as you had the permission node for that channel.
+# In order to swap channels, you must use the desired channel's command 
+#          to enter the new chat and leave the old one.
+# eg. /tc (would put you in town chat) and typing it again would not change 
+#          you channel. To get back to general chat, you can do /g. 
 
 # The channel type is either GLOBAL, TOWN, NATION or DEFAULT.
 #  These specify what chat formating section they will use
