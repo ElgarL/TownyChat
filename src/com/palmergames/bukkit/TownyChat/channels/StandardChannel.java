@@ -19,6 +19,7 @@ import com.palmergames.bukkit.util.Colors;
 import me.clip.placeholderapi.PlaceholderAPI;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
@@ -78,7 +79,6 @@ public class StandardChannel extends Channel {
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
 			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayers(town)));
-			recipients = checkSpying(recipients);
 			break;
 		
 		case NATION:
@@ -88,7 +88,6 @@ public class StandardChannel extends Channel {
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getNATION();
 			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayers(nation)));
-			recipients = checkSpying(recipients);
 			break;
 			
 		case ALLIANCE:
@@ -98,7 +97,6 @@ public class StandardChannel extends Channel {
 			}
 			Format = ChatSettings.getRelevantFormatGroup(player).getALLIANCE();
 			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayersAlliance(nation)));
-			recipients = checkSpying(recipients);
 			break;
 			
 		case DEFAULT:
@@ -185,8 +183,12 @@ public class StandardChannel extends Channel {
 				dynMap.postPlayerMessageToWeb(player, event.getMessage());
 			break;
 		}
+        
+        sendSpyMessage(event, exec);
 
 	}
+
+
 
 	/**
 	 * Check the distance between players and return a result based upon the range setting
@@ -239,10 +241,9 @@ public class StandardChannel extends Channel {
         	if (TownyUniverse.getInstance().getPermissionSource().has(test, getPermission())) {
         		
         		/*
-        		 * If the player is within range for this channel
-        		 * or the recipient has the spy mode.
+        		 * If the player is within range for this channel.
         		 */
-	        	if ((testDistance(sender, test, getRange())) || (plugin.getTowny().hasPlayerMode(test, "spy"))) {
+	        	if (testDistance(sender, test, getRange())){
 	        		
 	        		if (bEssentials) {
 						try {
@@ -273,6 +274,64 @@ public class StandardChannel extends Channel {
         	sender.sendMessage(ChatSettings.getUsingAloneMessageString());
 
         return recipients;
+	}
+	
+	/**
+	 * Sends messages to spies who have not already seen the message naturally.
+	 * 
+	 * @param event - Chat Event.
+	 * @param type - Channel Type
+	 */
+	private void sendSpyMessage(AsyncPlayerChatEvent event, channelTypes type) {		
+		Set<Player> recipients = new HashSet<>();				
+		Set<Player> spies = new HashSet<>();
+		
+		recipients.addAll(event.getRecipients());
+		spies = checkSpying(spies);
+		String format = formatSpyMessage(type, event.getPlayer());
+		
+		// Remove spies who've already seen the message naturally.
+		for (Player spy : spies)
+			if (recipients.contains(spy))
+				spies.remove(spy);
+			else
+				spy.sendMessage(ChatColor.GOLD + "[SPY] " + ChatColor.WHITE + format + ": " + event.getMessage());
+	}
+
+	/**
+	 * Formats look of message for spies
+	 * 
+	 * @param type - Channel Type.
+	 * @param player - Player who chatted.
+	 * @return format - Message format.
+	 */
+	private String formatSpyMessage(channelTypes type, Player player) {
+		Resident resident = null;
+		Town town = null;
+		Nation nation = null;
+		try {
+			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			town = resident.getTown();
+			nation = resident.getTown().getNation();
+		} catch (NotRegisteredException e1) {
+			// Not in a town/nation (doesn't matter which)
+		}
+		String format = ChatColor.translateAlternateColorCodes('&', getChannelTag());
+		switch (type) {
+			case TOWN:
+				format = format + " [" + town.getName() + "] " + resident.getName();
+				break;
+			case NATION:
+			case ALLIANCE:
+				format = format + " [" + nation.getName() + "] " + resident.getName();
+				break;
+			case GLOBAL:
+			case PRIVATE:
+			case DEFAULT:
+				format = format + " " + resident.getName();
+				break;
+		}
+		return format;
 	}
 	
 	/**

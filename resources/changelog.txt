@@ -302,3 +302,6 @@ v0.69:
 v0.70:
   - Allow for $ and \ to be used in the chat line.
     - Closes: https://github.com/TownyAdvanced/Towny/issues/3960
+  - People spying on chat will now see the chat formatted differently from normal. 
+    - De-clutters the chat.
+    - Closes: https://github.com/TownyAdvanced/Towny/issues/2665 
