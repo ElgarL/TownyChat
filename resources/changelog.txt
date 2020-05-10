@@ -299,3 +299,6 @@ v0.68:
   - Updated comments to reflect change with toggling chats, courtesy of GenSecrets with PR #25.
 v0.69:
   - Fix missing spaces from {title} & {surname} & {townypostfix}.
+v0.70:
+  - Allow for $ and \ to be used in the chat line.
+    - Closes: https://github.com/TownyAdvanced/Towny/issues/3960
