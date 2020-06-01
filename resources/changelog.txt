@@ -305,3 +305,5 @@ v0.70:
   - People spying on chat will now see the chat formatted differently from normal. 
     - De-clutters the chat.
     - Closes: https://github.com/TownyAdvanced/Towny/issues/2665 
+v0.71:
+  - Bugfixes on the AsyncChatHookEvents, courtesy of Rebstew with PR #26.
