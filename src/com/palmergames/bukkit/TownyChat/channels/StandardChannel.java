@@ -292,7 +292,7 @@ public class StandardChannel extends Channel {
 		// Remove spies who've already seen the message naturally.
 		for (Player spy : spies)
 			if (recipients.contains(spy))
-				spies.remove(spy);
+				continue;
 			else
 				spy.sendMessage(ChatColor.GOLD + "[SPY] " + ChatColor.WHITE + format + ": " + event.getMessage());
 	}

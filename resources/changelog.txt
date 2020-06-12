@@ -307,3 +307,6 @@ v0.70:
     - Closes: https://github.com/TownyAdvanced/Towny/issues/2665 
 v0.71:
   - Bugfixes on the AsyncChatHookEvents, courtesy of Rebstew with PR #26.
+v0.72:
+  - Fix ConcurrentModificationException caused by spies.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4077
