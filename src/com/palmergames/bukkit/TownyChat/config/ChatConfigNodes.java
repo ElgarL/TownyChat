@@ -70,7 +70,15 @@ public enum ChatConfigNodes {
 			"# Text altering",
 			"# -------------",
 			"# Bold = &l, Italics = &o, Underlined = &n,", 
-			"# Magic = &k, Strike = &m, Reset = &r"),
+			"# Magic = &k, Strike = &m, Reset = &r",
+			"#",
+			"# Hex Chat Coloring",
+			"# -----------------",
+			"# Valid formats: ",
+			"# #RRGGBB", 
+			"# &#RRGGBB", 
+			"# {#RRGGBB}"),
+			
 	CHANNEL_FORMATS(
 			"channel_formats",
 			"",

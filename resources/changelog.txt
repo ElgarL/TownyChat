@@ -310,3 +310,10 @@ v0.71:
 v0.72:
   - Fix ConcurrentModificationException caused by spies.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4077
+v0.73:
+  - Add Hex Color Support to TownyChat, courtesy of Siris with PR #27.
+    - The format for hex colors is a # symbol followed by 6 numbers.
+    - You can use any of the 3 formats:
+    - #RRGGBB
+    - &#RRGGBB
+    - {#RRGGBB}
