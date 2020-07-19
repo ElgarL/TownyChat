@@ -317,3 +317,5 @@ v0.73:
     - #RRGGBB
     - &#RRGGBB
     - {#RRGGBB}
+v0.74:
+  - Fix 0.96.2.5+ Towny API error spam.
