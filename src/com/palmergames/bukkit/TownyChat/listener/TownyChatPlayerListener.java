@@ -9,10 +9,10 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -125,7 +125,7 @@ public class TownyChatPlayerListener implements Listener  {
 				if (channel != null) {
 					// Notify player he is muted
 					if (channel.isMuted(player.getName())) {
-						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
+						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
 						event.setCancelled(true);
 						return;
 					}
@@ -145,7 +145,7 @@ public class TownyChatPlayerListener implements Listener  {
 				if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
 					// Notify player he is muted
 					if (channel.isMuted(player.getName())) {
-						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
+						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
 						event.setCancelled(true);
 						return;
 					}
@@ -168,7 +168,7 @@ public class TownyChatPlayerListener implements Listener  {
 			if (channel != null) {
 				// Notify player he is muted
 				if (channel.isMuted(player.getName())) {
-					TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
+					TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
 					event.setCancelled(true);
 					return;
 				}
@@ -209,7 +209,7 @@ public class TownyChatPlayerListener implements Listener  {
 		if (plugin.getTowny().isEssentials()) {
 			try {
 				if (plugin.getTowny().getEssentials().getUser(player).isMuted()) {
-					TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_unable_to_talk_essentials_mute"));
+					TownyMessaging.sendErrorMsg(player, Translation.of("tc_err_unable_to_talk_essentials_mute"));
 					return true;
 				}
 			} catch (TownyException e) {

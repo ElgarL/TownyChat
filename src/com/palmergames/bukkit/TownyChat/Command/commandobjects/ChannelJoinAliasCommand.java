@@ -3,9 +3,11 @@ package com.palmergames.bukkit.TownyChat.Command.commandobjects;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.util.StringMgmt;
+
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -34,7 +36,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 				}
 				if (message.isEmpty()) {
 					if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
-						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_you_are_already_in_channel"), channel.getName()));
+						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_you_are_already_in_channel"), channel.getName()));
 						return true;
 					} else {
 						// You can join a channel if:
@@ -44,17 +46,30 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 						//     - player has channel permission
 						String joinPerm = channel.getPermission();
 						if ((joinPerm != null && !TownyUniverse.getInstance().getPermissionSource().has(player, joinPerm))) {
-							TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
+							TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_err_you_cannot_join_channel"), channel.getName()));
 							return true;
 						}
 						
-						plugin.getTowny().setPlayerMode(player, new String[]{channel.getName()}, false);
-						TownyMessaging.sendMsg(player, String.format(TownySettings.getLangString("tc_you_are_now_talking_in_channel"), channel.getName()));
+						// Add channel we're moving to.
+						ArrayList<String> newModes = new ArrayList<String>();
+						newModes.add(channel.getName());
+						
+						// Add modes the player already had, except not any current chat channels.
+						for (String existingMode : plugin.getTowny().getPlayerMode(player))
+							if (!plugin.getChannelsHandler().isChannel(existingMode))
+								newModes.add(existingMode);
+						
+						String[] modes = new String[newModes.size()];
+						for (int i = 0; i < newModes.size(); i++)
+							modes[i] = newModes.get(i);
+							
+						plugin.getTowny().setPlayerMode(player, modes, false);
+						TownyMessaging.sendMsg(player, String.format(Translation.of("tc_you_are_now_talking_in_channel"), channel.getName()));
 						return true;
 					}
 				} else {
 					if (channel.isMuted(player.getName())) {
-						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
+						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_err_you_are_currently_muted_in_channel"), channel.getName()));
 						return true;
 					}
 					// You can speak in a channel if:
@@ -64,7 +79,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 					//     - player has channel permission
 					String joinPerm = channel.getPermission();
 					if ((joinPerm != null && !TownyUniverse.getInstance().getPermissionSource().has(player, joinPerm))) {
-						TownyMessaging.sendErrorMsg(player, String.format(TownySettings.getLangString("tc_err_you_cannot_join_channel"), channel.getName()));
+						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_err_you_cannot_join_channel"), channel.getName()));
 						return true;
 					}
 

@@ -144,12 +144,23 @@ public class StandardChannel extends Channel {
             	event.setCancelled(true);
             	return;
             }
+            /*
+             * Send spy message before another plugin changes any of the recipients,
+             * so we know which people can see it.
+             */
+            sendSpyMessage(event, exec);
+            
             if (hookEvent.isChanged()) {
             	event.setMessage(hookEvent.getMessage());
             	event.setFormat(hookEvent.getFormat());
                 event.getRecipients().clear();
                 event.getRecipients().addAll(hookEvent.getRecipients());
             }
+        } else {
+        	/*
+        	 * Send spy message.
+        	 */
+        	sendSpyMessage(event, exec);
         }
 
         if (notifyjoin) {
@@ -182,8 +193,6 @@ public class StandardChannel extends Channel {
 				dynMap.postPlayerMessageToWeb(player, event.getMessage());
 			break;
 		}
-        
-        sendSpyMessage(event, exec);
 
 	}
 

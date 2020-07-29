@@ -319,3 +319,8 @@ v0.73:
     - {#RRGGBB}
 v0.74:
   - Fix 0.96.2.5+ Towny API error spam.
+v0.75:
+  - Replace deprecated getLangString code.
+  - Update to fix spying on servers with DeluxeChat.
+  - Fix changing chat channels removing non-channel modes.
+  - Add Towny version checking to enforce min. required versions.

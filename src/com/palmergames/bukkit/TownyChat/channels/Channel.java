@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Translation;
 
 public abstract class Channel {
 	
@@ -270,7 +270,7 @@ public abstract class Channel {
 		Spammers.put(player, timeNow);
 		
 		if (timeNow - spam < (getSpam_time()*1000)) {
-			TownyMessaging.sendErrorMsg(player, TownySettings.getLangString("tc_err_unable_to_talk_you_are_spamming"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("tc_err_unable_to_talk_you_are_spamming"));
 			return true;
 		}
 		return false;

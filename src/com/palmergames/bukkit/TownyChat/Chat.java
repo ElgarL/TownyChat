@@ -11,6 +11,8 @@ import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.util.Version;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -43,6 +45,7 @@ public class Chat extends JavaPlugin {
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
 	
+	private static String requiredTownyVersion = "0.96.2.5";
 	public static boolean usingPlaceholderAPI = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
@@ -55,8 +58,16 @@ public class Chat extends JavaPlugin {
 		channelsConfig = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
 		
-		checkPlugins();		
+		checkPlugins();
 		loadConfigs();
+		
+		if (!townyVersionCheck(towny.getDescription().getVersion())) {
+			getLogger().severe("Towny version does not meet required version: " + requiredTownyVersion);
+			this.getServer().getPluginManager().disablePlugin(this);
+			return;
+		} else {
+			getLogger().info("Towny version " + towny.getDescription().getVersion() + " found.");
+		}
 		
 		/*
 		 * This executes the task with a 1 tick delay avoiding the bukkit
@@ -79,6 +90,13 @@ public class Chat extends JavaPlugin {
 		registerObjectCommands();
 	}
 	
+	private boolean townyVersionCheck(String version) {
+		Version ver = new Version(version);
+		Version required = new Version(requiredTownyVersion);
+		
+		return ver.compareTo(required) >= 0; 
+	}
+
 	private void loadConfigs() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
 		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + FileMgmt.fileSeparator() + "ChatConfig.yml", this.getDescription().getVersion()))
