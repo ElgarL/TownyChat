@@ -324,3 +324,6 @@ v0.75:
   - Update to fix spying on servers with DeluxeChat.
   - Fix changing chat channels removing non-channel modes.
   - Add Towny version checking to enforce min. required versions.
+v0.76:
+  - Fix chat format line not parsing hex colors, courtesy of Siris with PR #28.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4159.
