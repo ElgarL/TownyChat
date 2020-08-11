@@ -3,6 +3,7 @@ package com.palmergames.bukkit.TownyChat;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -214,9 +215,17 @@ public class TownyChatFormatter {
 
 	}
 
+	public static String hexIfCompatible(String str) {
+		if (Towny.is116Plus()) {
+			return HexFormatter.translateHexColors(str);
+		}
+
+		return str;
+	}
+
 	public static String getChatFormat(LocalTownyChatEvent event) {
 		// Replace the {msg} here so it's not regex parsed.
-		return replacer.replaceAll(event.getFormat(), event).replace("{modplayername}", "%1$s").replace("{msg}", "%2$s");
+		return hexIfCompatible(replacer.replaceAll(event.getFormat(), event).replace("{modplayername}", "%1$s").replace("{msg}", "%2$s"));
 	}
 
 	/**
@@ -287,11 +296,11 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasTown())
 				if (full)
-					return String.format(ChatSettings.getTownTag(), resident.getTown().getName());
+					return hexIfCompatible(String.format(ChatSettings.getTownTag(), resident.getTown().getName()));
 				else if (resident.getTown().hasTag())
-					return String.format(ChatSettings.getTownTag(), resident.getTown().getTag());
+					return hexIfCompatible(String.format(ChatSettings.getTownTag(), resident.getTown().getTag()));
 				else if (override)
-					return String.format(ChatSettings.getTownTag(), resident.getTown().getName());
+					return hexIfCompatible(String.format(ChatSettings.getTownTag(), resident.getTown().getName()));
 
 		} catch (NotRegisteredException e) {
 		}
@@ -302,11 +311,11 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasNation())
 				if (full)
-					return String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName());
+					return hexIfCompatible(String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName()));
 				else if (resident.getTown().getNation().hasTag())
-					return String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getTag());
+					return hexIfCompatible(String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getTag()));
 				else if (override)
-					return String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName());
+					return hexIfCompatible(String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName()));
 
 		} catch (NotRegisteredException e) {
 		}

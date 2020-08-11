@@ -190,7 +190,13 @@ public class TownyChatPlayerListener implements Listener  {
 				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 
 				LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-				event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+
+				if (Towny.is116Plus()) {
+					event.setFormat(HexFormatter.translateHexColors(TownyChatFormatter.getChatFormat(chatEvent)));
+				} else {
+					event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+				}
+
 			} catch (NotRegisteredException e) {
 				// World or resident not registered with Towny
 				e.printStackTrace();
