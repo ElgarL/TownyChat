@@ -327,3 +327,5 @@ v0.75:
 v0.76:
   - Fix chat format line not parsing hex colors, courtesy of Siris with PR #28.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4159.
+v0.77: 
+  - Build against 0.96.2.12, minimum required Towny version now 0.96.2.12.

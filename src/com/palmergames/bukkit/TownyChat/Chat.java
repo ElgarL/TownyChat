@@ -45,7 +45,7 @@ public class Chat extends JavaPlugin {
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
 	
-	private static String requiredTownyVersion = "0.96.2.5";
+	private static String requiredTownyVersion = "0.96.2.12";
 	public static boolean usingPlaceholderAPI = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
