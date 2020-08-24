@@ -6,7 +6,7 @@ website: http://code.google.com/a/eclipselabs.org/p/towny/
 description: >
     TownyChat plugin which hooks Towny.
 
-softdepend: [Towny, CraftIRC]
+softdepend: [Towny, CraftIRC, dynmap]
 
 ############################################################
 # +------------------------------------------------------+ #
