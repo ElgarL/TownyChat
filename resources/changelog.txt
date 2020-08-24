@@ -329,3 +329,5 @@ v0.76:
     - Closes https://github.com/TownyAdvanced/Towny/issues/4159.
 v0.77: 
   - Build against 0.96.2.12, minimum required Towny version now 0.96.2.12.
+v0.78:
+  - Dynmap added to softdepends list, courtesy of ZombiMigz with PR #31.
