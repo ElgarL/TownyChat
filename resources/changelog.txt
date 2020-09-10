@@ -331,3 +331,6 @@ v0.77:
   - Build against 0.96.2.12, minimum required Towny version now 0.96.2.12.
 v0.78:
   - Dynmap added to softdepends list, courtesy of ZombiMigz with PR #31.
+  - Allow for colouring the alone message.
+  - Adapt to change in Towny 0.96.2.17 Version code. 
+  - Build against 0.96.2.17, minimum required Towny version now 0.96.2.17.

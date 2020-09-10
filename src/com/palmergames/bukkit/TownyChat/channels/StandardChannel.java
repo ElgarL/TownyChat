@@ -2,10 +2,12 @@ package com.palmergames.bukkit.TownyChat.channels;
 
 import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.HexFormatter;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -278,8 +280,19 @@ public class StandardChannel extends Channel {
         	}
         }
         
-        if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage()))
-        	sender.sendMessage(ChatSettings.getUsingAloneMessageString());
+        if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage())) {
+        	
+			String aloneMsg; 
+
+			if (Towny.is116Plus()) {
+				aloneMsg = HexFormatter.translateHexColors(ChatSettings.getUsingAloneMessageString());
+			} else {
+				aloneMsg = ChatColor.translateAlternateColorCodes('&', ChatSettings.getUsingAloneMessageString());
+			}
+        	
+        	sender.sendMessage(aloneMsg);
+        }
+        	
 
         return recipients;
 	}

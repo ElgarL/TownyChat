@@ -45,7 +45,7 @@ public class Chat extends JavaPlugin {
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
 	
-	private static String requiredTownyVersion = "0.96.2.12";
+	private static Version requiredTownyVersion = Version.fromString("0.96.2.17");
 	public static boolean usingPlaceholderAPI = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
@@ -62,7 +62,7 @@ public class Chat extends JavaPlugin {
 		loadConfigs();
 		
 		if (!townyVersionCheck(towny.getDescription().getVersion())) {
-			getLogger().severe("Towny version does not meet required version: " + requiredTownyVersion);
+			getLogger().severe("Towny version does not meet required version: " + requiredTownyVersion.toString());
 			this.getServer().getPluginManager().disablePlugin(this);
 			return;
 		} else {
@@ -91,10 +91,9 @@ public class Chat extends JavaPlugin {
 	}
 	
 	private boolean townyVersionCheck(String version) {
-		Version ver = new Version(version);
-		Version required = new Version(requiredTownyVersion);
-		
-		return ver.compareTo(required) >= 0; 
+		Version ver = Version.fromString(version);
+				
+		return ver.compareTo(requiredTownyVersion) >= 0; 
 	}
 
 	private void loadConfigs() {
