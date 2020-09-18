@@ -135,7 +135,7 @@ public class Chat extends JavaPlugin {
 			towny = (Towny) test;
 
 		test = pm.getPlugin("dynmap");
-		if (test != null) {
+		if (test != null && pm.getPlugin("dynmap").isEnabled()) {
 			dynMap = (DynmapAPI) test;
 		}
 		

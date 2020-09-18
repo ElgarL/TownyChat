@@ -252,11 +252,11 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (!chan.mute(split[1])) {
-				TownyMessaging.sendMsg(player, Translation.of("tc_player_already_muted_in_channel", chan.getName()));
+				TownyMessaging.sendMessage(player, Translation.of("tc_player_already_muted_in_channel", chan.getName()));
 				return;
 			}
 
-			TownyMessaging.sendMsg(player, Translation.of("tc_player_is_now_muted_in_channel", split[1], chan.getName()));
+			TownyMessaging.sendMessage(player, Translation.of("tc_player_is_now_muted_in_channel", split[1], chan.getName()));
 		} else if (!mute) {
 			String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
 			if ((unmutePerm == null) || (unmutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, unmutePerm)))) {
@@ -268,11 +268,11 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 
 			if (!chan.unmute(split[1])) {
-				TownyMessaging.sendMsg(player, Translation.of("tc_player_is_not_muted_in_channel", chan.getName()));
+				TownyMessaging.sendMessage(player, Translation.of("tc_player_is_not_muted_in_channel", chan.getName()));
 				return;
 			}
 
-			TownyMessaging.sendMsg(player, Translation.of("tc_player_is_now_unmuted_in_channel", split[1], chan.getName()));
+			TownyMessaging.sendMessage(player, Translation.of("tc_player_is_now_unmuted_in_channel", split[1], chan.getName()));
 			return;
 		}
 	}

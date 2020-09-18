@@ -166,7 +166,7 @@ public class StandardChannel extends Channel {
         }
 
         if (notifyjoin) {
-			TownyMessaging.sendMsg(player, "You join " + Colors.White + getName());
+			TownyMessaging.sendMessage(player, "You join " + Colors.White + getName());
         }
 
         /*
@@ -280,19 +280,14 @@ public class StandardChannel extends Channel {
         	}
         }
         
-        if ((recipients.size() <= 1) && (ChatSettings.isUsingAloneMessage())) {
+        if (recipients.size() <= 1 && ChatSettings.isUsingAloneMessage()) {
         	
-			String aloneMsg; 
-
-			if (Towny.is116Plus()) {
-				aloneMsg = HexFormatter.translateHexColors(ChatSettings.getUsingAloneMessageString());
-			} else {
-				aloneMsg = ChatColor.translateAlternateColorCodes('&', ChatSettings.getUsingAloneMessageString());
-			}
+			String aloneMsg = ChatSettings.getUsingAloneMessageString(); 
+			if (Towny.is116Plus())
+				aloneMsg = HexFormatter.translateHexColors(aloneMsg);
         	
-        	sender.sendMessage(aloneMsg);
+        	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', aloneMsg));
         }
-        	
 
         return recipients;
 	}

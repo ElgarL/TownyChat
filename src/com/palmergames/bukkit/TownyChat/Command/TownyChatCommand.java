@@ -53,7 +53,7 @@ public class TownyChatCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("reload")) {
 			plugin.reload();
-			TownyMessaging.sendMsg(sender, Translation.of("tc_settings_reloaded"));
+			TownyMessaging.sendMessage(sender, Translation.of("tc_settings_reloaded"));
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("tc_err_unrecognized_command_format"));
 		}

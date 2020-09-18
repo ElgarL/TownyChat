@@ -334,3 +334,7 @@ v0.78:
   - Allow for colouring the alone message.
   - Adapt to change in Towny 0.96.2.17 Version code. 
   - Build against 0.96.2.17, minimum required Towny version now 0.96.2.17.
+v0.79:
+  - Fix colouring the alone message.
+  - Replace TownyMessaging method used to send some TownyChat messages.
+    - Removes double prefixes ie: [Towny] [TownyChat] message....
