@@ -338,3 +338,6 @@ v0.79:
   - Fix colouring the alone message.
   - Replace TownyMessaging method used to send some TownyChat messages.
     - Removes double prefixes ie: [Towny] [TownyChat] message....
+v0.80:
+  - Add townychat.chat.format.* childnodes to plugin.yml so players are explicitly not given them.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4351
