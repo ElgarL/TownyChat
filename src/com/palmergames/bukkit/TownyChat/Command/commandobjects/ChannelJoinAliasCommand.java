@@ -36,7 +36,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 				}
 				if (message.isEmpty()) {
 					if (plugin.getTowny().hasPlayerMode(player, channel.getName())) {
-						TownyMessaging.sendErrorMsg(player, String.format(Translation.of("tc_you_are_already_in_channel"), channel.getName()));
+						TownyMessaging.sendMessage(player, String.format(Translation.of("tc_you_are_already_in_channel"), channel.getName()));
 						return true;
 					} else {
 						// You can join a channel if:

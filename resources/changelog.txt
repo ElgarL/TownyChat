@@ -341,3 +341,5 @@ v0.79:
 v0.80:
   - Add townychat.chat.format.* childnodes to plugin.yml so players are explicitly not given them.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4351
+v0.81:
+  - Fix double prefix displaying on the message shown when using a channel command for the channel you're already joined to. 
