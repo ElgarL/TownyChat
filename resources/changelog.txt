@@ -343,3 +343,6 @@ v0.80:
     - Closes https://github.com/TownyAdvanced/Towny/issues/4351
 v0.81:
   - Fix double prefix displaying on the message shown when using a channel command for the channel you're already joined to. 
+v0.82:
+  - Fix Towny not being in the depend list (instead of the softdepend list.)
+    - Should solve load order issues.
