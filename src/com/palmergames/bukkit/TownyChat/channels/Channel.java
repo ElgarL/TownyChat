@@ -254,7 +254,7 @@ public abstract class Channel {
 	 * @return
 	 */
 	public boolean isSpam(Player player) {
-		if (!player.hasPermission("townychat.spam.bypass"))
+		if (player.hasPermission("townychat.spam.bypass"))
 			return false;
 		long timeNow = System.currentTimeMillis();
 		long spam = timeNow;

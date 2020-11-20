@@ -346,3 +346,5 @@ v0.81:
 v0.82:
   - Fix Towny not being in the depend list (instead of the softdepend list.)
     - Should solve load order issues.
+v0.83:
+  - Fix townychat.spam.bypass doing the opposite of its job.
