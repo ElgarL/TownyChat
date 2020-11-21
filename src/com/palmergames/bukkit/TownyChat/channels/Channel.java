@@ -267,9 +267,8 @@ public abstract class Channel {
 			spam -= ((getSpam_time() + 1)*1000);
 		}
 		
-		Spammers.put(player, timeNow);
-		
 		if (timeNow - spam < (getSpam_time()*1000)) {
+			Spammers.put(player, timeNow);
 			TownyMessaging.sendErrorMsg(player, Translation.of("tc_err_unable_to_talk_you_are_spamming"));
 			return true;
 		}

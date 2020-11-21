@@ -348,3 +348,4 @@ v0.82:
     - Should solve load order issues.
 v0.83:
   - Fix townychat.spam.bypass doing the opposite of its job.
+  - Fix spam countdown resetting if you speak too early.
