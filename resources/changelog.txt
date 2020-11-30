@@ -349,3 +349,6 @@ v0.82:
 v0.83:
   - Fix townychat.spam.bypass doing the opposite of its job.
   - Fix spam countdown resetting if you speak too early.
+v0.84:
+  - Fix nation and town names not parsing out the _'s for spaces.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4489.

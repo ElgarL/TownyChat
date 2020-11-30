@@ -6,9 +6,11 @@ import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.util.StringMgmt;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
 import java.util.regex.Pattern;
@@ -238,12 +240,12 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasTown()) {
 				Town town = resident.getTown();
-				String townTag = town.getTag();
+				String townTag = getTag(town);
 				Nation nation = null;
 				String nationTag = null;
 				if (resident.hasNation()) {
 					nation = town.getNation();
-					nationTag = nation.getTag();
+					nationTag = getTag(nation);
 				}
 
 				String nTag = "", tTag = "";
@@ -257,13 +259,13 @@ public class TownyChatFormatter {
 				if (townTag != null && !townTag.isEmpty())
 					tTag = townTag;
 				else if (override || full)
-					tTag = town.getName();
+					tTag = getName(town);
 
 				// Load the nation tags/names
 				if ((nationTag != null) && !nationTag.isEmpty())
 					nTag = nationTag;
 				else if (resident.hasNation() && (override || full))
-					nTag = nation.getName();
+					nTag = getName(nation);
 
 				// Output depending on what tags are present
 				if ((!tTag.isEmpty()) && (!nTag.isEmpty())) {
@@ -296,11 +298,11 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasTown())
 				if (full)
-					return hexIfCompatible(String.format(ChatSettings.getTownTag(), resident.getTown().getName()));
+					return hexIfCompatible(String.format(ChatSettings.getTownTag(), getName(resident.getTown())));
 				else if (resident.getTown().hasTag())
-					return hexIfCompatible(String.format(ChatSettings.getTownTag(), resident.getTown().getTag()));
+					return hexIfCompatible(String.format(ChatSettings.getTownTag(), getTag(resident.getTown())));
 				else if (override)
-					return hexIfCompatible(String.format(ChatSettings.getTownTag(), resident.getTown().getName()));
+					return hexIfCompatible(String.format(ChatSettings.getTownTag(), getName(resident.getTown())));
 
 		} catch (NotRegisteredException e) {
 		}
@@ -311,11 +313,11 @@ public class TownyChatFormatter {
 		try {
 			if (resident.hasNation())
 				if (full)
-					return hexIfCompatible(String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName()));
+					return hexIfCompatible(String.format(ChatSettings.getNationTag(), getName(resident.getTown().getNation())));
 				else if (resident.getTown().getNation().hasTag())
-					return hexIfCompatible(String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getTag()));
+					return hexIfCompatible(String.format(ChatSettings.getNationTag(), getTag(resident.getTown().getNation())));
 				else if (override)
-					return hexIfCompatible(String.format(ChatSettings.getNationTag(), resident.getTown().getNation().getName()));
+					return hexIfCompatible(String.format(ChatSettings.getNationTag(), getName(resident.getTown().getNation())));
 
 		} catch (NotRegisteredException e) {
 		}
@@ -342,5 +344,13 @@ public class TownyChatFormatter {
 		else if (resident.isMayor())
 			return TownySettings.getMayorPostfix(resident);
 		return "";
+	}
+	
+	private static String getName(Government gov) {
+		return StringMgmt.remUnderscore(gov.getName());
+	}
+	
+	private static String getTag(Government gov) {
+		return gov.getTag();
 	}
 }
