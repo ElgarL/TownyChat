@@ -3,6 +3,7 @@ package com.palmergames.bukkit.TownyChat.Command;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
+import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.TownyChat.util.TownyUtil;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.BaseCommand;
@@ -388,6 +389,8 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(player, Translation.of("tc_you_are_already_in_channel", chan.getName()));
 			return;
 		}
+
+		Bukkit.getPluginManager().callEvent(new PlayerJoinChatChannelEvent(player, chan));
 
 		TownyMessaging.sendMessage(player, Translation.of("tc_you_joined_channel", chan.getName()));
 	}
