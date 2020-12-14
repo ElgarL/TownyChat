@@ -352,3 +352,5 @@ v0.83:
 v0.84:
   - Fix nation and town names not parsing out the _'s for spaces.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4489.
+  - Allow hex colour codes to be used in the messagecolour options channels.yml.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4087.
