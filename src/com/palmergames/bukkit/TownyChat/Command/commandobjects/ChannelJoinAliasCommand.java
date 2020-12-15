@@ -2,6 +2,7 @@ package com.palmergames.bukkit.TownyChat.Command.commandobjects;
 
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.channels.Channel;
+import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -65,6 +66,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 							
 						plugin.getTowny().setPlayerMode(player, modes, false);
 						TownyMessaging.sendMessage(player, String.format(Translation.of("tc_you_are_now_talking_in_channel"), channel.getName()));
+						Bukkit.getPluginManager().callEvent(new PlayerJoinChatChannelEvent(player, channel));
 						return true;
 					}
 				} else {
