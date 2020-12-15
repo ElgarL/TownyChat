@@ -354,3 +354,5 @@ v0.84:
     - Closes https://github.com/TownyAdvanced/Towny/issues/4489.
   - Allow hex colour codes to be used in the messagecolour options channels.yml.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4087.
+  - Implemented PlayerJoinChatChannelEvent, courtesy of Glare with PR #32.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4575.
