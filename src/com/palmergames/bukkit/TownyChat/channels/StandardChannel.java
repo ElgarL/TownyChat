@@ -6,6 +6,7 @@ import com.palmergames.bukkit.TownyChat.HexFormatter;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
+import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -66,6 +67,7 @@ public class StandardChannel extends Channel {
 		if (isAbsent(player.getName())) {
 			join(player.getName());
 			notifyjoin = true;
+			Bukkit.getPluginManager().callEvent(new PlayerJoinChatChannelEvent(player, this));
 		}
 
 		/*
