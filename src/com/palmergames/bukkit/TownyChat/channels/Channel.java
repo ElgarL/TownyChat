@@ -286,7 +286,7 @@ public abstract class Channel {
 
 	private void playerAddIgnoreMeta(Player player) {
 		StringDataField icdf = new StringDataField("townychat_ignoredChannels", "", "Ignored TownyChat Channels");
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId()); 
 		if (resident == null)
 			return;
 
@@ -305,7 +305,7 @@ public abstract class Channel {
 	
 	private void playerRemoveIgnoreMeta(Player player) {
 		StringDataField icdf = new StringDataField("townychat_ignoredChannels", "", "Ignored TownyChat Channels");
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId()); 
 		if (resident == null || !resident.hasMeta(icdf.getKey()))
 			return;
 

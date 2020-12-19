@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,13 +49,14 @@ public class StandardChannel extends Channel {
 		
 		Player player = event.getPlayer();
 		Set<Player> recipients = null;
-		Resident resident = null;
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		if (resident == null)
+			return;
 		Town town = null;
 		Nation nation = null;
 		String Format = "";
 		
 		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			nation = resident.getTown().getNation();
 		} catch (NotRegisteredException e1) {
@@ -307,6 +309,7 @@ public class StandardChannel extends Channel {
 		recipients.addAll(event.getRecipients());
 		spies = checkSpying(spies);
 		String format = formatSpyMessage(type, event.getPlayer());
+		if (format == null) return;
 		
 		// Remove spies who've already seen the message naturally.
 		for (Player spy : spies)
@@ -323,12 +326,14 @@ public class StandardChannel extends Channel {
 	 * @param player - Player who chatted.
 	 * @return format - Message format.
 	 */
+	@Nullable
 	private String formatSpyMessage(channelTypes type, Player player) {
-		Resident resident = null;
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		if (resident == null)
+			return null;
 		Town town = null;
 		Nation nation = null;
 		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
 			town = resident.getTown();
 			nation = resident.getTown().getNation();
 		} catch (NotRegisteredException e1) {

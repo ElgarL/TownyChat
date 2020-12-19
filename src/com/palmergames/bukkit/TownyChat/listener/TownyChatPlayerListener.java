@@ -9,7 +9,6 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.tasks.onPlayerJoinTask;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -186,21 +185,15 @@ public class TownyChatPlayerListener implements Listener  {
 		 * We found no channels available so modify the chat (if enabled) and exit.
 		 */
 		if (ChatSettings.isModify_chat()) {
-			try {
-				event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
-				Resident resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
+			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId()); 
 
-				LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
+			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 
-				if (Towny.is116Plus()) {
-					event.setFormat(HexFormatter.translateHexColors(TownyChatFormatter.getChatFormat(chatEvent)));
-				} else {
-					event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
-				}
-
-			} catch (NotRegisteredException e) {
-				// World or resident not registered with Towny
-				e.printStackTrace();
+			if (Towny.is116Plus()) {
+				event.setFormat(HexFormatter.translateHexColors(TownyChatFormatter.getChatFormat(chatEvent)));
+			} else {
+				event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 			}
 		}
 	}
