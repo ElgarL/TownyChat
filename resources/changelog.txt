@@ -356,3 +356,9 @@ v0.84:
     - Closes https://github.com/TownyAdvanced/Towny/issues/4087.
   - Implemented PlayerJoinChatChannelEvent, courtesy of Glare with PR #32.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4575.
+v0.85:
+  - Add persistant leaving for channels.
+    - Uses Towny resident metadata, you will be able to see ignored channels on your /res status screen.
+    - Normal joining/leaving commands are used just like before.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/3133.
+  - Bump minimum Towny version to 0.96.3.0.

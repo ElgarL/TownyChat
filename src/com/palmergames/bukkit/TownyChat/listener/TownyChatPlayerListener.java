@@ -37,12 +37,14 @@ public class TownyChatPlayerListener implements Listener  {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		String name = player.getName();
+	
 		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, channel.getPermission()))
+				continue;
+			
 			// If the channel is auto join, they will be added
 			// If the channel is not auto join, they will marked as absent
-			// TODO: Only do this for channels the user has permissions for
-			channel.forgetPlayer(name);
+			channel.forgetPlayer(player);
 		}
 		Channel channel = plugin.getChannelsHandler().getDefaultChannel();
 		if (channel != null) {
@@ -58,11 +60,10 @@ public class TownyChatPlayerListener implements Listener  {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
-		String name = event.getPlayer().getName(); 
 		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
 			// If the channel is auto join, they will be added
 			// If the channel is not auto join, they will marked as absent
-			channel.forgetPlayer(name);
+			channel.forgetPlayer(event.getPlayer());
 		}
 	}
 	

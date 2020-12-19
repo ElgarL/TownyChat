@@ -118,16 +118,10 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMessage(player, Colors.Gold + "Channel" + Colors.Gray + " - " + Colors.LightBlue + Translation.of("tc_channel_list_status"));
 		for (Map.Entry<String, Channel> channel : chanList.entrySet()) {
 			if (player.hasPermission(channel.getValue().getPermission()))
-				if (channel.getValue().isPresent(player.getName())) {
+				if (channel.getValue().isPresent(player.getName()))
 					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + Translation.of("tc_channel_list_in"));
-				} else {
-					/*if (!plugin.getTowny().isPermissions()
-						|| ( (plugin.getTowny().isPermissions())
-						&& (TownyUniverse.getPermissionSource().has(player, channel.getValue().getPermission()))
-						|| (channel.getValue().getPermission().isEmpty()))) {*/
+				else
 					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + Translation.of("tc_channel_list_out"));
-					//}
-				}
 		}
 	}
 
@@ -319,7 +313,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// If we fail you weren't in there to start with
-		if (!chan.leave(player.getName())) {
+		if (!chan.leave(player)) {
 			TownyMessaging.sendMessage(player, Translation.of("tc_you_already_left_channel", chan.getName()));
 			return;
 		}
@@ -385,7 +379,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (!chan.join(player.getName())) {
+		if (!chan.join(player)) {
 			TownyMessaging.sendMessage(player, Translation.of("tc_you_are_already_in_channel", chan.getName()));
 			return;
 		}

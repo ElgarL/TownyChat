@@ -65,7 +65,7 @@ public class StandardChannel extends Channel {
 		// If player sends a message to a channel it had left
 		// tell the channel to add the player back
 		if (isAbsent(player.getName())) {
-			join(player.getName());
+			join(player);
 			notifyjoin = true;
 			Bukkit.getPluginManager().callEvent(new PlayerJoinChatChannelEvent(player, this));
 		}
