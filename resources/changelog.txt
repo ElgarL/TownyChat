@@ -363,3 +363,5 @@ v0.84:
   - Bump minimum Towny version to 0.96.3.0.
 v0.85:
   - Bump minimum Towny version to 0.96.5.5.
+  - Fix permission tests being done too early on PlayerJoin.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4615

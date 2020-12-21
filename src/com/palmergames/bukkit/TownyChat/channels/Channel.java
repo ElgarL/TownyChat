@@ -125,16 +125,13 @@ public abstract class Channel {
 	 * Used to reset channel settings for a given player
 	 */
 	public void forgetPlayer(Player player) {
-		// If the channel is auto join, they will be added
-		// If the channel is not auto join, they will marked as absent
-		if (playerIgnoringThisChannel(player))
-			return;
-		
-		if (autojoin) {
-			join(player);
-		} else {
+
+		if (playerIgnoringThisChannel(player)
+			|| !player.hasPermission(getPermission())
+			|| !autojoin)
 			leave(player);
-		}
+		else
+			join(player);
 	}
 
 	/*
@@ -145,7 +142,12 @@ public abstract class Channel {
 			absentPlayers = new ConcurrentHashMap<String, Integer> ();
 		}
 		Integer res = absentPlayers.put(player.getName(), 1);
-		playerAddIgnoreMeta(player);
+		
+		// If the player could see this channel if they wanted to, 
+		// we know they are ignoring the channel by choice.
+		if (player.hasPermission(getPermission()) && !playerIgnoringThisChannel(player))
+			playerAddIgnoreMeta(player);
+		
 		return (res == null || res == 0);
 	}
 	

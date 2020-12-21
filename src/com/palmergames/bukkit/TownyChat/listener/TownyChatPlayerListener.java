@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.TownyUniverse;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,25 +37,21 @@ public class TownyChatPlayerListener implements Listener  {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-	
+		
+		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> loginPlayer(event.getPlayer()), 1l);
+
+	}
+
+	private void loginPlayer(Player player) {
 		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
-			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, channel.getPermission()))
-				continue;
-			
-			// If the channel is auto join, they will be added
-			// If the channel is not auto join, they will marked as absent
 			channel.forgetPlayer(player);
 		}
+
 		Channel channel = plugin.getChannelsHandler().getDefaultChannel();
-		if (channel != null) {
-			// See if we have permissions for the default channel
-			channel = plugin.getChannelsHandler().getChannel(player, channel.getCommands().get(0));
-			if (channel != null) {
-				// Schedule it as delayed task because Towny may not have processed this just yet
-				// and would reset the mode otherwise
-				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new onPlayerJoinTask(plugin, player, channel), 5);
-			}
+		if (channel != null &&  player.hasPermission(channel.getPermission())) {
+			// Schedule it as delayed task because Towny may not have processed this just yet
+			// and would reset the mode otherwise
+			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new onPlayerJoinTask(plugin, player, channel), 5);
 		}
 	}
 
