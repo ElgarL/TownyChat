@@ -367,3 +367,6 @@ v0.85:
     - Closes https://github.com/TownyAdvanced/Towny/issues/4615
 v0.86:
   - Fix firing PlayerJoinChatChannelEvent async.
+v0.87:
+  - Fix event firing async.
+  - Fix ranged global channels' chat being forwarded to dynmap.

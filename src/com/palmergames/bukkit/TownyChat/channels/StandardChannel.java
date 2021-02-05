@@ -193,6 +193,11 @@ public class StandardChannel extends Channel {
 			
 		case PRIVATE:
 		case GLOBAL:
+			
+			// Don't broadcast local/ranged chat into dynmap.
+			if (super.getRange() > 0)
+				return;
+			
 			DynmapAPI dynMap = plugin.getDynmap();
 			
 			if (dynMap != null)
