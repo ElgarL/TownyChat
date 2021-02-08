@@ -3,6 +3,7 @@ package com.palmergames.bukkit.TownyChat.util;
 import com.palmergames.bukkit.towny.Towny;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,24 +33,24 @@ public class TownyUtil {
 
 	public static void removeAndSetPlayerMode(Towny towny, Player player, String removeMode, String addMode, boolean notify) {
 		List<String> modes = towny.getPlayerMode(player);
+		List<String> newModes = new ArrayList<>();
 		boolean modesChanged = false;
 		if (removeMode != null && towny.hasPlayerMode(player, removeMode)) {
-			Iterator<String> iter = modes.iterator();
-			while (iter.hasNext()) {
-				String s = iter.next();
-				if (s == null) continue;
-				if (s.equalsIgnoreCase(removeMode)) {
-					iter.remove();
-					modesChanged = true;
-				}
+			for (String mode : modes) {
+				if (!mode.equalsIgnoreCase(removeMode))
+					newModes.add(mode);
 			}
+			modesChanged = true;
 		}
 		if (addMode != null) {
-			modes.add(addMode);
+			newModes.add(addMode);
 			modesChanged = true;
 		}
 		if (modesChanged) {
-			towny.setPlayerMode(player, modes.toArray(new String[0]), notify);
+			if (newModes.isEmpty())
+				towny.removePlayerMode(player);
+			else 
+				towny.setPlayerMode(player, newModes.toArray(new String[0]), notify);
 		}
 	}
 }

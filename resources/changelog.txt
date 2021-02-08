@@ -370,3 +370,4 @@ v0.86:
 v0.87:
   - Fix event firing async.
   - Fix ranged global channels' chat being forwarded to dynmap.
+  - Fix UnsupportedOperationException which was possible when leaving a channel.
