@@ -244,12 +244,10 @@ public class StandardChannel extends Channel {
 	 * @param list
 	 * @return Set containing a list of players for this message.
 	 */
-	@SuppressWarnings("deprecation")
 	private Set<Player> findRecipients(Player sender, List<Player> list) {
 		
 		Set<Player> recipients = new HashSet<>();
 		boolean bEssentials = plugin.getTowny().isEssentials();
-		String sendersName = sender.getName();
 		
 		// Compile the list of recipients
         for (Player test : list) {
@@ -267,10 +265,11 @@ public class StandardChannel extends Channel {
 	        		if (bEssentials) {
 						try {
 							User targetUser = plugin.getTowny().getEssentials().getUser(test);
+							User senderUser = plugin.getTowny().getEssentials().getUser(sender);
 							/*
 							 *  Don't send this message if the user is ignored
 							 */
-							if (targetUser.isIgnoredPlayer(sendersName))
+							if (targetUser.isIgnoredPlayer(senderUser))
 								continue;
 						} catch (TownyException e) {
 							// Failed to fetch user so ignore.
