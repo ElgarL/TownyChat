@@ -46,16 +46,20 @@ public class StandardChannel extends Channel {
 	public void chatProcess(AsyncPlayerChatEvent event) {
 		
 		channelTypes channelType = this.getType();
-		
 		Player player = event.getPlayer();
 		Set<Player> recipients = null;
+		String Format = "";
+		boolean notifyjoin = false;
+
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)
 			return;
-		Town town = null;
-		Nation nation = null;
-		String Format = "";
+		// TODO: When 0.97.0.0 is released, replace 61-68 with: 
+		// Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
+		// Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
 		
+		Town town = null; 
+		Nation nation = null;
 		try {
 			town = resident.getTown();
 			nation = resident.getTown().getNation();
@@ -63,7 +67,6 @@ public class StandardChannel extends Channel {
 			// Not in a town/nation (doesn't matter which)
 		}
 		
-		boolean notifyjoin = false;
 		// If player sends a message to a channel it had left
 		// tell the channel to add the player back
 		if (isAbsent(player.getName())) {
