@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.TownyUniverse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -43,9 +42,7 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 
 	private void loginPlayer(Player player) {
-		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
-			channel.forgetPlayer(player);
-		}
+		refreshPlayerChannels(player);
 
 		Channel channel = plugin.getChannelsHandler().getDefaultChannel();
 		if (channel != null &&  player.hasPermission(channel.getPermission())) {
@@ -57,11 +54,11 @@ public class TownyChatPlayerListener implements Listener  {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
-		for (Channel channel : plugin.getChannelsHandler().getAllChannels().values()) {
-			// If the channel is auto join, they will be added
-			// If the channel is not auto join, they will marked as absent
-			channel.forgetPlayer(event.getPlayer());
-		}
+		refreshPlayerChannels(event.getPlayer());
+	}
+	
+	private void refreshPlayerChannels(Player player) {
+		plugin.getChannelsHandler().getAllChannels().values().stream().forEach(channel -> channel.forgetPlayer(player));
 	}
 	
 	@EventHandler

@@ -241,30 +241,35 @@ public class StandardChannel extends Channel {
 	 * Compile a list of valid recipients for this message.
 	 *
 	 * @param sender
-	 * @param list
+	 * @param playerList
 	 * @return Set containing a list of players for this message.
 	 */
-	private Set<Player> findRecipients(Player sender, List<Player> list) {
+	private Set<Player> findRecipients(Player sender, List<Player> playerList) {
 		
 		Set<Player> recipients = new HashSet<>();
 		boolean bEssentials = plugin.getTowny().isEssentials();
 		
 		// Compile the list of recipients
-        for (Player test : list) {
+        for (Player player : playerList) {
+        	
+        	/*
+        	 * Refresh the potential channels a player can see.
+        	 */
+        	plugin.getChannelsHandler().getChannel(getType().name()).forgetPlayer(player);
         	
         	/*
         	 * If the player has the correct permission node.
         	 */
-        	if (TownyUniverse.getInstance().getPermissionSource().has(test, getPermission())) {
+        	if (TownyUniverse.getInstance().getPermissionSource().has(player, getPermission())) {
         		
         		/*
         		 * If the player is within range for this channel.
         		 */
-	        	if (testDistance(sender, test, getRange())){
+	        	if (testDistance(sender, player, getRange())){
 	        		
 	        		if (bEssentials) {
 						try {
-							User targetUser = plugin.getTowny().getEssentials().getUser(test);
+							User targetUser = plugin.getTowny().getEssentials().getUser(player);
 							User senderUser = plugin.getTowny().getEssentials().getUser(sender);
 							/*
 							 *  Don't send this message if the user is ignored
@@ -279,11 +284,11 @@ public class StandardChannel extends Channel {
 	        		// Spy's can leave channels and we'll respect that
 	        		if (absentPlayers != null) {
 	        			// Ignore players who have left this channel
-	        			if (absentPlayers.containsKey(test.getName())) {
+	        			if (absentPlayers.containsKey(player.getName())) {
 	        				continue;
 	        			}
 	        		}
-	        		recipients.add(test);
+	        		recipients.add(player);
 	        	}
         	}
         }
