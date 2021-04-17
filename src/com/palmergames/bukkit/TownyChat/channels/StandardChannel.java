@@ -45,7 +45,7 @@ public class StandardChannel extends Channel {
 	@Override
 	public void chatProcess(AsyncPlayerChatEvent event) {
 		
-		channelTypes exec = channelTypes.valueOf(getType().name());
+		channelTypes channelType = this.getType();
 		
 		Player player = event.getPlayer();
 		Set<Player> recipients = null;
@@ -76,7 +76,7 @@ public class StandardChannel extends Channel {
 		 *  Retrieve the channel specific format
 		 *  and compile a set of recipients
 		 */
-		switch (exec) {
+		switch (channelType) {
 		
 		case TOWN:
 			if (town == null) {
@@ -131,7 +131,7 @@ public class StandardChannel extends Channel {
 		/*
 		 * Only modify GLOBAL channelType chat (general and local chat channels) if isModifyChat() is true.
 		 */
-		if (!(exec.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
+		if (!(channelType.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
 			event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", TownyChatFormatter.hexIfCompatible(getMessageColour())));
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
@@ -154,7 +154,7 @@ public class StandardChannel extends Channel {
              * Send spy message before another plugin changes any of the recipients,
              * so we know which people can see it.
              */
-            sendSpyMessage(event, exec);
+            sendSpyMessage(event, channelType);
             
             if (hookEvent.isChanged()) {
             	event.setMessage(hookEvent.getMessage());
@@ -166,7 +166,7 @@ public class StandardChannel extends Channel {
         	/*
         	 * Send spy message.
         	 */
-        	sendSpyMessage(event, exec);
+        	sendSpyMessage(event, channelType);
         }
 
         if (notifyjoin) {
@@ -177,7 +177,7 @@ public class StandardChannel extends Channel {
          * Perform any last channel specific functions
          * like logging this chat and relaying to Dynmap.
          */
-        switch (exec) {
+        switch (channelType) {
 		
 		case TOWN:
 			break;
@@ -248,14 +248,15 @@ public class StandardChannel extends Channel {
 		
 		Set<Player> recipients = new HashSet<>();
 		boolean bEssentials = plugin.getTowny().isEssentials();
-		
+		Channel channel = this;
 		// Compile the list of recipients
         for (Player player : playerList) {
         	
         	/*
-        	 * Refresh the potential channels a player can see.
+        	 * Refresh the potential channels a player can see, if they are not currently in the channel.
         	 */
-        	plugin.getChannelsHandler().getChannel(getType().name()).forgetPlayer(player);
+        	if (!channel.isPresent(player.getName()))
+        		channel.forgetPlayer(player);
         	
         	/*
         	 * If the player has the correct permission node.
