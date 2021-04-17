@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
-import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.HexFormatter;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
@@ -8,11 +7,11 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
+import com.palmergames.bukkit.TownyChat.util.EssentialsUtil;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -45,10 +44,10 @@ public class StandardChannel extends Channel {
 	@Override
 	public void chatProcess(AsyncPlayerChatEvent event) {
 		
-		channelTypes channelType = this.getType();
+		channelTypes channelType = channelTypes.valueOf(getType().name());
 		Player player = event.getPlayer();
 		Set<Player> recipients = null;
-		String Format = "";
+		String format = "";
 		boolean notifyjoin = false;
 
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
@@ -86,7 +85,7 @@ public class StandardChannel extends Channel {
 				event.setCancelled(true);
 				return;
 			}
-			Format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
+			format = ChatSettings.getRelevantFormatGroup(player).getTOWN();
 			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayers(town)));
 			break;
 		
@@ -95,7 +94,7 @@ public class StandardChannel extends Channel {
 				event.setCancelled(true);
 				return;
 			}
-			Format = ChatSettings.getRelevantFormatGroup(player).getNATION();
+			format = ChatSettings.getRelevantFormatGroup(player).getNATION();
 			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayers(nation)));
 			break;
 			
@@ -104,22 +103,22 @@ public class StandardChannel extends Channel {
 				event.setCancelled(true);
 				return;
 			}
-			Format = ChatSettings.getRelevantFormatGroup(player).getALLIANCE();
+			format = ChatSettings.getRelevantFormatGroup(player).getALLIANCE();
 			recipients = new HashSet<>(findRecipients(player, TownyAPI.getInstance().getOnlinePlayersAlliance(nation)));
 			break;
 			
 		case DEFAULT:
-			Format = ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
+			format = ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
 			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 			
 		case GLOBAL:
-			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
+			format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
 			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 			
 		case PRIVATE:
-			Format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
+			format = ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
 			recipients = new HashSet<>(findRecipients(player, new ArrayList<>(event.getRecipients())));
 			break;
 		}
@@ -128,14 +127,14 @@ public class StandardChannel extends Channel {
 		 * Perform all replace functions on this format
 		 */
 		if (Chat.usingPlaceholderAPI) {	    	
-            Format = PlaceholderAPI.setPlaceholders(player, Format);
+            format = PlaceholderAPI.setPlaceholders(player, format);
 	    }		
 
 		/*
 		 * Only modify GLOBAL channelType chat (general and local chat channels) if isModifyChat() is true.
 		 */
 		if (!(channelType.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
-			event.setFormat(Format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", TownyChatFormatter.hexIfCompatible(getMessageColour())));
+			event.setFormat(format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", TownyChatFormatter.hexIfCompatible(getMessageColour())));
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 		}
@@ -249,9 +248,8 @@ public class StandardChannel extends Channel {
 	 */
 	private Set<Player> findRecipients(Player sender, List<Player> playerList) {
 		
-		Set<Player> recipients = new HashSet<>();
-		boolean bEssentials = plugin.getTowny().isEssentials();
-		Channel channel = this;
+		Set<Player> recipients = new HashSet<>();		
+		Channel channel = plugin.getChannelsHandler().getChannel(getName());
 		// Compile the list of recipients
         for (Player player : playerList) {
         	
@@ -271,19 +269,11 @@ public class StandardChannel extends Channel {
         		 */
 	        	if (testDistance(sender, player, getRange())){
 	        		
-	        		if (bEssentials) {
-						try {
-							User targetUser = plugin.getTowny().getEssentials().getUser(player);
-							User senderUser = plugin.getTowny().getEssentials().getUser(sender);
-							/*
-							 *  Don't send this message if the user is ignored
-							 */
-							if (targetUser.isIgnoredPlayer(senderUser))
-								continue;
-						} catch (TownyException e) {
-							// Failed to fetch user so ignore.
-						}
-					}
+	        		/*
+	        		 * Don't send anything if the player is ignoring the sender.
+	        		 */
+	        		if (plugin.getEssentials() != null && EssentialsUtil.isUserIgnoringUser(sender, player))
+							continue;
 
 	        		// Spy's can leave channels and we'll respect that
 	        		if (absentPlayers != null) {

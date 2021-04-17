@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.TownyChat;
 
+import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.Command.commandobjects.ChannelJoinAliasCommand;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.util.Version;
 
 import org.bukkit.Bukkit;
@@ -44,11 +46,13 @@ public class Chat extends JavaPlugin {
 	protected PluginManager pm;
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
+	private Essentials essentials = null;
 	
 	private static Version requiredTownyVersion = Version.fromString("0.96.5.5");
 	public static boolean usingPlaceholderAPI = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
+	
 
 
 	@Override
@@ -84,6 +88,11 @@ public class Chat extends JavaPlugin {
 			pm.disablePlugin(this);
 			return;
 		}
+		
+		if (towny.isEssentials())
+			try {
+				essentials = towny.getEssentials();
+			} catch (TownyException ignored) {}
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
 		getCommand("channel").setExecutor(new ChannelCommand(this));
@@ -201,10 +210,13 @@ public class Chat extends JavaPlugin {
 	public Towny getTowny() {
 		return towny;
 	}
-	
 
 	public DynmapAPI getDynmap() {
 		return dynMap;
+	}
+
+	public Essentials getEssentials() {
+		return essentials;
 	}
 
 	private void registerObjectCommands() {
