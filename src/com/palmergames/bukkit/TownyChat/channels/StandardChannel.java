@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
+import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.TownyChat.HexFormatter;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
@@ -7,11 +8,11 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
-import com.palmergames.bukkit.TownyChat.util.EssentialsUtil;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -246,9 +247,12 @@ public class StandardChannel extends Channel {
 	 * @param playerList
 	 * @return Set containing a list of players for this message.
 	 */
+	@SuppressWarnings("deprecation")
 	private Set<Player> findRecipients(Player sender, List<Player> playerList) {
 		
-		Set<Player> recipients = new HashSet<>();		
+		Set<Player> recipients = new HashSet<>();
+		boolean bEssentials = plugin.getTowny().isEssentials();
+		String sendersName = sender.getName();
 		Channel channel = plugin.getChannelsHandler().getChannel(getName());
 		// Compile the list of recipients
         for (Player player : playerList) {
@@ -269,11 +273,18 @@ public class StandardChannel extends Channel {
         		 */
 	        	if (testDistance(sender, player, getRange())){
 	        		
-	        		/*
-	        		 * Don't send anything if the player is ignoring the sender.
-	        		 */
-	        		if (plugin.getEssentials() != null && EssentialsUtil.isUserIgnoringUser(sender, player))
-							continue;
+	        		if (bEssentials) {
+						try {
+							User targetUser = plugin.getTowny().getEssentials().getUser(player);
+							/*
+							 *  Don't send this message if the user is ignored
+							 */
+							if (targetUser.isIgnoredPlayer(sendersName))
+								continue;
+						} catch (TownyException e) {
+							// Failed to fetch user so ignore.
+						}
+					}
 
 	        		// Spy's can leave channels and we'll respect that
 	        		if (absentPlayers != null) {

@@ -26,7 +26,7 @@ public abstract class Channel {
 	private boolean hooked=false;
 	private boolean autojoin=true;
 	private double spamtime;
-	private WeakHashMap<Player, Long> Spammers = new WeakHashMap<>();
+	private WeakHashMap<Player, Long> spammers = new WeakHashMap<>();
 	protected ConcurrentMap<String, Integer> absentPlayers = null;  
 	protected ConcurrentMap<String, Integer> mutedPlayers = null;
 	
@@ -270,19 +270,20 @@ public abstract class Channel {
 		long timeNow = System.currentTimeMillis();
 		long spam = timeNow;
 		
-		if (Spammers.containsKey(player)) {
-			spam = Spammers.get(player);
-			Spammers.remove(player);
+		if (spammers.containsKey(player)) {
+			spam = spammers.get(player);
+			spammers.remove(player);
 		} else {
 			// No record found so ensure we don't trigger for spam
 			spam -= ((getSpam_time() + 1)*1000);
 		}
 		
 		if (timeNow - spam < (getSpam_time()*1000)) {
-			Spammers.put(player, timeNow);
+			spammers.put(player, spam);
 			TownyMessaging.sendErrorMsg(player, Translation.of("tc_err_unable_to_talk_you_are_spamming"));
 			return true;
 		}
+		spammers.put(player, timeNow);
 		return false;
 	}
 
