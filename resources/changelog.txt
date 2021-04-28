@@ -372,5 +372,5 @@ v0.87:
   - Fix ranged global channels' chat being forwarded to dynmap.
   - Fix UnsupportedOperationException which was possible when leaving a channel.
 v0.88:
-  - Replace deprecated Essentials call.
   - Fix players who've just recently joined a town/nation/alliance not being included in the town/nation/alliance chats.
+  - Fix spam_time settings not working.
