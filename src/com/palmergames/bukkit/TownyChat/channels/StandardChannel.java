@@ -354,6 +354,9 @@ public class StandardChannel extends Channel {
 			// Not in a town/nation (doesn't matter which)
 		}
 		String format = ChatColor.translateAlternateColorCodes('&', getChannelTag());
+		if (Towny.is116Plus())
+			format = HexFormatter.translateHexColors(format);
+		
 		switch (type) {
 			case TOWN:
 				format = format + " [" + town.getName() + "] " + resident.getName();
