@@ -4,8 +4,8 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -237,89 +237,82 @@ public class TownyChatFormatter {
 	 * @return string containing the correctly formatted nation/town data
 	 */
 	public static String formatTownyTag(Resident resident, Boolean override, Boolean full) {
-		try {
-			if (resident.hasTown()) {
-				Town town = resident.getTown();
-				String townTag = getTag(town);
-				Nation nation = null;
-				String nationTag = null;
-				if (resident.hasNation()) {
-					nation = town.getNation();
-					nationTag = getTag(nation);
-				}
-
-				String nTag = "", tTag = "";
-
-				//Force use of full names only
-				if (full) {
-					nationTag = "";
-					townTag = "";
-				}
-				// Load town tags/names
-				if (townTag != null && !townTag.isEmpty())
-					tTag = townTag;
-				else if (override || full)
-					tTag = getName(town);
-
-				// Load the nation tags/names
-				if ((nationTag != null) && !nationTag.isEmpty())
-					nTag = nationTag;
-				else if (resident.hasNation() && (override || full))
-					nTag = getName(nation);
-
-				// Output depending on what tags are present
-				if ((!tTag.isEmpty()) && (!nTag.isEmpty())) {
-					if (ChatSettings.getBothTags().contains("%t") || ChatSettings.getBothTags().contains("%n")) {
-						// Then it contains %s & %s
-						// Small suttle change so that an issue is solved, it is documented in the config.
-						// But only after addition of this. (v0.50)
-						return ChatSettings.getBothTags().replace("%t", tTag).replace("%n", nTag);
-					} else {
-						return String.format(ChatSettings.getBothTags(), nTag, tTag);
-					}
-				}
-
-				if (!nTag.isEmpty()) {
-					return String.format(ChatSettings.getNationTag(), nTag);
-				}
-
-				if (!tTag.isEmpty()) {
-					return String.format(ChatSettings.getTownTag(), tTag);
-				}
-
+		if (resident.hasTown()) {
+			Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
+			String townTag = getTag(town);
+			Nation nation = null;
+			String nationTag = null;
+			if (resident.hasNation()) {
+				nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
+				nationTag = getTag(nation);
 			}
-		} catch (NotRegisteredException e) {
-			// no town or nation
+
+			String nTag = "", tTag = "";
+
+			//Force use of full names only
+			if (full) {
+				nationTag = "";
+				townTag = "";
+			}
+			// Load town tags/names
+			if (townTag != null && !townTag.isEmpty())
+				tTag = townTag;
+			else if (override || full)
+				tTag = getName(town);
+
+			// Load the nation tags/names
+			if ((nationTag != null) && !nationTag.isEmpty())
+				nTag = nationTag;
+			else if (resident.hasNation() && (override || full))
+				nTag = getName(nation);
+
+			// Output depending on what tags are present
+			if ((!tTag.isEmpty()) && (!nTag.isEmpty())) {
+				if (ChatSettings.getBothTags().contains("%t") || ChatSettings.getBothTags().contains("%n")) {
+					// Then it contains %s & %s
+					// Small suttle change so that an issue is solved, it is documented in the config.
+					// But only after addition of this. (v0.50)
+					return ChatSettings.getBothTags().replace("%t", tTag).replace("%n", nTag);
+				} else {
+					return String.format(ChatSettings.getBothTags(), nTag, tTag);
+				}
+			}
+
+			if (!nTag.isEmpty()) {
+				return String.format(ChatSettings.getNationTag(), nTag);
+			}
+
+			if (!tTag.isEmpty()) {
+				return String.format(ChatSettings.getTownTag(), tTag);
+			}
+
 		}
 		return "";
 	}
 
 	public static String formatTownTag(Resident resident, Boolean override, Boolean full) {
-		try {
-			if (resident.hasTown())
-				if (full)
-					return hexIfCompatible(String.format(ChatSettings.getTownTag(), getName(resident.getTown())));
-				else if (resident.getTown().hasTag())
-					return hexIfCompatible(String.format(ChatSettings.getTownTag(), getTag(resident.getTown())));
-				else if (override)
-					return hexIfCompatible(String.format(ChatSettings.getTownTag(), getName(resident.getTown())));
+		if (resident.hasTown()) {
+			Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
+			if (full)
+				return hexIfCompatible(String.format(ChatSettings.getTownTag(), getName(town)));
+			else if (town.hasTag())
+				return hexIfCompatible(String.format(ChatSettings.getTownTag(), getTag(town)));
+			else if (override)
+				return hexIfCompatible(String.format(ChatSettings.getTownTag(), getName(town)));
 
-		} catch (NotRegisteredException e) {
 		}
 		return "";
 	}
 
 	public static String formatNationTag(Resident resident, Boolean override, Boolean full) {
-		try {
-			if (resident.hasNation())
-				if (full)
-					return hexIfCompatible(String.format(ChatSettings.getNationTag(), getName(resident.getTown().getNation())));
-				else if (resident.getTown().getNation().hasTag())
-					return hexIfCompatible(String.format(ChatSettings.getNationTag(), getTag(resident.getTown().getNation())));
-				else if (override)
-					return hexIfCompatible(String.format(ChatSettings.getNationTag(), getName(resident.getTown().getNation())));
-
-		} catch (NotRegisteredException e) {
+		if (resident.hasNation()) {
+			Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
+			if (full)
+				return hexIfCompatible(String.format(ChatSettings.getNationTag(), getName(nation)));
+			else if (nation.hasTag())
+				return hexIfCompatible(String.format(ChatSettings.getNationTag(), getTag(nation)));
+			else if (override)
+				return hexIfCompatible(String.format(ChatSettings.getNationTag(), getName(nation)));
 		}
 		return "";
 	}

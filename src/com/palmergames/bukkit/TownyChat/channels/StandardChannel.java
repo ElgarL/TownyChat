@@ -11,7 +11,6 @@ import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -54,18 +53,8 @@ public class StandardChannel extends Channel {
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)
 			return;
-		// TODO: When 0.97.0.0 is released, replace 61-68 with: 
-		// Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
-		// Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
-		
-		Town town = null; 
-		Nation nation = null;
-		try {
-			town = resident.getTown();
-			nation = resident.getTown().getNation();
-		} catch (NotRegisteredException e1) {
-			// Not in a town/nation (doesn't matter which)
-		}
+		Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
+		Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
 		
 		// If player sends a message to a channel it had left
 		// tell the channel to add the player back
@@ -345,14 +334,9 @@ public class StandardChannel extends Channel {
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)
 			return null;
-		Town town = null;
-		Nation nation = null;
-		try {
-			town = resident.getTown();
-			nation = resident.getTown().getNation();
-		} catch (NotRegisteredException e1) {
-			// Not in a town/nation (doesn't matter which)
-		}
+		Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
+		Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
+		
 		String format = ChatColor.translateAlternateColorCodes('&', getChannelTag());
 		if (Towny.is116Plus())
 			format = HexFormatter.translateHexColors(format);

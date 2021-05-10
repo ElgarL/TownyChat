@@ -375,3 +375,5 @@ v0.88:
   - Fix players who've just recently joined a town/nation/alliance not being included in the town/nation/alliance chats.
   - Fix spam_time settings not working.
   - Fix hex color codes not being parsed in TownyChat spy messages.  
+v0.89:
+  - Update min. Towny to 0.97.0.0 and remove NotRegisteredException catches.
