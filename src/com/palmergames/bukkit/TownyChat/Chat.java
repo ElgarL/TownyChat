@@ -7,6 +7,7 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
+import com.palmergames.bukkit.TownyChat.listener.EssentialsDiscordHookListener;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
@@ -47,6 +48,7 @@ public class Chat extends JavaPlugin {
 	
 	private static Version requiredTownyVersion = Version.fromString("0.97.0.0");
 	public static boolean usingPlaceholderAPI = false;
+	public static boolean usingEssentialsDiscord = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
 
@@ -144,6 +146,11 @@ public class Chat extends JavaPlugin {
 		    usingPlaceholderAPI = true;
 		}
 
+		test = pm.getPlugin("EssentialsDiscord");
+		if (test != null) {
+			usingEssentialsDiscord = true;
+		}
+
 	}
 
 	public void registerEvents() {
@@ -154,7 +161,10 @@ public class Chat extends JavaPlugin {
 			if (TownyPlayerListener != null)
 				pm.registerEvents(TownyPlayerListener, this);
 		}
-		
+
+		if (usingEssentialsDiscord) {
+			pm.registerEvents(new EssentialsDiscordHookListener(this), this);
+		}
 	}
 	
 	public void registerPermissions() {

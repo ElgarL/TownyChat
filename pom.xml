@@ -108,6 +108,18 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.EssentialsX.Essentials</groupId>
+            <artifactId>EssentialsXDiscord</artifactId>
+            <version>57600f333c</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.dv8tion</groupId>
+                    <artifactId>JDA</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.2</version>
