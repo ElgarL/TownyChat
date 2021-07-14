@@ -377,3 +377,4 @@ v0.88:
   - Fix hex color codes not being parsed in TownyChat spy messages.  
 v0.89:
   - Update min. Towny to 0.97.0.0 and remove NotRegisteredException catches.
+  - Add support for EssentialsDiscord, courtesy of JRoy with PR #33.
