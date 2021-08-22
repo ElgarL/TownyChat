@@ -380,3 +380,5 @@ v0.89:
   - Add support for EssentialsDiscord, courtesy of JRoy with PR #33.
 v0.90:
   - Allow channeltags to make use of hex colour formatting.
+  - Fix default channels not being returned if TownyChat is searching for a channel of that type.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4984

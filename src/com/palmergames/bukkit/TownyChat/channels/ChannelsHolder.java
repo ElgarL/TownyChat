@@ -105,6 +105,10 @@ public class ChannelsHolder {
 		
 		String name = player.getName();
 		
+		// Return the defaultChan if it is the correct type, and the player is present in that channel.
+		if (getDefaultChannel() != null && getDefaultChannel().isPresent(name) && getDefaultChannel().getType().equals(type))
+			return getDefaultChannel();
+		
 		for (Channel channel: channels.values()) {
 			if (!channel.isPresent(name)) continue;
 			if (!channel.getType().equals(type)) continue;
