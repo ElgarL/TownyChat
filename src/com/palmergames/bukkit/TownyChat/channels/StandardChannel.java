@@ -124,7 +124,7 @@ public class StandardChannel extends Channel {
 		 * Only modify GLOBAL channelType chat (general and local chat channels) if isModifyChat() is true.
 		 */
 		if (!(channelType.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
-			event.setFormat(format.replace("{channelTag}", getChannelTag()).replace("{msgcolour}", TownyChatFormatter.hexIfCompatible(getMessageColour())));
+			event.setFormat(format.replace("{channelTag}", Colors.translateColorCodes(getChannelTag())).replace("{msgcolour}", Colors.translateColorCodes(getMessageColour())));
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 		}
