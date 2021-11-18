@@ -22,6 +22,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.dynmap.DynmapAPI;
@@ -160,6 +161,21 @@ public class StandardChannel extends Channel {
         	 */
         	sendSpyMessage(event, channelType);
         }
+
+		if (getChannelSound() != null) {
+			for (Player recipient : event.getRecipients()) {
+				if (!isSoundMuted(player)) {
+					try {
+						recipient.playSound(player.getLocation(), Sound.valueOf(getChannelSound()), 1.0f, 1.0f);
+					} catch (IllegalArgumentException ex) {
+						plugin.getLogger().warning("Channel " + this.getName() + " has an invalid sound configured.");
+						setChannelSound(null);
+						break;
+					}
+				}
+			}
+		}
+
 
         if (notifyjoin) {
 			TownyMessaging.sendMessage(player, "You join " + Colors.White + getName());
