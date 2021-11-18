@@ -382,3 +382,6 @@ v0.90:
   - Allow channeltags to make use of hex colour formatting.
   - Fix default channels not being returned if TownyChat is searching for a channel of that type.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4984
+v0.91:
+  - Implemented sounds for channels and toggling, courtesy of Glare with PR #34.
+  - Minimum Towny version set to 0.97.2.18.
