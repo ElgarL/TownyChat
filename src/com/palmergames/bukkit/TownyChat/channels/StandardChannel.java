@@ -125,7 +125,7 @@ public class StandardChannel extends Channel {
 		 * Only modify GLOBAL channelType chat (general and local chat channels) if isModifyChat() is true.
 		 */
 		if (!(channelType.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
-			event.setFormat(format.replace("{channelTag}", Colors.translateColorCodes(getChannelTag())).replace("{msgcolour}", Colors.translateColorCodes(getMessageColour())));
+			event.setFormat(getFormat(format));
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 		}
@@ -215,7 +215,11 @@ public class StandardChannel extends Channel {
 
 	}
 
-
+	private String getFormat(String format) {
+		return format
+			.replace("{channelTag}", Colors.translateColorCodes(getChannelTag() != null ? getChannelTag() : ""))
+			.replace("{msgcolour}", Colors.translateColorCodes(getMessageColour() != null ? getMessageColour() : ""));
+	}
 
 	/**
 	 * Check the distance between players and return a result based upon the range setting
@@ -353,7 +357,7 @@ public class StandardChannel extends Channel {
 		Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 		Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
 		
-		String format = ChatColor.translateAlternateColorCodes('&', getChannelTag());
+		String format = ChatColor.translateAlternateColorCodes('&', getChannelTag() != null ? getChannelTag() : getName());
 		if (Towny.is116Plus())
 			format = HexFormatter.translateHexColors(format);
 		
