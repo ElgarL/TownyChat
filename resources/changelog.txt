@@ -390,3 +390,5 @@ v0.92:
   - Internalize player channel storage.
   - Repurpose the display modes on join ChatConfig setting, not displays the channel join message.
   - Fix for Spigot 1.18.1 config enabling comments by default.
+v0.93:
+  - Regression: NPE in EssentialsDiscordHookListener.
