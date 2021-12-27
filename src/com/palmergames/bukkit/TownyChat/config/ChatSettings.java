@@ -2,6 +2,7 @@ package com.palmergames.bukkit.TownyChat.config;
 
 import com.palmergames.bukkit.TownyChat.channels.channelFormats;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
+import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -40,7 +41,7 @@ public class ChatSettings extends tag_formats {
 		if (file != null) {
 
 			// read the config.yml into memory
-			ChatSettings.chatConfig = new CommentedConfiguration(file);			
+			ChatSettings.chatConfig = new CommentedConfiguration(file.toPath());
 			if (!chatConfig.load()) {
 				Bukkit.getLogger().severe("[TownyChat] Failed to load ChatConfig!");
 				Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
@@ -48,7 +49,11 @@ public class ChatSettings extends tag_formats {
 				return false;
 			}
 			setDefaults(version, file);
-			chatConfig.save();			
+			try {
+				// Pre-1.18.1 this option does not exist. 
+				chatConfig.options().width(500);
+			} catch (NoSuchMethodError ignored) {}
+			chatConfig.save();
 		}
 		return true;
 	}
@@ -59,7 +64,7 @@ public class ChatSettings extends tag_formats {
 	 */
 	private static void setDefaults(String version, File file) {
 
-		newChatConfig = new CommentedConfiguration(file);
+		newChatConfig = new CommentedConfiguration(file.toPath());
 		newChatConfig.load();
 
 		for (ChatConfigNodes root : ChatConfigNodes.values()) {

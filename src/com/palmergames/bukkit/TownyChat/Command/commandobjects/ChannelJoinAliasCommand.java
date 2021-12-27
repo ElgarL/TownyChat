@@ -35,7 +35,8 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 					message = StringMgmt.join(args, " ");
 				}
 				if (message.isEmpty()) {
-					if (plugin.getPlayerChannel(player).getName().equals(channel.getName())) {
+					Channel chan = plugin.getPlayerChannel(player); 
+					if (chan != null && chan.getName().equalsIgnoreCase(channel.getName())) {
 						TownyMessaging.sendMessage(player, String.format(Translation.of("tc_you_are_already_in_channel"), channel.getName()));
 						return true;
 					} else {

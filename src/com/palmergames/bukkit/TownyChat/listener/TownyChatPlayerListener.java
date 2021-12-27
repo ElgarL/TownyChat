@@ -141,7 +141,7 @@ public class TownyChatPlayerListener implements Listener  {
 			/*
 			 * Check the player for any channel modes.
 			 */
-			Channel channel = plugin.getChannelsHandler().getChannel(plugin.getPlayerChannel(player).getName());
+			Channel channel = plugin.getPlayerChannel(player);
 			if (channel != null) {
 				// Notify player he is muted
 				if (channel.isMuted(player.getName())) {

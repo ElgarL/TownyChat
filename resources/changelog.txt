@@ -392,3 +392,6 @@ v0.92:
   - Fix for Spigot 1.18.1 config enabling comments by default.
 v0.93:
   - Regression: NPE in EssentialsDiscordHookListener.
+  - Regression: NPE in TownyChatPlayerListener.
+  - Minimum Towny version set to 0.97.5.0.
+  - Use Towny's built-in Commented configuration & adapt to use the new width() option supplied by Spigot.
