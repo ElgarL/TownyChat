@@ -192,20 +192,6 @@ public class TownyChatFormatter {
 				return event.getEvent().getPlayer().getName();
 			}
 		});
-		/*
-		replacer.registerFormatReplacement(Pattern.quote("{modplayername}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, TownyChatEvent event) throws Exception {
-				return event.getEvent().getPlayer().getDisplayName();
-			}
-		});
-		*/
-		replacer.registerFormatReplacement(Pattern.quote("{channelTag}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownyTag(event.getResident(), false, false);
-			}
-		});
 
 		// Replace colours last ({msg} is replaced last as it can't be regex parsed).
 		replacer.registerFormatReplacement("&{1}[0-9A-Fa-fLlOoNnKkMmRr]{1}", new TownyChatReplacerCallable() {

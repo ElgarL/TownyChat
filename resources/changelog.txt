@@ -395,3 +395,5 @@ v0.93:
   - Regression: NPE in TownyChatPlayerListener.
   - Minimum Towny version set to 0.97.5.0.
   - Use Towny's built-in Commented configuration & adapt to use the new width() option supplied by Spigot.
+v0.94:
+  - Remove 2 unused replacers in TownyChatFormatter.
