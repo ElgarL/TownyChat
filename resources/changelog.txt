@@ -397,3 +397,4 @@ v0.93:
   - Use Towny's built-in Commented configuration & adapt to use the new width() option supplied by Spigot.
 v0.94:
   - Remove 2 unused replacers in TownyChatFormatter.
+  - Switch to using Translatables, so messages appear in the correct Locale for each player.
