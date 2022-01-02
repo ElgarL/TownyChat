@@ -3,7 +3,7 @@ package com.palmergames.bukkit.TownyChat.Command;
 import com.palmergames.bukkit.TownyChat.Chat;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.command.BaseCommand;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.ChatTools;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -53,9 +53,9 @@ public class TownyChatCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else if (split[0].equalsIgnoreCase("reload")) {
 			plugin.reload();
-			TownyMessaging.sendMessage(sender, Translation.of("tc_settings_reloaded"));
+			TownyMessaging.sendMessage(sender, Translatable.of("tc_settings_reloaded"));
 		} else {
-			TownyMessaging.sendErrorMsg(sender, Translation.of("tc_err_unrecognized_command_format"));
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("tc_err_unrecognized_command_format"));
 		}
 
 	}
