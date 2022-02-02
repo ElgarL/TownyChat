@@ -55,7 +55,7 @@ public class Chat extends JavaPlugin {
 	public static boolean usingEssentialsDiscord = false;
 	boolean chatConfigError = false;
 	boolean channelsConfigError = false;
-	private static ConcurrentMap<UUID, Channel> playerChannelMap = new ConcurrentHashMap<>();
+	private static ConcurrentMap<UUID, Channel> playerChannelMap;
 
 	@Override
 	public void onEnable() {
@@ -63,6 +63,7 @@ public class Chat extends JavaPlugin {
 		pm = getServer().getPluginManager();
 		channelsConfig = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
+		playerChannelMap = new ConcurrentHashMap<>();
 		
 		checkPlugins();
 		loadConfigs();
@@ -120,6 +121,7 @@ public class Chat extends JavaPlugin {
 		
 		channelsConfig = null;
 		channels = null;
+		playerChannelMap = null;
 	}
 	
 	/**

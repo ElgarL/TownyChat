@@ -398,3 +398,5 @@ v0.93:
 v0.94:
   - Remove 2 unused replacers in TownyChatFormatter.
   - Switch to using Translatables, so messages appear in the correct Locale for each player.
+v0.95:
+  - Regression: channels.yml not handling /townychat reload, bug began in 0.92. 
