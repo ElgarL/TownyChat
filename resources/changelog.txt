@@ -400,3 +400,5 @@ v0.94:
   - Switch to using Translatables, so messages appear in the correct Locale for each player.
 v0.95:
   - Regression: channels.yml not handling /townychat reload, bug began in 0.92. 
+v0.96:
+  - Display invalid subcommand message when /ch is used with an invalid subcommand.

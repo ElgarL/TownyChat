@@ -88,14 +88,10 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseChannelCommand(Player player, String[] split) {
-		if (split.length == 0) { // So they just type /channel , We should probably send them to the help menu..
-			for (String line : channel_help) {
+		// So they just type /channel , We should probably send them to the help menu..
+		if (split.length == 0 || split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) { 
+			for (String line : channel_help)
 				player.sendMessage(line);
-			}
-		} else if (split[0].equalsIgnoreCase("help") || split[0].equalsIgnoreCase("?")) {
-			for (String line : channel_help) {
-				player.sendMessage(line);
-			}
 		} else if (split[0].equalsIgnoreCase("join")) { // /channel join [chn] (/label args[0] args[1] length = 2.)
 			parseChannelJoin(player, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("leave")) {
@@ -110,8 +106,9 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			parseChannelList(player);
 		} else if (split[0].equalsIgnoreCase("soundtoggle")) {
 			parseChannelSoundToggle(player, StringMgmt.remFirstArg(split));
+		} else {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_sub"));
 		}
-
 	}
 
 	public static void parseChannelList(Player player) {
