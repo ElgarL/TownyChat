@@ -7,10 +7,13 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.metadata.StringDataField;
+import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
 import org.bukkit.Bukkit;
@@ -42,6 +45,8 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 
 	private void loginPlayer(Player player) {
+		checkPlayerForOldMeta(player);
+		
 		refreshPlayerChannels(player);
 
 		Channel channel = plugin.getChannelsHandler().getDefaultChannel();
@@ -217,5 +222,37 @@ public class TownyChatPlayerListener implements Listener  {
 			return false;
 		}
 		return false;
+	}
+	
+
+	private void checkPlayerForOldMeta(Player player) {
+		Resident resident = TownyAPI.getInstance().getResident(player);
+		if (resident != null && playerHasTCMeta(resident))
+			checkIfMetaContainsOldSplitter(resident);
+	}
+
+	private boolean playerHasTCMeta(Resident resident) {
+		StringDataField icsdf = new StringDataField("townychat_ignoredChannels", "", "Ignored TownyChat Channels");
+		StringDataField socsdf = new StringDataField("townychat_soundOffChannels", "", "TownyChat Channels with Sound Toggle Off");
+		return MetaDataUtil.hasMeta(resident, icsdf) || MetaDataUtil.hasMeta(resident, socsdf); 
+	}
+
+	private void checkIfMetaContainsOldSplitter(Resident resident) {
+		StringDataField icsdf = new StringDataField("townychat_ignoredChannels", "", "Ignored TownyChat Channels");
+		if (MetaDataUtil.hasMeta(resident, icsdf)) {
+			String meta = MetaDataUtil.getString(resident, icsdf);
+			if (meta.contains("\uFF0c ")) {
+				meta.replaceAll("\uFF0c ", "#");
+				MetaDataUtil.setString(resident, icsdf, meta, true);
+			}
+		}
+		StringDataField socsdf = new StringDataField("townychat_soundOffChannels", "", "TownyChat Channels with Sound Toggle Off");
+		if (MetaDataUtil.hasMeta(resident, socsdf)) {
+			String meta = MetaDataUtil.getString(resident, socsdf);
+			if (meta.contains("\uFF0c ")) {
+				meta.replaceAll("\uFF0c ", "#");
+				MetaDataUtil.setString(resident, socsdf, meta, true);
+			}
+		}
 	}
 }
