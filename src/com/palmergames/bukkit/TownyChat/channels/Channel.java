@@ -317,7 +317,7 @@ public abstract class Channel {
 			CustomDataField<?> cdf = resident.getMetadata(icdf.getKey());
 			if (cdf instanceof StringDataField) {
 				StringDataField sdf = (StringDataField) cdf;
-				sdf.setValue(sdf.getValue().concat("\uFF0C " + this.getName()));
+				sdf.setValue(sdf.getValue().concat("#" + this.getName()));
 				TownyUniverse.getInstance().getDataSource().saveResident(resident);
 			}
 
@@ -336,13 +336,13 @@ public abstract class Channel {
 		if (cdf instanceof StringDataField) {
 			StringDataField sdf = (StringDataField) cdf;
 			String newValues = "";
-			String[] values = sdf.getValue().split("\uFF0C ");
+			String[] values = sdf.getValue().split("#");
 			for (String chanName : values)
 				if (!chanName.equalsIgnoreCase(this.getName()))
 					if (newValues.isEmpty())
 						newValues = chanName;
 					else 
-						newValues += "\uFF0C " + chanName;
+						newValues += "#" + chanName;
 
 			if (!newValues.isEmpty()) {
 				sdf.setValue(newValues);
@@ -361,7 +361,7 @@ public abstract class Channel {
 			CustomDataField<?> cdf = resident.getMetadata(idf.getKey());
 			if (cdf instanceof StringDataField) {
 				StringDataField sdf = (StringDataField) cdf;
-				String[] split = sdf.getValue().split("\uFF0C ");
+				String[] split = sdf.getValue().split("#");
 				for (String string : split)
 					if (string.equalsIgnoreCase(this.getName()))
 						return true;
@@ -380,7 +380,7 @@ public abstract class Channel {
 			CustomDataField<?> cdf = resident.getMetadata(icdf.getKey());
 			if (cdf instanceof StringDataField) {
 				StringDataField sdf = (StringDataField) cdf;
-				sdf.setValue(sdf.getValue().concat("\uFF0C " + this.getName()));
+				sdf.setValue(sdf.getValue().concat("#" + this.getName()));
 				TownyUniverse.getInstance().getDataSource().saveResident(resident);
 			}
 		} else {
@@ -398,13 +398,13 @@ public abstract class Channel {
 		if (cdf instanceof StringDataField) {
 			StringDataField sdf = (StringDataField) cdf;
 			String newValues = "";
-			String[] values = sdf.getValue().split("\uFF0C ");
+			String[] values = sdf.getValue().split("#");
 			for (String chanName : values)
 				if (!chanName.equalsIgnoreCase(this.getName()))
 					if (newValues.isEmpty())
 						newValues = chanName;
 					else
-						newValues += "\uFF0C " + chanName;
+						newValues += "#" + chanName;
 
 			if (!newValues.isEmpty()) {
 				sdf.setValue(newValues);
@@ -422,7 +422,7 @@ public abstract class Channel {
 			CustomDataField<?> cdf = resident.getMetadata(idf.getKey());
 			if (cdf instanceof StringDataField) {
 				StringDataField sdf = (StringDataField) cdf;
-				String[] split = sdf.getValue().split("\uFF0C ");
+				String[] split = sdf.getValue().split("#");
 				for (String string : split)
 					if (string.equalsIgnoreCase(this.getName()))
 						return true;
