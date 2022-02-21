@@ -225,6 +225,8 @@ public class TownyChatPlayerListener implements Listener  {
 	}
 	
 
+	// From TownyChat 0.84-0.95 the symbol used to separate the channels in the meta
+	// was not good for non-unicode-using mysql servers.
 	private void checkPlayerForOldMeta(Player player) {
 		Resident resident = TownyAPI.getInstance().getResident(player);
 		if (resident != null && playerHasTCMeta(resident))
@@ -242,7 +244,8 @@ public class TownyChatPlayerListener implements Listener  {
 		if (MetaDataUtil.hasMeta(resident, icsdf)) {
 			String meta = MetaDataUtil.getString(resident, icsdf);
 			if (meta.contains("\uFF0c ")) {
-				meta.replaceAll("\uFF0c ", "#");
+				meta = replaceSymbol(meta);
+				meta = meta.replaceAll(" ", "");
 				MetaDataUtil.setString(resident, icsdf, meta, true);
 			}
 		}
@@ -250,9 +253,20 @@ public class TownyChatPlayerListener implements Listener  {
 		if (MetaDataUtil.hasMeta(resident, socsdf)) {
 			String meta = MetaDataUtil.getString(resident, socsdf);
 			if (meta.contains("\uFF0c ")) {
-				meta.replaceAll("\uFF0c ", "#");
+				meta = replaceSymbol(meta);
+				meta = meta.replaceAll(" ", "");
 				MetaDataUtil.setString(resident, socsdf, meta, true);
 			}
 		}
+	}
+
+	private String replaceSymbol(String meta) {
+		char[] charray = meta.toCharArray();
+		for (int i = 0; i < meta.length(); i++) {
+			char n = meta.charAt(i);
+			if (n == '\uFF0c')
+				charray[i] = '#';
+		}
+		return new String(charray);
 	}
 }

@@ -402,3 +402,4 @@ v0.95:
   - Regression: channels.yml not handling /townychat reload, bug began in 0.92. 
 v0.96:
   - Display invalid subcommand message when /ch is used with an invalid subcommand.
+  - Replace the splitter for channels saved in metadata with the # symbol.
