@@ -203,7 +203,7 @@ public class ConfigurationHandler {
 					}
 				}
 				
-				if (Key.equalsIgnoreCase("display_modes_set_on_join"))
+				if (Key.equalsIgnoreCase("display_channel_join_message_on_joining_the_server"))
 					ChatSettings.setDisplayModesSetOnJoin(Boolean.valueOf(file.get(Key).toString()));
 
 				if (Key.equalsIgnoreCase("colour")) {

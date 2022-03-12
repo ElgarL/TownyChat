@@ -403,3 +403,5 @@ v0.95:
 v0.96:
   - Display invalid subcommand message when /ch is used with an invalid subcommand.
   - Replace the splitter for channels saved in metadata with the , symbol.
+v0.97:
+  - Fix the display_channel_join_message_on_joining_the_server option in the config not being used.
