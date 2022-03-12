@@ -405,3 +405,5 @@ v0.96:
   - Replace the splitter for channels saved in metadata with the , symbol.
 v0.97:
   - Fix the display_channel_join_message_on_joining_the_server option in the config not being used.
+  - Delay the login task by another tick so that the player's locale has been determined on the server.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/5802
