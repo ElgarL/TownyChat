@@ -213,7 +213,7 @@ public class TownyChatFormatter {
 
 	public static String getChatFormat(LocalTownyChatEvent event) {
 		// Replace the {msg} here so it's not regex parsed.
-		return hexIfCompatible(replacer.replaceAll(event.getFormat(), event).replace("{modplayername}", "%1$s").replace("{msg}", "%2$s"));
+		return hexIfCompatible(replacer.replaceAll(event.getFormat(), event).replace("%", "").replace("{modplayername}", "%1$s").replace("{msg}", "%2$s"));
 	}
 
 	/**
