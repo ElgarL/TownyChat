@@ -6,6 +6,7 @@ import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Bukkit;
@@ -52,7 +53,7 @@ public class ChannelJoinAliasCommand extends BukkitCommand {
 						}
 						
 						plugin.setPlayerChannel(player, channel);
-						TownyMessaging.sendMessage(player, Translatable.of("tc_you_are_now_talking_in_channel", channel.getName()));
+						TownyMessaging.sendMessage(player, Translatable.of("tc_you_are_now_talking_in_channel", Colors.translateColorCodes(channel.getMessageColour()) + channel.getName()));
 						Bukkit.getPluginManager().callEvent(new PlayerJoinChatChannelEvent(player, channel));
 						return true;
 					}

@@ -385,7 +385,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 		Bukkit.getPluginManager().callEvent(new PlayerJoinChatChannelEvent(player, chan));
 
-		TownyMessaging.sendMessage(player, Translatable.of("tc_you_joined_channel", chan.getName()));
+		TownyMessaging.sendMessage(player, Translatable.of("tc_you_joined_channel", Colors.translateColorCodes(chan.getMessageColour()) + chan.getName()));
 	}
 
 	public static void parseChannelSoundToggle(Player player, String[] split) {

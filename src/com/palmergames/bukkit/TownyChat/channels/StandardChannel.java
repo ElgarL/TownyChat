@@ -111,7 +111,7 @@ public class StandardChannel extends Channel {
 		tryPlayChannelSound(event.getRecipients());
 
 		if (notifyjoin)
-			TownyMessaging.sendMessage(player, "You join " + Colors.White + getName());
+			TownyMessaging.sendMessage(player, "You join " + Colors.translateColorCodes(getMessageColour()) + getName());
 
 		/*
 		 * Perform any last channel specific functions like logging this chat and

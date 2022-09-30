@@ -415,3 +415,5 @@ v0.97:
   - Fix channel sounds being played at the sender's location, fix muting channel sounds.
   - Remove built-in HexFormatter.
   - Update java to 17 and adopt jabel.
+  - Colour channel name in the You have joined channel messages, according to the channel message colour.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/4503
