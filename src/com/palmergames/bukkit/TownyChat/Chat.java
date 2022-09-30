@@ -10,6 +10,7 @@ import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.EssentialsDiscordHookListener;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
+import com.palmergames.bukkit.TownyChat.util.EssentialsIntegration;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.util.Version;
@@ -221,6 +222,12 @@ public class Chat extends JavaPlugin {
 
 	public DynmapAPI getDynmap() {
 		return dynMap;
+	}
+
+	public boolean isIgnoredByEssentials(Player sender, Player player) {
+		if (!getTowny().isEssentials())
+			return false;
+		return EssentialsIntegration.ignoredByEssentials(sender, player);
 	}
 
 	private void registerObjectCommands() {

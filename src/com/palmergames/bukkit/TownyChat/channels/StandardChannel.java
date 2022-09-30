@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
-import com.earth2me.essentials.User;
 import com.palmergames.bukkit.TownyChat.Chat;
-import com.palmergames.bukkit.TownyChat.HexFormatter;
 import com.palmergames.bukkit.TownyChat.TownyChatFormatter;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
@@ -10,7 +8,6 @@ import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -31,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class StandardChannel extends Channel {
 
@@ -113,28 +111,30 @@ public class StandardChannel extends Channel {
 			break;
 		}
 
+		trySendingAloneMessage(player, recipients);
+
 		/*
 		 * Perform all replace functions on this format
 		 */
-		if (Chat.usingPlaceholderAPI) {	    	
-            format = PlaceholderAPI.setPlaceholders(player, format);
-	    }		
+		if (Chat.usingPlaceholderAPI)
+			format = PlaceholderAPI.setPlaceholders(player, format);
 
 		/*
 		 * Only modify GLOBAL channelType chat (general and local chat channels) if isModifyChat() is true.
 		 */
-		if (!(channelType.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat()))  {
+		if (!(channelType.equals(channelTypes.GLOBAL) && !ChatSettings.isModify_chat())) {
 			event.setFormat(getFormat(format));
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 		}
 		
 		/*
-		 *  Set all the listeners for Bukkit to send this message to.
+		 *  Set recipients for Bukkit to send this message to.
 		 */
         event.getRecipients().clear();
         event.getRecipients().addAll(recipients);
         
+        // If the server has marked this Channel as hooked, fire the AsyncChatHookEvent.
         if (isHooked()) {
         	AsyncChatHookEvent hookEvent = new AsyncChatHookEvent(event, this, !Bukkit.getServer().isPrimaryThread());
             Bukkit.getServer().getPluginManager().callEvent(hookEvent);
@@ -161,24 +161,10 @@ public class StandardChannel extends Channel {
         	sendSpyMessage(event, channelType);
         }
 
-		if (getChannelSound() != null) {
-			for (Player recipient : event.getRecipients()) {
-				if (!isSoundMuted(player)) {
-					try {
-						recipient.playSound(player.getLocation(), Sound.valueOf(getChannelSound()), 1.0f, 1.0f);
-					} catch (IllegalArgumentException ex) {
-						plugin.getLogger().warning("Channel " + this.getName() + " has an invalid sound configured.");
-						setChannelSound(null);
-						break;
-					}
-				}
-			}
-		}
+		tryPlayChannelSound(event.getRecipients());
 
-
-        if (notifyjoin) {
+		if (notifyjoin)
 			TownyMessaging.sendMessage(player, "You join " + Colors.White + getName());
-        }
 
         /*
          * Perform any last channel specific functions
@@ -187,31 +173,41 @@ public class StandardChannel extends Channel {
         switch (channelType) {
 		
 		case TOWN:
-			break;
-		
 		case NATION:
-			break;
-		
 		case ALLIANCE:
-			break;
-			
 		case DEFAULT:
 			break;
 			
 		case PRIVATE:
 		case GLOBAL:
-			
-			// Don't broadcast local/ranged chat into dynmap.
-			if (super.getRange() > 0)
-				return;
-			
-			DynmapAPI dynMap = plugin.getDynmap();
-			
-			if (dynMap != null)
-				dynMap.postPlayerMessageToWeb(player, event.getMessage());
+			tryPostToDynmap(player, event.getMessage());
 			break;
 		}
 
+	}
+
+	private void tryPlayChannelSound(Set<Player> recipients) {
+		if (getChannelSound() != null) {
+			for (Player recipient : recipients) {
+				if (!isSoundMuted(recipient)) {
+					try {
+						recipient.playSound(recipient.getLocation(), Sound.valueOf(getChannelSound()), 1.0f, 1.0f);
+					} catch (IllegalArgumentException ex) {
+						plugin.getLogger().warning("Channel " + this.getName() + " has an invalid sound configured.");
+						setChannelSound(null);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	private void tryPostToDynmap(Player player, String message) {
+		if (super.getRange() > 0)
+			return;
+		DynmapAPI dynMap = plugin.getDynmap();
+		if (dynMap != null)
+			dynMap.postPlayerMessageToWeb(player, message);
 	}
 
 	private String getFormat(String format) {
@@ -242,10 +238,8 @@ public class StandardChannel extends Channel {
 			return player1.getWorld().equals(player2.getWorld());
 		
 		// Range check (same world)
-		if (player1.getWorld().equals(player2.getWorld()))
-			return (player1.getLocation().distance(player2.getLocation()) < range);
-		else
-			return false;
+		return player1.getWorld().equals(player2.getWorld()) && 
+				player1.getLocation().distance(player2.getLocation()) < range;
 	}
 	
 	/**
@@ -256,72 +250,25 @@ public class StandardChannel extends Channel {
 	 * @return Set containing a list of players for this message.
 	 */
 	private Set<Player> findRecipients(Player sender, List<Player> playerList) {
-		
-		Set<Player> recipients = new HashSet<>();
-		boolean bEssentials = plugin.getTowny().isEssentials();
-		Channel channel = plugin.getChannelsHandler().getChannel(getName());
-		// Compile the list of recipients
-        for (Player player : playerList) {
-        	
-        	/*
-        	 * Refresh the potential channels a player can see, if they are not currently in the channel.
-        	 */
-        	if (!channel.isPresent(player.getName()))
-        		channel.forgetPlayer(player);
-        	
-        	/*
-        	 * If the player has the correct permission node.
-        	 */
-        	if (TownyUniverse.getInstance().getPermissionSource().has(player, getPermission())) {
-        		
-        		/*
-        		 * If the player is within range for this channel.
-        		 */
-	        	if (testDistance(sender, player, getRange())){
-	        		
-	        		if (bEssentials) {
-						try {
-							User targetUser = plugin.getTowny().getEssentials().getUser(player);
-							User senderUser = plugin.getTowny().getEssentials().getUser(sender);
-							/*
-							 *  Don't send this message if the user is ignored
-							 */
-							if (targetUser.isIgnoredPlayer(senderUser))
-								continue;
-						} catch (TownyException e) {
-							// Failed to fetch user so ignore.
-						}
-					}
+		// Refresh the potential channels a player can see, if they are not currently in the channel.
+		playerList.stream().forEach(p -> refreshPlayer(this, p));
+		return playerList.stream()
+				.filter(p -> TownyUniverse.getInstance().getPermissionSource().has(p, getPermission())) // Check permission.
+				.filter(p -> testDistance(sender, p, getRange())) // Within range.
+				.filter(p -> !plugin.isIgnoredByEssentials(sender, p)) // Check essentials ignore.
+				.filter(p -> !isAbsent(p.getName())) // Check if player is purposefully absent.
+				.collect(Collectors.toSet());
+	}
 
-	        		// Spy's can leave channels and we'll respect that
-	        		if (absentPlayers != null) {
-	        			// Ignore players who have left this channel
-	        			if (absentPlayers.containsKey(player.getName())) {
-	        				continue;
-	        			}
-	        		}
-	        		recipients.add(player);
-	        	}
-        	}
-        }
-
-		trySendingAloneMessage(sender, recipients);
-
-        return recipients;
+	private void refreshPlayer(Channel channel, Player player) {
+		if (!channel.isPresent(player.getName()))
+			channel.forgetPlayer(player);
 	}
 
 	private void trySendingAloneMessage(Player sender, Set<Player> recipients) {
 		if (ChatSettings.isUsingAloneMessage() &&
 				recipients.stream().filter(p -> sender.canSee(p)).count() < 2) // sender will usually be a recipient of their own message.
-			sender.sendMessage(color(ChatSettings.getUsingAloneMessageString()));
-	}
-
-	/**
-	 * @return a coloured string.
-	 */
-	private String color(String str) {
-		// TODO: Replace this with Towny's colouring system post 0.98.4.0.
-		return HexFormatter.translateHexColors(ChatColor.translateAlternateColorCodes('&', str));
+			sender.sendMessage(Colors.translateColorCodes(ChatSettings.getUsingAloneMessageString()));
 	}
 
 	/**
@@ -330,21 +277,16 @@ public class StandardChannel extends Channel {
 	 * @param event - Chat Event.
 	 * @param type - Channel Type
 	 */
-	private void sendSpyMessage(AsyncPlayerChatEvent event, channelTypes type) {		
-		Set<Player> recipients = new HashSet<>();				
-		Set<Player> spies = new HashSet<>();
-		
-		recipients.addAll(event.getRecipients());
-		spies = checkSpying(spies);
+	private void sendSpyMessage(AsyncPlayerChatEvent event, channelTypes type) {
+		Set<Player> recipients = event.getRecipients();
+		Set<Player> spies = getSpies();
 		String format = formatSpyMessage(type, event.getPlayer());
 		if (format == null) return;
 		
 		// Remove spies who've already seen the message naturally.
-		for (Player spy : spies)
-			if (recipients.contains(spy))
-				continue;
-			else
-				spy.sendMessage(ChatColor.GOLD + "[SPY] " + ChatColor.WHITE + format + ": " + event.getMessage());
+		spies.stream()
+			.filter(spy -> !recipients.contains(spy))
+			.forEach(spy -> spy.sendMessage(ChatColor.GOLD + "[SPY] " + ChatColor.WHITE + format + ": " + event.getMessage()));
 	}
 
 	/**
@@ -362,7 +304,7 @@ public class StandardChannel extends Channel {
 		Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 		Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
 		
-		String format = color(getChannelTag() != null ? getChannelTag() : getName());
+		String format = Colors.translateColorCodes(getChannelTag() != null ? getChannelTag() : getName());
 		
 		switch (type) {
 			case TOWN:
@@ -382,24 +324,13 @@ public class StandardChannel extends Channel {
 	}
 	
 	/**
-	 * Add all spying players to the recipients list.
-	 *
-	 * @param recipients
-	 * @return new recipients including spying.
+	 * @return A Set of players online who are spying.
 	 */
-	private Set<Player> checkSpying(Set<Player> recipients) {
-
-		
+	private Set<Player> getSpies() {
 		// Compile the list of recipients with spy perms
-		for (Player test : plugin.getServer().getOnlinePlayers()) {
-        	
-        	if (plugin.getTowny().hasPlayerMode(test, "spy") && !(recipients.contains(test))) {
-        		recipients.add(test);
-        	}
-
-        }
-		
-		return recipients;
+		return plugin.getServer().getOnlinePlayers().stream()
+				.filter(p -> plugin.getTowny().hasPlayerMode(p, "spy"))
+				.collect(Collectors.toSet());
 	}
 
 }

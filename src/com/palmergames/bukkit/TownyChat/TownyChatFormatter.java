@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
@@ -203,12 +204,12 @@ public class TownyChatFormatter {
 	}
 
 	public static String hex(String str) {
-		return HexFormatter.translateHexColors(str);
+		return Colors.translateColorCodes(str);
 	}
 
 	public static String getChatFormat(LocalTownyChatEvent event) {
 		// Replace the {msg} here so it's not regex parsed.
-		return hex(replacer.replaceAll(event.getFormat(), event).replace("%", "").replace("{modplayername}", "%1$s").replace("{msg}", "%2$s"));
+		return replacer.replaceAll(event.getFormat(), event).replace("%", "").replace("{modplayername}", "%1$s").replace("{msg}", "%2$s");
 	}
 
 	/**
