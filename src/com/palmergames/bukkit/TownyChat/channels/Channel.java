@@ -430,4 +430,8 @@ public abstract class Channel {
 		}
 		return false;
 	}
+	
+	public boolean isGovernmentChannel() {
+		return type.equals(channelTypes.TOWN) || type.equals(channelTypes.NATION) || type.equals(channelTypes.ALLIANCE); 
+	}
 }

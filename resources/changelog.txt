@@ -414,3 +414,4 @@ v0.97:
     - Closes https://github.com/TownyAdvanced/Towny/issues/6194
   - Fix channel sounds being played at the sender's location, fix muting channel sounds.
   - Remove built-in HexFormatter.
+  - Update java to 17 and adopt jabel.
