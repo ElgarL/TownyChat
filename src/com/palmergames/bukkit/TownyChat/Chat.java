@@ -50,7 +50,7 @@ public class Chat extends JavaPlugin {
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
 	
-	private static Version requiredTownyVersion = Version.fromString("0.97.5.0");
+	private static Version requiredTownyVersion = Version.fromString("0.98.3.0");
 	public static boolean usingPlaceholderAPI = false;
 	public static boolean usingEssentialsDiscord = false;
 	boolean chatConfigError = false;

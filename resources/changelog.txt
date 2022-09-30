@@ -409,3 +409,6 @@ v0.96:
 v0.97:
   - Replace % when it is found in the channel formats.
     - Closes https://github.com/TownyAdvanced/Towny/issues/6125
+  - Update min. Towny version to 0.98.3.0.
+  - Make the alone message respect people's vanished status.
+    - Closes https://github.com/TownyAdvanced/Towny/issues/6194

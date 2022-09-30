@@ -8,7 +8,6 @@ import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.events.AsyncChatHookEvent;
 import com.palmergames.bukkit.TownyChat.events.PlayerJoinChatChannelEvent;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -256,12 +255,10 @@ public class StandardChannel extends Channel {
 	 * @param playerList
 	 * @return Set containing a list of players for this message.
 	 */
-	@SuppressWarnings("deprecation")
 	private Set<Player> findRecipients(Player sender, List<Player> playerList) {
 		
 		Set<Player> recipients = new HashSet<>();
 		boolean bEssentials = plugin.getTowny().isEssentials();
-		String sendersName = sender.getName();
 		Channel channel = plugin.getChannelsHandler().getChannel(getName());
 		// Compile the list of recipients
         for (Player player : playerList) {
@@ -285,10 +282,11 @@ public class StandardChannel extends Channel {
 	        		if (bEssentials) {
 						try {
 							User targetUser = plugin.getTowny().getEssentials().getUser(player);
+							User senderUser = plugin.getTowny().getEssentials().getUser(sender);
 							/*
 							 *  Don't send this message if the user is ignored
 							 */
-							if (targetUser.isIgnoredPlayer(sendersName))
+							if (targetUser.isIgnoredPlayer(senderUser))
 								continue;
 						} catch (TownyException e) {
 							// Failed to fetch user so ignore.
@@ -306,19 +304,26 @@ public class StandardChannel extends Channel {
 	        	}
         	}
         }
-        
-        if (recipients.size() <= 1 && ChatSettings.isUsingAloneMessage()) {
-        	
-			String aloneMsg = ChatSettings.getUsingAloneMessageString(); 
-			if (Towny.is116Plus())
-				aloneMsg = HexFormatter.translateHexColors(aloneMsg);
-        	
-        	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', aloneMsg));
-        }
+
+		trySendingAloneMessage(sender, recipients);
 
         return recipients;
 	}
-	
+
+	private void trySendingAloneMessage(Player sender, Set<Player> recipients) {
+		if (ChatSettings.isUsingAloneMessage() &&
+				recipients.stream().filter(p -> sender.canSee(p)).count() < 2) // sender will usually be a recipient of their own message.
+			sender.sendMessage(color(ChatSettings.getUsingAloneMessageString()));
+	}
+
+	/**
+	 * @return a coloured string.
+	 */
+	private String color(String str) {
+		// TODO: Replace this with Towny's colouring system post 0.98.4.0.
+		return HexFormatter.translateHexColors(ChatColor.translateAlternateColorCodes('&', str));
+	}
+
 	/**
 	 * Sends messages to spies who have not already seen the message naturally.
 	 * 
@@ -357,9 +362,7 @@ public class StandardChannel extends Channel {
 		Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 		Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
 		
-		String format = ChatColor.translateAlternateColorCodes('&', getChannelTag() != null ? getChannelTag() : getName());
-		if (Towny.is116Plus())
-			format = HexFormatter.translateHexColors(format);
+		String format = color(getChannelTag() != null ? getChannelTag() : getName());
 		
 		switch (type) {
 			case TOWN:
