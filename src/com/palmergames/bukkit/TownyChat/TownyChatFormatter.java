@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.TownyChat;
 
+import org.bukkit.entity.Player;
+
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.TownyChat.listener.LocalTownyChatEvent;
 import com.palmergames.bukkit.TownyChat.util.StringReplaceManager;
@@ -13,194 +15,37 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
-import java.util.regex.Pattern;
-
 public class TownyChatFormatter {
 	private static StringReplaceManager<LocalTownyChatEvent> replacer = new StringReplaceManager<LocalTownyChatEvent>();
 
 	static {
-		replacer.registerFormatReplacement(Pattern.quote("{worldname}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return String.format(ChatSettings.getWorldTag(), event.getEvent().getPlayer().getWorld().getName());
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{town}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasTown() ? event.getResident().getTown().getName() : "";
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townformatted}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownTag(event.getResident(), false, true);
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{towntag}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownTag(event.getResident(), false, false);
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{towntagoverride}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownTag(event.getResident(), true, false);
-			}
-		});
-		
-		replacer.registerFormatReplacement(Pattern.quote("{nation}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasNation() ? event.getResident().getTown().getNation().getName() : "";
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{nationformatted}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatNationTag(event.getResident(), false, true);
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{nationtag}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatNationTag(event.getResident(), false, false);
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{nationtagoverride}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatNationTag(event.getResident(), true, false);
-			}
-		});
-		
-		replacer.registerFormatReplacement(Pattern.quote("{townytag}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownyTag(event.getResident(), false, false);
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townyformatted}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownyTag(event.getResident(), false, true);
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townytagoverride}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return formatTownyTag(event.getResident(), true, false);
-			}
-		});
-		
-		replacer.registerFormatReplacement(Pattern.quote("{title}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasTitle() ? event.getResident().getTitle() + " " : "";
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{surname}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasSurname() ? " " + event.getResident().getSurname() : "";
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townynameprefix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return getNamePrefix(event.getResident());
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townynamepostfix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return getNamePostfix(event.getResident());
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townyprefix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasTitle() ? event.getResident().getTitle() + " " : getNamePrefix(event.getResident());
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{townypostfix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getResident().hasSurname() ? " " + event.getResident().getSurname() : getNamePostfix(event.getResident());
-			}
-		});
-		
-		replacer.registerFormatReplacement(Pattern.quote("{townycolor}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				if (!event.getResident().hasTown())
-					return ChatSettings.getNomadColour();
-				else 
-					return event.getResident().isMayor() ? (event.getResident().isKing() ? ChatSettings.getKingColour() : ChatSettings.getMayorColour()) : ChatSettings.getResidentColour();
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{group}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPlayerGroup(event.getEvent().getPlayer());
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{permprefix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "prefix");
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{permsuffix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "suffix");
-			}
-		});
-
-		replacer.registerFormatReplacement(Pattern.quote("{permuserprefix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "userprefix");
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{permusersuffix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "usersuffix");
-			}
-		});
-
-		replacer.registerFormatReplacement(Pattern.quote("{permgroupprefix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "groupprefix");
-			}
-		});
-		replacer.registerFormatReplacement(Pattern.quote("{permgroupsuffix}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(event.getResident(), "groupsuffix");
-			}
-		});
-
-		
-		replacer.registerFormatReplacement(Pattern.quote("{playername}"), new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return event.getEvent().getPlayer().getName();
-			}
-		});
-
-		// Replace colours last ({msg} is replaced last as it can't be regex parsed).
-		replacer.registerFormatReplacement("&{1}[0-9A-Fa-fLlOoNnKkMmRr]{1}", new TownyChatReplacerCallable() {
-			@Override
-			public String call(String match, LocalTownyChatEvent event) throws Exception {
-				return "\u00A7" + match.charAt(1);
-			}
-		});
-
+		replacer.registerReplacer("{worldname}", event -> getWorldTag(event));
+		replacer.registerReplacer("{town}", event -> getTownName(event.getResident()));
+		replacer.registerReplacer("{townformatted}", event -> formatTownTag(event.getResident(), false, true));
+		replacer.registerReplacer("{towntag}", event -> formatTownTag(event.getResident(), false, false));
+		replacer.registerReplacer("{towntagoverride}", event -> formatTownTag(event.getResident(), true, false));
+		replacer.registerReplacer("{nation}", event -> getNationName(event.getResident()));
+		replacer.registerReplacer("{nationformatted}", event -> formatNationTag(event.getResident(), false, true));
+		replacer.registerReplacer("{nationtag}", event -> formatNationTag(event.getResident(), false, false));
+		replacer.registerReplacer("{nationtagoverride}", event -> formatNationTag(event.getResident(), true, false));
+		replacer.registerReplacer("{townytag}", event -> formatTownyTag(event.getResident(), false, false));
+		replacer.registerReplacer("{townyformatted}", event -> formatTownyTag(event.getResident(), false, true));
+		replacer.registerReplacer("{townytagoverride}", event -> formatTownyTag(event.getResident(), true, false));
+		replacer.registerReplacer("{title}", event -> getPrefix(event.getResident(), true));
+		replacer.registerReplacer("{surname}", event -> getSuffix(event.getResident(), false));
+		replacer.registerReplacer("{townynameprefix}", event -> getNamePrefix(event.getResident()));
+		replacer.registerReplacer("{townynamepostfix}", event -> getNamePostfix(event.getResident()));
+		replacer.registerReplacer("{townyprefix}", event -> getPrefix(event.getResident(), false));
+		replacer.registerReplacer("{townypostfix}", event -> getSuffix(event.getResident(), false));
+		replacer.registerReplacer("{townycolor}", event -> getTownyColour(event.getResident()));
+		replacer.registerReplacer("{group}", event -> getVaultGroup(event.getEvent().getPlayer()));
+		replacer.registerReplacer("{permprefix}", event -> getVaultPrefixSuffix(event.getResident(), "prefix"));
+		replacer.registerReplacer("{permsuffix}", event -> getVaultPrefixSuffix(event.getResident(), "suffix"));
+		replacer.registerReplacer("{permuserprefix}", event -> getVaultPrefixSuffix(event.getResident(), "userprefix"));
+		replacer.registerReplacer("{permusersuffix}", event -> getVaultPrefixSuffix(event.getResident(), "usersuffix"));
+		replacer.registerReplacer("{permgroupprefix}", event -> getVaultPrefixSuffix(event.getResident(), "groupprefix"));
+		replacer.registerReplacer("{permgroupsuffix}", event -> getVaultPrefixSuffix(event.getResident(), "groupsuffix"));
+		replacer.registerReplacer("{playername}", event -> event.getEvent().getPlayer().getName());
 	}
 
 	public static String getChatFormat(LocalTownyChatEvent event) {
@@ -209,6 +54,18 @@ public class TownyChatFormatter {
 							 .replace("{modplayername}", "%1$s")   // Other plugins will replace this with the DisplayName.
 							 .replace("{msg}", "%2$s");            // Replace the {msg} here so it's not regex parsed.
 		return Colors.translateColorCodes(out);
+	}
+
+	public static String getWorldTag(LocalTownyChatEvent event) {
+		return String.format(ChatSettings.getWorldTag(), event.getEvent().getPlayer().getWorld().getName());
+	}
+
+	public static String getTownName(Resident resident) {
+		return resident.hasTown() ? resident.getTownOrNull().getName() : "";
+	}
+
+	public static String getNationName(Resident resident) {
+		return resident.hasNation() ? resident.getNationOrNull().getName() : "";
 	}
 
 	/**
@@ -326,5 +183,27 @@ public class TownyChatFormatter {
 	
 	private static String getTag(Government gov) {
 		return gov.getTag();
+	}
+
+	public static String getPrefix(Resident resident, boolean blank) {
+		return resident.hasTitle() ? resident.getTitle() + " " : blank ? "" : getNamePrefix(resident);
+	}
+
+	public static String getSuffix(Resident resident, boolean blank) {
+		return resident.hasSurname() ? " " + resident.getSurname() : blank ? "" : getNamePostfix(resident);
+	}
+
+	public static String getTownyColour(Resident resident) {
+		return !resident.hasTown() 
+				? ChatSettings.getNomadColour()
+				: resident.isMayor() ? (resident.isKing() ? ChatSettings.getKingColour() : ChatSettings.getMayorColour()) : ChatSettings.getResidentColour();
+	}
+	
+	public static String getVaultGroup(Player player) {
+		return TownyUniverse.getInstance().getPermissionSource().getPlayerGroup(player);
+	}
+
+	public static String getVaultPrefixSuffix(Resident resident, String slug) {
+		return TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, slug);
 	}
 }
