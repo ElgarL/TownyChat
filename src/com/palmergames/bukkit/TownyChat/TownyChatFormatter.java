@@ -203,13 +203,12 @@ public class TownyChatFormatter {
 
 	}
 
-	public static String hex(String str) {
-		return Colors.translateColorCodes(str);
-	}
-
 	public static String getChatFormat(LocalTownyChatEvent event) {
-		// Replace the {msg} here so it's not regex parsed.
-		return replacer.replaceAll(event.getFormat(), event).replace("%", "").replace("{modplayername}", "%1$s").replace("{msg}", "%2$s");
+		String out = replacer.replaceAll(event.getFormat(), event) // Replace the townychat tags with their values. 
+							 .replace("%", "")                     // Prevent user-inputted tags from breaking chat format. 
+							 .replace("{modplayername}", "%1$s")   // Other plugins will replace this with the DisplayName.
+							 .replace("{msg}", "%2$s");            // Replace the {msg} here so it's not regex parsed.
+		return Colors.translateColorCodes(out);
 	}
 
 	/**
@@ -276,11 +275,11 @@ public class TownyChatFormatter {
 		if (resident.hasTown()) {
 			Town town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 			if (full)
-				return hex(String.format(ChatSettings.getTownTag(), getName(town)));
+				return String.format(ChatSettings.getTownTag(), getName(town));
 			else if (town.hasTag())
-				return hex(String.format(ChatSettings.getTownTag(), getTag(town)));
+				return String.format(ChatSettings.getTownTag(), getTag(town));
 			else if (override)
-				return hex(String.format(ChatSettings.getTownTag(), getName(town)));
+				return String.format(ChatSettings.getTownTag(), getName(town));
 
 		}
 		return "";
@@ -290,11 +289,11 @@ public class TownyChatFormatter {
 		if (resident.hasNation()) {
 			Nation nation = TownyAPI.getInstance().getResidentNationOrNull(resident);
 			if (full)
-				return hex(String.format(ChatSettings.getNationTag(), getName(nation)));
+				return String.format(ChatSettings.getNationTag(), getName(nation));
 			else if (nation.hasTag())
-				return hex(String.format(ChatSettings.getNationTag(), getTag(nation)));
+				return String.format(ChatSettings.getNationTag(), getTag(nation));
 			else if (override)
-				return hex(String.format(ChatSettings.getNationTag(), getName(nation)));
+				return String.format(ChatSettings.getNationTag(), getName(nation));
 		}
 		return "";
 	}

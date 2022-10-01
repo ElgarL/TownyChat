@@ -187,7 +187,7 @@ public class TownyChatPlayerListener implements Listener  {
 
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
 
-			event.setFormat(Colors.translateColorCodes(TownyChatFormatter.getChatFormat(chatEvent)));
+			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
 		}
 	}
 	
