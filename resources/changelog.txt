@@ -417,3 +417,5 @@ v0.97:
   - Update java to 17 and adopt jabel.
   - Colour channel name in the You have joined channel messages, according to the channel message colour.
     - Closes https://github.com/TownyAdvanced/Towny/issues/4503
+v0.98:
+  - Fix hex colouring not being parsed for some tags.
