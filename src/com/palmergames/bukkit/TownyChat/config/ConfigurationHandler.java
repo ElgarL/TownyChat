@@ -7,7 +7,6 @@ import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import org.bukkit.Bukkit;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,29 +33,27 @@ public class ConfigurationHandler {
 	 * If it doesn't exist, create it from
 	 * the resource in this jar.
 	 * 
-	 * @param filepath
-	 * @param defaultRes
 	 * @return true if the channels were loaded
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean loadChannels(String filepath, String defaultRes) {
+	public boolean loadChannels() {
 
-		String filename = filepath + File.separator + defaultRes;
+		String filename = Chat.getTownyChat().getChannelsConfigPath();
 
-		Map<String, Object> file;
+		Map<String, Object> channelsMap;
 		try {
-			file = FileMgmt.getFile(filename, defaultRes);
+			channelsMap = FileMgmt.getMap(filename, "Channels.yml");
 		} catch (Exception e) {
 			Bukkit.getLogger().severe("[TownyChat] Failed to load Channels.yml!");
 			Bukkit.getLogger().severe("[TownyChat] Please check that the file passes a YAML Parser test:");
 			Bukkit.getLogger().severe("[TownyChat] Online YAML Parser: https://yaml-online-parser.appspot.com/");
 			return false;
 		}
-		if (file == null || !file.containsKey("Channels")) 
+		if (channelsMap == null || !channelsMap.containsKey("Channels")) 
 			return false;
 
 		// Parse the channels
-		Map<String, Object> allChannelNodes = (Map<String, Object>) file.get("Channels");
+		Map<String, Object> allChannelNodes = (Map<String, Object>) channelsMap.get("Channels");
 		if (allChannelNodes == null)
 			return false;
 		

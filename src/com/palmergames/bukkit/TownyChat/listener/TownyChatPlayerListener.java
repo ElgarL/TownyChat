@@ -13,8 +13,6 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.metadata.StringDataField;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.towny.TownyUniverse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,49 +62,15 @@ public class TownyChatPlayerListener implements Listener  {
 		plugin.getChannelsHandler().getAllChannels().values().stream().forEach(channel -> channel.forgetPlayer(player));
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		if (event.isCancelled()) return;
-		
 		Player player = event.getPlayer();
-		
-		if (event.getMessage().contains("&L") || event.getMessage().contains("&l") ||
-			event.getMessage().contains("&O") || event.getMessage().contains("&o") ||
-			event.getMessage().contains("&N") || event.getMessage().contains("&n") ||
-			event.getMessage().contains("&K") || event.getMessage().contains("&k") ||
-			event.getMessage().contains("&M") || event.getMessage().contains("&m") ||
-			event.getMessage().contains("&R") || event.getMessage().contains("&r") ) {			
-			if (!player.hasPermission("townychat.chat.format.bold")) {			
-				event.setMessage(event.getMessage().replaceAll("&L", ""));
-				event.setMessage(event.getMessage().replaceAll("&l", ""));
-			}
-			if (!player.hasPermission("townychat.chat.format.italic")) {			
-				event.setMessage(event.getMessage().replaceAll("&O", ""));
-				event.setMessage(event.getMessage().replaceAll("&o", ""));
-			}
-			if (!player.hasPermission("townychat.chat.format.magic")) {			
-				event.setMessage(event.getMessage().replaceAll("&K", ""));
-				event.setMessage(event.getMessage().replaceAll("&k", ""));
-			}
-			if (!player.hasPermission("townychat.chat.format.underlined")) {			
-				event.setMessage(event.getMessage().replaceAll("&N", ""));
-				event.setMessage(event.getMessage().replaceAll("&n", ""));
-			}
-			if (!player.hasPermission("townychat.chat.format.strike")) {			
-				event.setMessage(event.getMessage().replaceAll("&M", ""));
-				event.setMessage(event.getMessage().replaceAll("&m", ""));
-			}
-			if (!player.hasPermission("townychat.chat.format.reset")) {			
-				event.setMessage(event.getMessage().replaceAll("&R", ""));
-				event.setMessage(event.getMessage().replaceAll("&r", ""));
-			}
-		}
-		
-		if(player.hasPermission("townychat.chat.color"))
-			event.setMessage(Colors.translateColorCodes(event.getMessage()));
+
+		// Check if the message contains colour codes we need to remove or parse.
+		testColourCodes(event, player);
 
 		// Check if essentials has this player muted.
-		if (!isMuted(player)) {
+		if (!isEssentialsMuted(player)) {
 
 			/*
 			 * If this was directed chat send it via the relevant channel
@@ -115,15 +79,7 @@ public class TownyChatPlayerListener implements Listener  {
 				Channel channel = plugin.getChannelsHandler().getChannel(directedChat.get(player));
 				
 				if (channel != null) {
-					// Notify player he is muted
-					if (channel.isMuted(player.getName())) {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_are_currently_muted_in_channel", channel.getName()));
-						event.setCancelled(true);
-						directedChat.remove(player);
-						return;
-					}
-					if (channel.isSpam(player)) {
-						event.setCancelled(true);
+					if (isMutedOrSpam(event, channel, player)) {
 						directedChat.remove(player);
 						return;
 					}
@@ -141,38 +97,19 @@ public class TownyChatPlayerListener implements Listener  {
 			 */
 			Channel channel = plugin.getPlayerChannel(player);
 			if (channel != null) {
-				// Notify player he is muted
-				if (channel.isMuted(player.getName())) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_are_currently_muted_in_channel", channel.getName()));
-					event.setCancelled(true);
+				if (isMutedOrSpam(event, channel, player))
 					return;
-				}
-				if (channel.isSpam(player)) {
-					event.setCancelled(true);
-					return;
-				}
-				/*
-				 *  Channel Chat mode set
-				 *  Process the chat
-				 */
 				channel.chatProcess(event);
 				return;
 			}
 			
-			// Find a global channel this player has permissions for.
+			/*
+			 *  Find a global channel this player has permissions for.
+			 */
 			channel = plugin.getChannelsHandler().getActiveChannel(player, channelTypes.GLOBAL);
-					
 			if (channel != null) {
-				// Notify player he is muted
-				if (channel.isMuted(player.getName())) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_are_currently_muted_in_channel", channel.getName()));
-					event.setCancelled(true);
+				if (isMutedOrSpam(event, channel, player))
 					return;
-				}
-				if (channel.isSpam(player)) {
-					event.setCancelled(true);
-					return;
-				}
 				channel.chatProcess(event);
 				return;
 			}
@@ -182,37 +119,90 @@ public class TownyChatPlayerListener implements Listener  {
 		 * We found no channels available so modify the chat (if enabled) and exit.
 		 */
 		if (ChatSettings.isModify_chat()) {
+			// Set the format based on the global channelformat, with channeltag and msgcolour removed.
 			event.setFormat(ChatSettings.getChannelFormat(player, channelTypes.GLOBAL).replace("{channelTag}", "").replace("{msgcolour}", ""));
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId()); 
-
-			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);
-
-			event.setFormat(TownyChatFormatter.getChatFormat(chatEvent));
+			event.setFormat(TownyChatFormatter.getChatFormat(new LocalTownyChatEvent(event, TownyAPI.getInstance().getResident(player))));
 		}
 	}
-	
+
+	/**
+	 * Remove colour tags that a player doesn't not have permission for,
+	 * and colour messages if the player is allowed.
+	 * 
+	 * @param event {@link AsyncPlayerChatEvent} which has been fired.
+	 * @param player {@link Player} which has spoken.
+	 */
+	private void testColourCodes(AsyncPlayerChatEvent event, Player player) {
+		if ((event.getMessage().contains("&L") || event.getMessage().contains("&l"))
+				&& !player.hasPermission("townychat.chat.format.bold"))
+			event.setMessage(event.getMessage().replaceAll("&L", "").replaceAll("&l", ""));
+
+		if ((event.getMessage().contains("&O") || event.getMessage().contains("&o")) 
+				&& !player.hasPermission("townychat.chat.format.italic"))
+			event.setMessage(event.getMessage().replaceAll("&O", "").replaceAll("&o", ""));
+
+		if ((event.getMessage().contains("&K") || event.getMessage().contains("&k")) 
+				&& !player.hasPermission("townychat.chat.format.magic"))
+			event.setMessage(event.getMessage().replaceAll("&K", "").replaceAll("&k", ""));
+
+		if ((event.getMessage().contains("&N") || event.getMessage().contains("&n"))
+			&& !player.hasPermission("townychat.chat.format.underlined"))
+			event.setMessage(event.getMessage().replaceAll("&N", "").replaceAll("&n", ""));
+
+		if ((event.getMessage().contains("&M") || event.getMessage().contains("&m"))
+				&& !player.hasPermission("townychat.chat.format.strike"))
+			event.setMessage(event.getMessage().replaceAll("&M", "").replaceAll("&m", ""));
+
+		if ((event.getMessage().contains("&R") || event.getMessage().contains("&r"))
+				&&!player.hasPermission("townychat.chat.format.reset"))
+			event.setMessage(event.getMessage().replaceAll("&R", "").replaceAll("&r", ""));
+
+		if (player.hasPermission("townychat.chat.color"))
+			event.setMessage(Colors.translateColorCodes(event.getMessage()));
+	}
+
 	/**
 	 * Is this player Muted via Essentials?
 	 * 
-	 * @param player
-	 * @return true if muted
+	 * @param player {@link Player} speaking.
+	 * @return true if muted by Essentials.
 	 */
-	private boolean isMuted(Player player) {
-		// Check if essentials has this player muted.
-		if (plugin.getTowny().isEssentials()) {
-			try {
-				if (plugin.getTowny().getEssentials().getUser(player).isMuted()) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_unable_to_talk_essentials_mute"));
-					return true;
-				}
-			} catch (TownyException e) {
-				// Get essentials failed
-			}
+	private boolean isEssentialsMuted(Player player) {
+		if (!plugin.getTowny().isEssentials())
 			return false;
+		try {
+			// Check if essentials has this player muted.
+			if (plugin.getTowny().getEssentials().getUser(player).isMuted()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_unable_to_talk_essentials_mute"));
+				return true;
+			}
+		} catch (TownyException e) {
+			// Get essentials failed
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Check if the player is channel-muted or channel-spamming and cancel the
+	 * {@link AsyncPlayerChatEvent} if this is the case.
+	 * 
+	 * @param event {@link AsyncPlayerChatEvent} which has fired.
+	 * @param channel {@link Channel} being spoken in to.
+	 * @param player {@link Player} speaking.
+	 * @return true if the chat is muted or spammed.
+	 */
+	private boolean isMutedOrSpam(AsyncPlayerChatEvent event, Channel channel, Player player) {
+		if (channel.isMuted(player.getName())) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_are_currently_muted_in_channel", channel.getName()));
+			event.setCancelled(true);
+			return true;
+		}
+		if (channel.isSpam(player)) {
+			event.setCancelled(true);
+			return true;
+		}
+		return false;
+	}
 
 	// From TownyChat 0.84-0.95 the symbol used to separate the channels in the meta
 	// was not good for non-unicode-using mysql servers.

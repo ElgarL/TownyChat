@@ -7,11 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
@@ -20,138 +18,57 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 
 public class FileMgmt {
 
-	public static void checkFolders(String[] folders) {
-		for (String folder : folders) {
-			File f = new File(folder);
-			if (!(f.exists() && f.isDirectory()))
-				f.mkdir();
-		}
-	}
-
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getFile(String filepath, String resource) {
+	public static Map<String, Object> getMap(String filepath, String resource) {
 
-		try {
-			File f = new File(filepath);
-			if (!(f.exists() && f.isFile())) {
-				// Populate a new file
-				try {
-					String resString = convertStreamToString("/" + resource);
-					// If we have a plugin reference pass to load default.
-					
-					FileMgmt.stringToFile(resString, filepath);
-
-				} catch (IOException e) {
-					// No resource file found
-					e.printStackTrace();
-					return null;
-				}
-			}
-
-			f = new File(filepath);
-
-			Yaml yamlChannels = new Yaml(new SafeConstructor());
-			Object channelsRootDataNode;
-
-			FileInputStream fileInputStream = new FileInputStream(f);
+		File f = new File(filepath);
+		if (!(f.exists() && f.isFile())) {
+			// Populate a new file
 			try {
-				channelsRootDataNode = yamlChannels.load(new UnicodeReader(fileInputStream));
-				if (channelsRootDataNode == null) {
-					throw new NullPointerException();
+				try (FileOutputStream fos = new FileOutputStream(f)) {
+					fos.write(getResourceFileAsString("/" + resource).getBytes(StandardCharsets.UTF_8));
 				}
-			} catch (Exception ex) {
-				throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + f.getPath(), ex);
-			} finally {
-				fileInputStream.close();
+			} catch (IOException e) {
+				// No resource file found
+				e.printStackTrace();
+				return null;
 			}
-
-			if (channelsRootDataNode instanceof Map)
-				return (Map<String, Object>) channelsRootDataNode;
-
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
+		f = new File(filepath);
+
+		Yaml yamlChannels = new Yaml(new SafeConstructor());
+		Object channelsRootDataNode;
+
+		try (FileInputStream fileInputStream = new FileInputStream(f)) {
+			channelsRootDataNode = yamlChannels.load(new UnicodeReader(fileInputStream));
+			if (channelsRootDataNode == null) {
+				throw new NullPointerException();
+			}
+		} catch (Exception ex) {
+			throw new IllegalArgumentException("The following file couldn't pass on Parser.\n" + f.getPath(), ex);
+		}
+
+		if (channelsRootDataNode instanceof Map)
+			return (Map<String, Object>) channelsRootDataNode;
 
 		return null;
 	}
 
-	// pass a resource name and it will return it's contents as a string
-	private static String convertStreamToString(String name) throws IOException {
-		if (name != null) {
-			Writer writer = new StringWriter();
-			InputStream is = FileMgmt.class.getResourceAsStream(name);
-
-			char[] buffer = new char[1024];
-			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
-			} catch (IOException e) {
-				System.out.println("Exception ");
-			} finally {
-				try {
-					is.close();
-				} catch (NullPointerException e) {
-					// Failed to open a stream
-					throw new IOException();
-				}
-			}
-			return writer.toString();
-		} else {
+	/**
+	 * Reads given resource file as a string.
+	 *
+	 * @param fileName path to the resource file
+	 * @return the file's contents
+	 * @throws IOException if read fails for any reason
+	 */
+	static String getResourceFileAsString(String fileName) throws IOException {
+		if (fileName == null)
 			return "";
-		}
-	}
-
-	/**
-	 * Wrapper for stringToFile writes a string to a file making all newline
-	 * codes platform specific
-	 * 
-	 * @param source
-	 * @param FileName
-	 * @return true on success
-	 */
-	private static boolean stringToFile(String source, String FileName) {
-
-		if (source != null) {
-			// Save the string to file (*.yml)
-			try {
-				return stringToFile(source, new File(FileName));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * Writes the contents of a string to a file.
-	 * 
-	 * @param source
-	 *            String to write.
-	 * @param file
-	 *            File to write to.
-	 * @return True on success.
-	 * @throws IOException
-	 */
-	private static boolean stringToFile(String source, File file) throws IOException {
-
-		try {
-
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-
-			source.replaceAll("\n", System.getProperty("line.separator"));
-
-			out.write(source);
-			out.close();
-			return true;
-
-		} catch (IOException e) {
-			System.out.println("Exception ");
-			return false;
+		try (InputStream is = FileMgmt.class.getResourceAsStream(fileName);
+			InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+			BufferedReader reader = new BufferedReader(isr)) {
+				return reader.lines().collect(Collectors.joining(System.lineSeparator()));
 		}
 	}
 

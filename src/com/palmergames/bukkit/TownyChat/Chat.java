@@ -11,9 +11,9 @@ import com.palmergames.bukkit.TownyChat.listener.EssentialsDiscordHookListener;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
 import com.palmergames.bukkit.TownyChat.util.EssentialsIntegration;
-import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.util.Version;
+import com.palmergames.util.FileMgmt;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -70,29 +70,29 @@ public class Chat extends JavaPlugin {
 		playerChannelMap = new ConcurrentHashMap<>();
 		
 		checkPlugins();
-		loadConfigs();
-		
-		if (!townyVersionCheck(towny.getDescription().getVersion())) {
-			getLogger().severe("Towny version does not meet required minimum version: " + requiredTownyVersion.toString());
-			this.getServer().getPluginManager().disablePlugin(this);
+		if (towny == null || !townyVersionCheck(towny.getDescription().getVersion())) {
+			disableWithMessage("Towny version does not meet required minimum version: " + requiredTownyVersion.toString());
 			return;
 		} else {
 			getLogger().info("Towny version " + towny.getDescription().getVersion() + " found.");
 		}
 		
+		loadConfigs();
+		if (channelsConfigError || chatConfigError) {
+			disableWithMessage("The config could not be loaded.");
+			return;
+		}
+		
 		/*
-		 * This executes the task with a 1 tick delay avoiding the bukkit
-		 * depends bug.
+		 * This executes the task with a 1 tick delay avoiding the bukkit depends bug.
+		 * TODO: What bug is this referencing? This goes back to the first version of TownyChat.
 		 */
-		if ((towny == null) || (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1)
-			|| (channelsConfigError) || (chatConfigError)) {
+		if (getServer().getScheduler().scheduleSyncDelayedTask(this, new onLoadedTask(this), 1) == -1) {
 			/*
 			 * We either failed to find Towny or the Scheduler failed to
 			 * register the task.
 			 */
-			getLogger().severe("Could not schedule onLoadedTask.");
-			getLogger().severe("Disabling TownyChat...");
-			pm.disablePlugin(this);
+			disableWithMessage("Could not schedule onLoadedTask.");
 			return;
 		}
 
@@ -101,18 +101,20 @@ public class Chat extends JavaPlugin {
 		registerObjectCommands();
 	}
 	
+	private void disableWithMessage(String message) {
+		getLogger().severe(message);
+		getLogger().severe("Disabling TownyChat...");
+		pm.disablePlugin(this);
+	}
+
 	private boolean townyVersionCheck(String version) {
-		Version ver = Version.fromString(version);
-				
-		return ver.compareTo(requiredTownyVersion) >= 0; 
+		return Version.fromString(version).compareTo(requiredTownyVersion) >= 0; 
 	}
 
 	private void loadConfigs() {
-		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
-		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + File.separator + "ChatConfig.yml"))
-			chatConfigError = true;
-		if (!channelsConfig.loadChannels(getChannelsPath(), "Channels.yml"))
-			channelsConfigError = true;
+		FileMgmt.checkOrCreateFolders(new String[] { getRootPath(), getTownySettingsPath() });
+		chatConfigError = !ChatSettings.loadCommentedChatConfig();
+		channelsConfigError = !channelsConfig.loadChannels();
 	}
 
 	public static Chat getTownyChat() {
@@ -205,10 +207,18 @@ public class Chat extends JavaPlugin {
 		return getTowny().getDataFolder().getPath();
 	}
 
-	public String getChannelsPath() {
+	public String getTownySettingsPath() {
 		return getRootPath() + File.separator + "settings";
 	}
+
+	public String getChatConfigPath() {
+		return getTownySettingsPath() + File.separator + "ChatConfig.yml";
+	}
 	
+	public String getChannelsConfigPath() {
+		return getTownySettingsPath() + File.separator + "Channels.yml";
+	}
+
 	/**
 	 * @return the channels
 	 */

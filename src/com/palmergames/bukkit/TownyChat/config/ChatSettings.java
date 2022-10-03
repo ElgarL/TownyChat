@@ -27,13 +27,11 @@ public class ChatSettings {
 	
 	/**
 	 * 
-	 * @param filepath - Location of chatconfig.yml.
-	 * @param version - Chat version from plugin.yml.
-	 * @return 
+	 * @return true if the chatconfig has loaded. 
 	 * @throws IOException
 	 */
-	public static boolean loadCommentedConfig(String filepath) {
-
+	public static boolean loadCommentedChatConfig() {
+		String filepath = Chat.getTownyChat().getChatConfigPath();
 		if (FileMgmt.checkOrCreateFile(filepath)) {
 			File file = new File(filepath);
 
