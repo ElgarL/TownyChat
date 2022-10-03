@@ -6,7 +6,7 @@ import com.palmergames.bukkit.TownyChat.Command.commandobjects.ChannelJoinAliasC
 import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.ChannelsHolder;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
-import com.palmergames.bukkit.TownyChat.config.ConfigurationHandler;
+import com.palmergames.bukkit.TownyChat.config.ChannelConfigurationHandler;
 import com.palmergames.bukkit.TownyChat.listener.EssentialsDiscordHookListener;
 import com.palmergames.bukkit.TownyChat.listener.TownyChatPlayerListener;
 import com.palmergames.bukkit.TownyChat.tasks.onLoadedTask;
@@ -46,7 +46,7 @@ public class Chat extends JavaPlugin {
 
 	private TownyChatPlayerListener TownyPlayerListener;
 	private ChannelsHolder channels;
-	private ConfigurationHandler channelsConfig;
+	private ChannelConfigurationHandler channelsConfig;
 	
 	protected PluginManager pm;
 	private static Chat chat = null;
@@ -65,7 +65,7 @@ public class Chat extends JavaPlugin {
 		
 		chat = this;
 		pm = getServer().getPluginManager();
-		channelsConfig = new ConfigurationHandler(this);
+		channelsConfig = new ChannelConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
 		playerChannelMap = new ConcurrentHashMap<>();
 		
@@ -229,7 +229,7 @@ public class Chat extends JavaPlugin {
 	/**
 	 * @return the data
 	 */
-	public ConfigurationHandler getConfigurationHandler() {
+	public ChannelConfigurationHandler getConfigurationHandler() {
 		return channelsConfig;
 	}
 
