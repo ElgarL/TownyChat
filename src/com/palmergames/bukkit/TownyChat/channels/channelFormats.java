@@ -15,22 +15,6 @@ public class channelFormats {
 	}
 
 	private String name, GLOBAL, TOWN, NATION, ALLIANCE, DEFAULT;
-
-	/**
-	 * @return a clone of this channelFormats
-	 */
-	public channelFormats clone(String name) {
-		
-		channelFormats clone = new channelFormats(name.toLowerCase());
-		
-		clone.setGLOBAL(this.getGLOBAL());
-		clone.setTOWN(this.getTOWN());
-		clone.setNATION(this.getNATION());
-		clone.setALLIANCE(this.getALLIANCE());
-		clone.setDEFAULT(this.getDEFAULT());
-		
-		return clone;
-	}
 	
 	/**
 	 * @return the name

@@ -106,13 +106,13 @@ public class TownyChatFormatter {
 
 			// Output depending on what tags are present
 			if ((!tTag.isEmpty()) && (!nTag.isEmpty())) {
-				if (ChatSettings.getBothTags().contains("%t") || ChatSettings.getBothTags().contains("%n")) {
+				if (ChatSettings.getBothTag().contains("%t") || ChatSettings.getBothTag().contains("%n")) {
 					// Then it contains %s & %s
 					// Small suttle change so that an issue is solved, it is documented in the config.
 					// But only after addition of this. (v0.50)
-					return ChatSettings.getBothTags().replace("%t", tTag).replace("%n", nTag);
+					return ChatSettings.getBothTag().replace("%t", tTag).replace("%n", nTag);
 				} else {
-					return String.format(ChatSettings.getBothTags(), nTag, tTag);
+					return String.format(ChatSettings.getBothTag(), nTag, tTag);
 				}
 			}
 

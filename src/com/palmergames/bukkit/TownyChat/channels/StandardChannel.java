@@ -67,7 +67,7 @@ public class StandardChannel extends Channel {
 		}
 
 		// Set the channel specific format
-		String format = getFormat(player, channelType);
+		String format = ChatSettings.getChannelFormat(player, channelType);
 
 		// Get the list of message recipients.
 		Set<Player> recipients = getRecipients(player, town, nation, channelType, event.getRecipients());
@@ -128,16 +128,6 @@ public class StandardChannel extends Channel {
 			tryPostToDynmap(player, event.getMessage());
 			break;
 		}
-	}
-
-	private String getFormat(Player player, channelTypes channelType) {
-		return switch(channelType) {
-		case TOWN -> ChatSettings.getRelevantFormatGroup(player).getTOWN();
-		case NATION -> ChatSettings.getRelevantFormatGroup(player).getNATION();
-		case ALLIANCE -> ChatSettings.getRelevantFormatGroup(player).getALLIANCE();
-		case DEFAULT -> ChatSettings.getRelevantFormatGroup(player).getDEFAULT();
-		case GLOBAL, PRIVATE -> ChatSettings.getRelevantFormatGroup(player).getGLOBAL();
-		};
 	}
 
 	private Set<Player> getRecipients(Player player, Town town, Nation nation, channelTypes channelType, Set<Player> recipients) {

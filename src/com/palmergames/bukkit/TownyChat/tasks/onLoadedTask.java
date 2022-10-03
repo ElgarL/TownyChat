@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.TownyChat.tasks;
 
 import com.palmergames.bukkit.TownyChat.Chat;
+import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.towny.Towny;
 
 /*
@@ -25,13 +26,14 @@ public class onLoadedTask implements Runnable {
 		
 		if (this.towny.isEnabled()) {
 			// Setup our config here as we now have Towny loaded.
-			if (this.towny.isError() || (!plugin.getConfigurationHandler().loadConfig(plugin.getChannelsPath(), "ChatConfig.yml"))) {
+			if (this.towny.isError()) {
 				
 				plugin.getLogger().severe("Disabling TownyChat...");
 				plugin.getServer().getPluginManager().disablePlugin(plugin);
 				return;
 			}
 			
+			ChatSettings.loadWorldFormats();
 			plugin.getLogger().info("-******* TownyChat enabled *******-");
 			plugin.registerPermissions();
 			plugin.registerEvents();

@@ -182,7 +182,7 @@ public class TownyChatPlayerListener implements Listener  {
 		 * We found no channels available so modify the chat (if enabled) and exit.
 		 */
 		if (ChatSettings.isModify_chat()) {
-			event.setFormat(ChatSettings.getRelevantFormatGroup(player).getGLOBAL().replace("{channelTag}", "").replace("{msgcolour}", ""));
+			event.setFormat(ChatSettings.getChannelFormat(player, channelTypes.GLOBAL).replace("{channelTag}", "").replace("{msgcolour}", ""));
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId()); 
 
 			LocalTownyChatEvent chatEvent = new LocalTownyChatEvent(event, resident);

@@ -25,6 +25,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapAPI;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class Chat extends JavaPlugin {
 	private ConfigurationHandler channelsConfig;
 	
 	protected PluginManager pm;
+	private static Chat chat = null;
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
 	
@@ -61,6 +63,7 @@ public class Chat extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
+		chat = this;
 		pm = getServer().getPluginManager();
 		channelsConfig = new ConfigurationHandler(this);
 		channels = new ChannelsHolder(this);
@@ -106,11 +109,16 @@ public class Chat extends JavaPlugin {
 
 	private void loadConfigs() {
 		FileMgmt.checkFolders(new String[] { getRootPath(), getChannelsPath() });
-		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + FileMgmt.fileSeparator() + "ChatConfig.yml", this.getDescription().getVersion()))
+		if (!ChatSettings.loadCommentedConfig(getChannelsPath() + File.separator + "ChatConfig.yml"))
 			chatConfigError = true;
 		if (!channelsConfig.loadChannels(getChannelsPath(), "Channels.yml"))
 			channelsConfigError = true;
 	}
+
+	public static Chat getTownyChat() {
+		return chat;
+	}
+
 	@Override
 	public void onDisable() {
 		unregisterPermissions();
@@ -198,7 +206,7 @@ public class Chat extends JavaPlugin {
 	}
 
 	public String getChannelsPath() {
-		return getRootPath() + FileMgmt.fileSeparator() + "settings";
+		return getRootPath() + File.separator + "settings";
 	}
 	
 	/**
@@ -218,7 +226,6 @@ public class Chat extends JavaPlugin {
 	public Towny getTowny() {
 		return towny;
 	}
-	
 
 	public DynmapAPI getDynmap() {
 		return dynMap;
