@@ -423,3 +423,6 @@ v0.98:
     - Makes use of Functions to do what the old Callable did.
   - Refactor a bunch of the plugin to get rid of old/ugly code.
     - There is a chance that some 3rd party chat plugins will break. Let me know about this asap.
+v0.99:
+  - Allow for players to use !message to send chat to a Global channel. 
+    - Will not work when chat is being directed to a channel, ie: /nc !chat message.

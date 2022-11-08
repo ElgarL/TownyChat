@@ -71,6 +71,8 @@ public class TownyChatPlayerListener implements Listener  {
 
 		// Check if essentials has this player muted.
 		if (!isEssentialsMuted(player)) {
+			
+			boolean forceGlobal = event.getMessage().startsWith("!");
 
 			/*
 			 * If this was directed chat send it via the relevant channel
@@ -96,7 +98,7 @@ public class TownyChatPlayerListener implements Listener  {
 			 * Check the player for any channel modes.
 			 */
 			Channel channel = plugin.getPlayerChannel(player);
-			if (channel != null) {
+			if (!forceGlobal && channel != null) {
 				if (isMutedOrSpam(event, channel, player))
 					return;
 				channel.chatProcess(event);
@@ -110,6 +112,8 @@ public class TownyChatPlayerListener implements Listener  {
 			if (channel != null) {
 				if (isMutedOrSpam(event, channel, player))
 					return;
+				if (forceGlobal)
+					event.setMessage(event.getMessage().substring(1));
 				channel.chatProcess(event);
 				return;
 			}
