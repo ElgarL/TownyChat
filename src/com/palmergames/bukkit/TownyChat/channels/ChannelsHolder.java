@@ -82,6 +82,19 @@ public class ChannelsHolder {
 	 */
 	public Channel getActiveChannel(Player player, channelTypes type) {
 		
+		return getActiveChannel(player, type, false);
+	}
+	
+	/**
+	 * Find a channel we are able to talk in, and have not left, starting with the greatest range.
+	 * 
+	 * @param player
+	 * @param type
+	 * @param unlimitedRange true when a channel has to have an unlimited range.
+	 * @return channel or null if none.
+	 */
+	public Channel getActiveChannel(Player player, channelTypes type, boolean unlimitedRange) {
+		
 		Channel local = null;
 		Channel global = null;
 		Channel world = null;
@@ -89,8 +102,10 @@ public class ChannelsHolder {
 		String name = player.getName();
 		
 		// Return the defaultChan if it is the correct type, and the player is present in that channel.
-		if (getDefaultChannel() != null && getDefaultChannel().isPresent(name) && getDefaultChannel().getType().equals(type))
-			return getDefaultChannel();
+		if (getDefaultChannel() != null && getDefaultChannel().isPresent(name) && getDefaultChannel().getType().equals(type)) {
+			if (!unlimitedRange || getDefaultChannel().getRange() < 1)
+				return getDefaultChannel();
+		}
 		
 		for (Channel channel: channels.values()) {
 			if (!channel.isPresent(name)) continue;
@@ -100,7 +115,7 @@ public class ChannelsHolder {
 					global = channel;
 				} else if (channel.getRange() == 0) {
 					world = channel;
-				} else
+				} else if (!unlimitedRange)
 					local = channel;
 			}
 		}
