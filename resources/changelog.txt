@@ -426,3 +426,7 @@ v0.98:
 v0.99:
   - Allow for players to use !message to send chat to a Global channel. 
     - Will not work when chat is being directed to a channel, ie: /nc !chat message.
+  - Make TownyChat better able to handle broken PAPI placeholders that won't parse.
+    - On the off chance you have put unparse-able placeholders into your chatconfig.yml you will be made aware of them in your log.
+    - This new system should be able to let TownyChat format your chat properly when this occurs. 
+  - Update min. Towny version to 0.98.4.0.
