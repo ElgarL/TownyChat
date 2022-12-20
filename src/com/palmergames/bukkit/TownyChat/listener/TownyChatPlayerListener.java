@@ -7,7 +7,6 @@ import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import com.palmergames.bukkit.TownyChat.config.ChatSettings;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.metadata.StringDataField;
@@ -172,16 +171,10 @@ public class TownyChatPlayerListener implements Listener  {
 	 * @return true if muted by Essentials.
 	 */
 	private boolean isEssentialsMuted(Player player) {
-		if (!plugin.getTowny().isEssentials())
-			return false;
-		try {
-			// Check if essentials has this player muted.
-			if (plugin.getTowny().getEssentials().getUser(player).isMuted()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_unable_to_talk_essentials_mute"));
-				return true;
-			}
-		} catch (TownyException e) {
-			// Get essentials failed
+		// Check if essentials has this player muted.
+		if (plugin.isEssentialsMuted(player)) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_unable_to_talk_essentials_mute"));
+			return true;
 		}
 		return false;
 	}
