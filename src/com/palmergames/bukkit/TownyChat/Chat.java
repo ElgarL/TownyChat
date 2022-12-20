@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.TownyChat;
 
+import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.TownyChat.Command.ChannelCommand;
 import com.palmergames.bukkit.TownyChat.Command.TownyChatCommand;
 import com.palmergames.bukkit.TownyChat.Command.commandobjects.ChannelJoinAliasCommand;
@@ -52,6 +53,7 @@ public class Chat extends JavaPlugin {
 	private static Chat chat = null;
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
+	private Essentials essentials = null;
 	
 	private static Version requiredTownyVersion = Version.fromString("0.98.4.0");
 	public static boolean usingPlaceholderAPI = false;
@@ -168,6 +170,11 @@ public class Chat extends JavaPlugin {
 			usingEssentialsDiscord = true;
 		}
 
+		test = pm.getPlugin("Essentials");
+		if (test != null) {
+			this.essentials = (Essentials) test;
+		}
+
 	}
 
 	public void registerEvents() {
@@ -241,8 +248,22 @@ public class Chat extends JavaPlugin {
 		return dynMap;
 	}
 
+	public boolean isUsingEssentials() {
+		return essentials != null;
+	}
+
+	public Essentials getEssentials() {
+		return essentials;
+	}
+
+	public boolean isEssentialsMuted(Player player) {
+		if (!isUsingEssentials())
+			return false;
+		return EssentialsIntegration.isMuted(player);
+	}
+
 	public boolean isIgnoredByEssentials(Player sender, Player player) {
-		if (!getTowny().isEssentials())
+		if (!isUsingEssentials())
 			return false;
 		return EssentialsIntegration.ignoredByEssentials(sender, player);
 	}
