@@ -432,3 +432,4 @@ v0.99:
   - Update min. Towny version to 0.98.4.0.
 v0.100:
   - Use internal Essentials object instead of the one found in Towny.
+  - Fix incorrect lang string called in /ch mutelist {channelname} 

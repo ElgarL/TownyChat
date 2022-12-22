@@ -188,7 +188,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		TownyMessaging.sendMessage(player, Translatable.of("tc_players_muted_in_channel_players", count, chan.getName(), players));
+		TownyMessaging.sendMessage(player, Translatable.of("tc_players_muted_in_channel", count, chan.getName(), players));
 	}
 
 	public static void parseChannelMute(Player player, String[] split, boolean mute) {
