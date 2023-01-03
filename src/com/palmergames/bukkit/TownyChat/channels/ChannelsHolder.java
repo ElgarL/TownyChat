@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.TownyChat.channels;
 
 import com.palmergames.bukkit.TownyChat.Chat;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -110,7 +109,7 @@ public class ChannelsHolder {
 		for (Channel channel: channels.values()) {
 			if (!channel.isPresent(name)) continue;
 			if (!channel.getType().equals(type)) continue;
-			if (TownyUniverse.getInstance().getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())) {
+			if (channel.hasPermission(player)) {
 				if (channel.getRange() == -1) {
 					global = channel;
 				} else if (channel.getRange() == 0) {
@@ -148,7 +147,7 @@ public class ChannelsHolder {
 		
 		for (Channel channel: channels.values()) {
 			if (!channel.getType().equals(type)) continue;
-			if (TownyUniverse.getInstance().getPermissionSource().has(player, channel.getPermission()) || (channel.getPermission().isEmpty())){
+			if (channel.hasPermission(player)){
 				if (channel.getRange() == -1) {
 					global = channel;
 				} else if (channel.getRange() == 0) {

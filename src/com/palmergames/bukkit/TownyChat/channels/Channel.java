@@ -127,7 +127,7 @@ public abstract class Channel {
 	public void forgetPlayer(Player player) {
 
 		if (playerIgnoringThisChannel(player)
-			|| !player.hasPermission(getPermission())
+			|| !hasPermission(player)
 			|| !autojoin)
 			leave(player);
 		else
@@ -145,7 +145,7 @@ public abstract class Channel {
 		
 		// If the player could see this channel if they wanted to, 
 		// we know they are ignoring the channel by choice.
-		if (player.hasPermission(getPermission()) && !playerIgnoringThisChannel(player))
+		if (hasPermission(player) && !playerIgnoringThisChannel(player))
 			playerAddIgnoreMeta(player);
 		
 		return (res == null || res == 0);
@@ -433,5 +433,8 @@ public abstract class Channel {
 	
 	public boolean isGovernmentChannel() {
 		return type.equals(channelTypes.TOWN) || type.equals(channelTypes.NATION) || type.equals(channelTypes.ALLIANCE); 
+	}
+	public boolean hasPermission(Player player) {
+		return getPermission() != null && TownyUniverse.getInstance().getPermissionSource().has(player, getPermission());
 	}
 }
