@@ -119,7 +119,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle("Channels"));
 		TownyMessaging.sendMessage(player, Colors.Gold + "Channel" + Colors.Gray + " - " + Colors.LightBlue + translator.of("tc_channel_list_status"));
 		for (Map.Entry<String, Channel> channel : chanList.entrySet()) {
-			if (player.hasPermission(channel.getValue().getPermission()))
+			if (channel.getValue().hasPermission(player))
 				if (channel.getValue().isPresent(player.getName()))
 					TownyMessaging.sendMessage(player, Colors.Gold + channel.getKey() + Colors.Gray + " - " + Colors.LightBlue + translator.of("tc_channel_list_in"));
 				else
@@ -372,8 +372,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		// - channel has no permission set OR  [by default they don't]
 		//   - channel has permission set AND:
 		//     - player has channel permission
-		String joinPerm = chan.getPermission();
-		if ((joinPerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, joinPerm)))) {
+		if (chan.hasPermission(player)) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_cannot_join_channel", chan.getName()));
 			return;
 		}
