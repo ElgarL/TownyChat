@@ -26,6 +26,7 @@
         <java.version>17</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <towny.version>0.98.4.0</towny.version>
     </properties>
 
     <!-- For use with GitHub Package Registry -->
@@ -74,7 +75,7 @@
         <dependency>
             <groupId>com.github.TownyAdvanced</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.98.4.0</version>
+            <version>${towny.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
