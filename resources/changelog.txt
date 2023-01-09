@@ -434,3 +434,5 @@ v0.100:
   - Use internal Essentials object instead of the one found in Towny.
   - Fix incorrect lang string called in /ch mutelist {channelname} 
   - Fix a player who has lost their town being stuck in /tc or /nc. 
+v0.101:
+  - Update min. Towny version to 0.98.5.0 & replace deprecated methods.

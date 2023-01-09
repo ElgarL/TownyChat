@@ -435,6 +435,6 @@ public abstract class Channel {
 		return type.equals(channelTypes.TOWN) || type.equals(channelTypes.NATION) || type.equals(channelTypes.ALLIANCE); 
 	}
 	public boolean hasPermission(Player player) {
-		return getPermission() != null && TownyUniverse.getInstance().getPermissionSource().has(player, getPermission());
+		return getPermission() != null && TownyUniverse.getInstance().getPermissionSource().testPermission(player, getPermission());
 	}
 }
