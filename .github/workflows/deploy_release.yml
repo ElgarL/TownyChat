@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         java: ['17']
-    name: Creating TownyFlight Release
+    name: Creating TownyChat Release
     steps:
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content to github runner.
