@@ -137,8 +137,8 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		String mutePerm = plugin.getChannelsHandler().getMutePermission();
 		String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
 		if ((mutePerm == null && unmutePerm == null) ||
-				(mutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, mutePerm))) ||
-				(unmutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, unmutePerm)))) {
+				(mutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, mutePerm))) ||
+				(unmutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, unmutePerm)))) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_dont_have_perm_mute_list"));
 			return;
 		}
@@ -229,7 +229,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 
 		if (mute) {
 			String mutePerm = plugin.getChannelsHandler().getMutePermission();
-			if ((mutePerm == null) || (mutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, mutePerm)))) {
+			if ((mutePerm == null) || (mutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, mutePerm)))) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_dont_have_mute_perms"));
 				return;
 			}
@@ -242,8 +242,8 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
-			if ((mutePerm != null && (TownyUniverse.getInstance().getPermissionSource().has(muteePlayer, mutePerm))) ||
-					(unmutePerm != null && (TownyUniverse.getInstance().getPermissionSource().has(muteePlayer, unmutePerm)))) {
+			if ((mutePerm != null && (TownyUniverse.getInstance().getPermissionSource().testPermission(muteePlayer, mutePerm))) ||
+					(unmutePerm != null && (TownyUniverse.getInstance().getPermissionSource().testPermission(muteePlayer, unmutePerm)))) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_cant_mute_chat_mod"));
 				return;
 			}
@@ -256,7 +256,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(player, Translatable.of("tc_player_is_now_muted_in_channel", split[1], chan.getName()));
 		} else if (!mute) {
 			String unmutePerm = plugin.getChannelsHandler().getUnmutePermission();
-			if ((unmutePerm == null) || (unmutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, unmutePerm)))) {
+			if ((unmutePerm == null) || (unmutePerm != null && (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, unmutePerm)))) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_dont_have_unmute_perm"));
 				return;
 			}
@@ -309,7 +309,7 @@ public class ChannelCommand extends BaseCommand implements CommandExecutor {
 		// - player has leaving permission set      [by default they don't]
 		String leavePerm = chan.getLeavePermission();
 		if (leavePerm == null ||
-				(leavePerm != null && (!TownyUniverse.getInstance().getPermissionSource().has(player, leavePerm)))) {
+				(leavePerm != null && (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, leavePerm)))) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("tc_err_you_cannot_leave_channel", chan.getName()));
 			return;
 		}
