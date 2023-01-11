@@ -436,3 +436,4 @@ v0.100:
   - Fix a player who has lost their town being stuck in /tc or /nc. 
 v0.101:
   - Update min. Towny version to 0.98.5.0 & replace deprecated methods.
+  - Fix permission test backing /channel join {channelname}.
