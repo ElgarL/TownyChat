@@ -437,3 +437,5 @@ v0.100:
 v0.101:
   - Update min. Towny version to 0.98.5.0 & replace deprecated methods.
   - Fix permission test backing /channel join {channelname}.
+v0.102:
+  - Parse placeholders when we're unable to find a channel to speak into, but modify_chat is true.
