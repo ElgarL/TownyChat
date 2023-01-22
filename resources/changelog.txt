@@ -439,3 +439,7 @@ v0.101:
   - Fix permission test backing /channel join {channelname}.
 v0.102:
   - Parse placeholders when we're unable to find a channel to speak into, but modify_chat is true.
+v0.103:
+  - New Config Option: allow_exclamation_point_to_shout
+    - Default: true
+    - If true players that say !somewords will have their message sent to a global type channel with unlimited range (usually your general chat.)

@@ -177,6 +177,13 @@ public class ChatSettings {
 		return getBoolean(ChatConfigNodes.DISPLAY_CHANNEL_JOIN_MESSAGE_ON_JOIN);
 	}
 
+	/**
+	 * @return true if preceding exclamation points shouts into global channel with unlimited range.
+	 */
+	public static boolean isExclamationPoint() {
+		return getBoolean(ChatConfigNodes.ALLOW_EXCLAMATION_POINT_SHOUTS);
+	}
+
 	/*
 	 * Get Tags formats.
 	 */
