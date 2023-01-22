@@ -167,7 +167,12 @@ public enum ChatConfigNodes {
     		"display_channel_join_message_on_joining_the_server",
     		"true",
     		"",
-    		"# If true players will see You have joined channel {channel} message on joining the server."),    
+    		"# If true players will see You have joined channel {channel} message on joining the server."),
+    ALLOW_EXCLAMATION_POINT_SHOUTS(
+    		"allow_exclamation_point_to_shout",
+    		"true",
+    		"",
+    		"# If true players that say !somewords will have their message sent to a global type channel with unlimited range (usually your general chat.)"),
     WORLDS("worlds","","");
 	
 
