@@ -58,8 +58,8 @@
             <url>https://repo.mikeprimm.com</url>
         </repository>
         <repository>
-            <id>github-Towny</id>
-		    <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+            <id>glaremasters repo</id>
+            <url>https://repo.glaremasters.me/repository/towny/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <version>1.19-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
