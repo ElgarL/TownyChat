@@ -5,8 +5,8 @@ import com.palmergames.bukkit.TownyChat.channels.Channel;
 import com.palmergames.bukkit.TownyChat.channels.StandardChannel;
 import com.palmergames.bukkit.TownyChat.channels.channelTypes;
 import org.bukkit.Bukkit;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 
 import java.io.BufferedReader;
@@ -183,7 +183,7 @@ public class ChannelConfigurationHandler {
 
 		f = new File(filepath);
 
-		Yaml yamlChannels = new Yaml(new SafeConstructor());
+		Yaml yamlChannels = new Yaml(new LoaderOptions());
 		Object channelsRootDataNode;
 
 		try (FileInputStream fileInputStream = new FileInputStream(f)) {

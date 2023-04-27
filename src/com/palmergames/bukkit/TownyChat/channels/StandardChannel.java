@@ -282,10 +282,11 @@ public class StandardChannel extends Channel {
 		String format = formatSpyMessage(type, event.getPlayer());
 		if (format == null) return;
 		
+		String message = Colors.translateColorCodes(event.getMessage());
 		// Remove spies who've already seen the message naturally.
 		spies.stream()
 			.filter(spy -> !recipients.contains(spy))
-			.forEach(spy -> spy.sendMessage(format + event.getMessage()));
+			.forEach(spy -> spy.sendMessage(format + message));
 	}
 
 	/**
