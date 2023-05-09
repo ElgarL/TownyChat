@@ -15,7 +15,6 @@ import com.palmergames.bukkit.util.Colors;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,7 +38,7 @@ public class TownyChatPlayerListener implements Listener  {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		
-		Bukkit.getScheduler().runTaskLater(plugin, () -> loginPlayer(event.getPlayer()), 2l);
+		plugin.getScheduler().runLater(event.getPlayer(), () -> loginPlayer(event.getPlayer()), 2L);
 
 	}
 
