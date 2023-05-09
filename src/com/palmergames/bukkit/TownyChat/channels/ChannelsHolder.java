@@ -18,7 +18,9 @@ public class ChannelsHolder {
 	@SuppressWarnings("unused")
 	private Chat plugin;
 	private Channel defaultChan = null;
-	
+	// Container for all channels
+	private Map<String,Channel> channels = new LinkedHashMap<>();
+
 	/** Constructor
 	 * 
 	 * @param plugin
@@ -35,9 +37,6 @@ public class ChannelsHolder {
 	public Channel getDefaultChannel() {
 		return defaultChan;
 	}
-	
-	// Container for all channels
-	private Map<String,Channel> channels = new LinkedHashMap<>();
 
 	/**
 	 * @return the channels
