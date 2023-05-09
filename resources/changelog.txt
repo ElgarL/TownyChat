@@ -451,3 +451,7 @@ v0.104:
 v0.105:
   - Add Folia support, courtesy of Warrior with PR #46.
   - Update min. Towny version to 0.99.0.6.
+v0.106:
+  - Add focusable option to channels in the channels.yml.
+    - By default channels are focusable and adding focusable: true has no effect.
+    - Adding focusable: false will prevent players making their primary channel, ie using /tc with no message.
