@@ -54,7 +54,7 @@ public class Chat extends JavaPlugin {
 	
 	protected PluginManager pm;
 	private static Chat chat = null;
-	private final TaskScheduler scheduler;
+	private final Object scheduler;
 	private Towny towny = null;
 	private DynmapAPI dynMap = null;
 	private Essentials essentials = null;
@@ -68,7 +68,7 @@ public class Chat extends JavaPlugin {
 
 	public Chat() {
 		chat = this;
-		this.scheduler = isFoliaClassPresent() ? new FoliaTaskScheduler(this) : new BukkitTaskScheduler(this);
+		this.scheduler = townyVersionCheck() ? isFoliaClassPresent() ? new FoliaTaskScheduler(this) : new BukkitTaskScheduler(this) : null;
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class Chat extends JavaPlugin {
 		playerChannelMap = new ConcurrentHashMap<>();
 		
 		checkPlugins();
-		if (towny == null || !townyVersionCheck(towny.getDescription().getVersion())) {
+		if (towny == null || !townyVersionCheck()) {
 			disableWithMessage("Towny version does not meet required minimum version: " + requiredTownyVersion.toString());
 			return;
 		} else {
@@ -96,7 +96,7 @@ public class Chat extends JavaPlugin {
 		 * This executes the task with a 1 tick delay avoiding the bukkit depends bug.
 		 * TODO: What bug is this referencing? This goes back to the first version of TownyChat.
 		 */
-		scheduler.run(new onLoadedTask(this));
+		getScheduler().run(new onLoadedTask(this));
 
 		getCommand("townychat").setExecutor(new TownyChatCommand(this));
 		getCommand("channel").setExecutor(new ChannelCommand(this));
@@ -109,8 +109,8 @@ public class Chat extends JavaPlugin {
 		pm.disablePlugin(this);
 	}
 
-	private boolean townyVersionCheck(String version) {
-		return Version.fromString(version).compareTo(requiredTownyVersion) >= 0; 
+	private boolean townyVersionCheck() {
+		return Version.fromString(Towny.getPlugin().getVersion()).compareTo(requiredTownyVersion) >= 0;
 	}
 
 	private void loadConfigs() {
@@ -302,7 +302,7 @@ public class Chat extends JavaPlugin {
 	}
 
 	public TaskScheduler getScheduler() {
-		return this.scheduler;
+		return (TaskScheduler) this.scheduler;
 	}
 
 	private static boolean isFoliaClassPresent() {
