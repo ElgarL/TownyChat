@@ -455,3 +455,8 @@ v0.106:
   - Add focusable option to channels in the channels.yml.
     - By default channels are focusable and adding focusable: true has no effect.
     - Adding focusable: false will prevent players making their primary channel, ie using /tc with no message.
+  - Add new chat slug: {primaryresidentrank}
+    - When a resident has a primary rank with a prefix this will display their prefix with a space added to the end.
+    - Primary ranks and their prefixes are set in the townyperms.yml like so:
+      - towny.rankpriority.#
+      - towny.rankprefix.<somewordshere> 

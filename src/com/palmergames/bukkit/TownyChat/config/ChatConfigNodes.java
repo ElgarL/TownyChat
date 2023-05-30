@@ -53,6 +53,8 @@ public enum ChatConfigNodes {
 			"# {permprefix} - Permission group and user prefix.",
 			"# {permsuffix} - Permission group and user suffix.",
 			"#",
+			"# {primaryresidentrank} - When a resident has a primary rank with a prefix this will display their prefix with a space added to the end.",
+			"#",
 			"# {playername} - Default player name.",
 			"# {modplayername} - Modified player name (use if Towny is over writing some other plugins changes).",
 			"# {msg} - The message sent.",

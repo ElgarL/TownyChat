@@ -46,6 +46,7 @@ public class TownyChatFormatter {
 		replacer.registerReplacer("{permgroupprefix}", event -> getVaultPrefixSuffix(event.getResident(), "groupprefix"));
 		replacer.registerReplacer("{permgroupsuffix}", event -> getVaultPrefixSuffix(event.getResident(), "groupsuffix"));
 		replacer.registerReplacer("{playername}", event -> event.getEvent().getPlayer().getName());
+		replacer.registerReplacer("{primaryresidentrank}", event -> getPrimaryRankPrefix(event.getResident()));
 	}
 
 	public static String getChatFormat(LocalTownyChatEvent event) {
@@ -176,7 +177,14 @@ public class TownyChatFormatter {
 			return TownySettings.getMayorPostfix(resident);
 		return "";
 	}
-	
+
+	public static String getPrimaryRankPrefix(Resident resident) {
+		if (resident == null)
+			return "";
+		String rank = resident.getPrimaryRankPrefix();
+		return rank.isEmpty() ? "" : rank + " "; 
+	}
+
 	private static String getName(Government gov) {
 		return StringMgmt.remUnderscore(gov.getName());
 	}
