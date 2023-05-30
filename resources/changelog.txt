@@ -460,3 +460,5 @@ v0.106:
     - Primary ranks and their prefixes are set in the townyperms.yml like so:
       - towny.rankpriority.#
       - towny.rankprefix.<somewordshere> 
+  - Fix version check, courtesy of Warrior with PR #48.
+  - Update min. Towny version to 0.99.1.0.
