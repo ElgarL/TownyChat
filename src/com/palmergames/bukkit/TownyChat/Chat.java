@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.scheduling.TaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.BukkitTaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
-import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 
 import org.bukkit.Bukkit;
@@ -59,7 +58,7 @@ public class Chat extends JavaPlugin {
 	private DynmapAPI dynMap = null;
 	private Essentials essentials = null;
 	
-	private static Version requiredTownyVersion = Version.fromString("0.99.1.0");
+	private static String requiredTownyVersion = "0.99.1.0";
 	public static boolean usingPlaceholderAPI = false;
 	public static boolean usingEssentialsDiscord = false;
 	boolean chatConfigError = false;
@@ -110,7 +109,11 @@ public class Chat extends JavaPlugin {
 	}
 
 	private boolean townyVersionCheck() {
-		return Version.fromString(Towny.getPlugin().getVersion()).compareTo(requiredTownyVersion) >= 0;
+		try {
+			return Towny.isTownyVersionSupported(requiredTownyVersion);
+		} catch (NoSuchMethodError e) {
+			return false;
+		}
 	}
 
 	private void loadConfigs() {

@@ -462,3 +462,5 @@ v0.106:
       - towny.rankprefix.<somewordshere> 
   - Fix version check, courtesy of Warrior with PR #48.
   - Update min. Towny version to 0.99.1.0.
+v0.107:
+  - Remove usage of Version, using new Towny version checker instead.
