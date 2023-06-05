@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.scheduling.TaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.BukkitTaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.JavaUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -174,7 +175,7 @@ public class Chat extends JavaPlugin {
 		}
 
 		test = pm.getPlugin("Essentials");
-		if (test != null) {
+		if (test != null && JavaUtil.classExists("com.earth2me.essentials.Essentials")) {
 			this.essentials = (Essentials) test;
 		}
 

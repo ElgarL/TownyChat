@@ -464,3 +464,4 @@ v0.106:
   - Update min. Towny version to 0.99.1.0.
 v0.107:
   - Remove usage of Version, using new Towny version checker instead.
+  - Handle knock-off Essentials plugins fooling TownyChat into hooking the real EssentialsX.
